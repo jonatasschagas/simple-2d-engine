@@ -1,0 +1,17 @@
+{
+    "configurations": [
+    {
+        "name": "(lldb) Launch OpenGl Backend",
+        "type": "cppdbg",
+        "request": "launch",
+        "program": "${workspaceFolder}/build/simple-2d-engine-opengl",
+        "args": [],
+        "stopAtEntry": false,
+        "cwd": "${workspaceFolder}/build",
+        "environment": [],
+        "externalConsole": false,
+        "MIMode": "lldb",
+        "preLaunchTask": "CMake: build"
+    }
+    ]
+}

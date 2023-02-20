@@ -7,7 +7,8 @@
                 "${workspaceFolder}/opengl-backend/**",
                 "${workspaceFolder}/sdl-backend/**",
                 "${workspaceFolder}/third-party/**",
-                "${workspaceFolder}/projects/osx-opengl-backend/**"
+                "${workspaceFolder}/projects/osx-opengl-backend/**",
+                "${workspaceFolder}/projects/sample-game/**"
             ],
             "defines": [],
             "macFrameworkPath": [

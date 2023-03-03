@@ -1,9 +1,12 @@
 #pragma once
-
 #ifndef OPENGLRENDERER_H
 #define OPENGLRENDERER_H
 
+#include "view/Game.hpp"
+
 class Game;
+class PlatformManager;
+class GLFWwindow;
 
 struct OpenGLRenderer
 {
@@ -13,22 +16,7 @@ struct OpenGLRenderer
     Game* pGame;
 };
 
-#include "OpenGLRenderer.h"
-
-#include "view/Game.hpp"
-
-#ifdef __APPLE__
-#include <GLUT/glut.h>
-#else
-#include <GL/glut.h>
-#endif
-
-void render();
-
-void resizeWindow(int w, int h);
-
-void update();
-
-void initialize(int argc, char **argv, Game* pGame, int screenWidth, int screenHeight);
+GLFWwindow* initializeOpenGLRenderer(int argc, char **argv, int screenWidth, int screenHeight, const string& gameName);
+int mainLoopOpenGLRenderer(GLFWwindow* pWindow , Game* pGame, int screenWidth, int screenHeight, PlatformManager* pPlatformManager);
 
 #endif /* OPENGLRENDERER_H */

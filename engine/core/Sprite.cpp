@@ -17,9 +17,9 @@ Sprite::Sprite(PlatformManager* pPlatformManager)
 
 Sprite::~Sprite()
 {
-    removeAllChildren();
+    //removeAllChildren();
     
-    delete m_pDrawCall;
+    //delete m_pDrawCall;
 
     initializeMembers();
 }

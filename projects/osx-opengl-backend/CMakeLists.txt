@@ -11,7 +11,6 @@ message( STATUS "CMAKE_FINDCMAKE: " ${CMAKE_SOURCE_DIR}/CMAKE )
 
 project(simple-2d-engine-opengl)
 
-set(CMAKE_C_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON) 
 set(CMAKE_CXX_EXTENSIONS ON)
 
@@ -24,9 +23,12 @@ set(SOURCE_FILES    main.cpp)
 set(OPENGL_BACKEND_IMPL ${PROJECT_SOURCE_DIR}/opengl-backend)
 set(ENGINE_IMPL ${PROJECT_SOURCE_DIR}/engine)
 set(ASSETS ${PROJECT_SOURCE_DIR}/projects/assets)
+set(SAMPLE_GAME ${PROJECT_SOURCE_DIR}/projects/sample-game)
+# third party libs
 set(GLM ${PROJECT_SOURCE_DIR}/third-party/glm)
 set(RAPID_JSON ${PROJECT_SOURCE_DIR}/third-party/rapidjson)
-set(SAMPLE_GAME ${PROJECT_SOURCE_DIR}/projects/sample-game)
+set(STB ${PROJECT_SOURCE_DIR}/third-party/stb)
+set(GLAD ${PROJECT_SOURCE_DIR}/third-party/glad)
 
 message("")
 message( STATUS "ENGINE_IMPL : " ${ENGINE_IMPL} )
@@ -50,12 +52,16 @@ list(APPEND SOURCE_FILES ${OTHER_MODULES_SOURCE_FILES})
 # adding third-party deps source code
 file(GLOB_RECURSE GLM_CODE ${GLM}/*.h ${GLM}/*.hpp ${GLM}/*.inl)
 file(GLOB_RECURSE RAPID_JSON_CODE ${RAPID_JSON}/include/*.h ${RAPID_JSON}/include/*.hpp)
+file(GLOB_RECURSE GLAD_HEADERS ${GLAD}/includes/*.h ${GLAD}/includes/*.hpp)
 list(APPEND SOURCE_FILES ${GLM_CODE}) 
 list(APPEND SOURCE_FILES ${RAPID_JSON_CODE})
+list(APPEND SOURCE_FILES ${STB}/stb_image.h)
+list(APPEND SOURCE_FILES ${GLAD}/glad.c)
+list(APPEND SOURCE_FILES ${GLAD_HEADERS})
 
 # Find the packages we need.
+find_package(glfw3 REQUIRED)
 find_package(OpenGL REQUIRED)
-find_package(GLUT REQUIRED)
 
 # adding code to the executable
 add_executable(simple-2d-engine-opengl ${SOURCE_FILES})
@@ -68,6 +74,6 @@ add_custom_target(copy_assets
 add_dependencies(simple-2d-engine-opengl copy_assets)
 
 # include
-include_directories(${CMAKE_RUNTIME_OUTPUT_DIRECTORY} ${GLM} ${RAPID_JSON}/include/ ${ENGINE_IMPL} ${OPENGL_BACKEND_IMPL} ${OPENGL_INCLUDE_DIR} ${GLUT_INCLUDE_DIR} ${SAMPLE_GAME})
+include_directories(${CMAKE_RUNTIME_OUTPUT_DIRECTORY} ${GLM} ${RAPID_JSON}/include/ ${ENGINE_IMPL} ${OPENGL_BACKEND_IMPL} ${OPENGL_INCLUDE_DIR} ${GLUT_INCLUDE_DIR} ${SAMPLE_GAME} ${STB} ${GLAD}/includes)
 # link
-target_link_libraries(${PROJECT_NAME} ${OPENGL_LIBRARIES} ${GLUT_LIBRARIES})
+target_link_libraries(${PROJECT_NAME} glfw ${OPENGL_LIBRARIES})

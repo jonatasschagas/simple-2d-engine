@@ -6,6 +6,8 @@
 #include <string>
 
 #include "view/Game.hpp"
+#include "view/ViewManager.hpp"
+#include "data/DataCacheManager.hpp"
 
 using namespace std;
 
@@ -26,6 +28,8 @@ public:
 private:
 
     PlatformManager* m_pPlatformManager;
+    DataCacheManager m_dataCacheManager;
+    ViewManager m_viewManager;
     string m_gameName;
 
     void initializeMembers()

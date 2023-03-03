@@ -1,10 +1,7 @@
 #include "SampleGame.hpp"
 
-#ifdef __APPLE__  // include Mac OS X verions of headers
-#include <GLUT/glut.h>
-#else // non-Mac OS X operating systems
-#include <GL/glut.h>
-#endif
+#include "view/GameView.hpp"
+#include <glm/glm.hpp>
 
 SampleGame::SampleGame() : Game()
 {
@@ -18,7 +15,16 @@ SampleGame::~SampleGame()
 
 void SampleGame::initialize(PlatformManager* pManager)
 {
+    pManager->initialize();
 
+    m_gameName = "Sample Game";
+    m_pPlatformManager = pManager;
+    m_viewManager = ViewManager();
+    m_viewManager.initialize(m_pPlatformManager, &m_dataCacheManager);
+
+    GameView* pGameView = new GameView(*m_pPlatformManager, m_dataCacheManager);
+    m_viewManager.addView("game-view", pGameView);
+    m_viewManager.switchView("game-view");
 }
 
 void SampleGame::receiveEvent(Event* pEvent)
@@ -28,7 +34,7 @@ void SampleGame::receiveEvent(Event* pEvent)
 
 void SampleGame::update(const float deltaTime)
 {
-
+    m_viewManager.update(deltaTime);
 }
 
 void SampleGame::updateEditor(const float deltaTime)
@@ -38,18 +44,7 @@ void SampleGame::updateEditor(const float deltaTime)
 
 void SampleGame::render()
 {
-    glColor3f(0.0, 1.0, 1.0);      // draw in cyan.
-                                   // The color stays the same until we
-                                   // change it next time.
-
-    glBegin(GL_POLYGON);           // Draw a polygon (can have many vertices)
-                                   // The vertex coordinates change by different
-                                   // values of f; see also function idle().
-    glVertex2f(100, 100); 
-    glVertex2f(200, 100);
-    glVertex2f(200, 300);
-    glVertex2f(100, 300);
-    glEnd();
+    m_viewManager.render();
 }
 
 const string& SampleGame::getGameName()

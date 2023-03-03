@@ -45,6 +45,7 @@ struct SpriteProperties
     float y;
     float w;
     float h;
+    float rotation;
 };
 
 struct Vertex
@@ -123,13 +124,15 @@ inline ColorReplacement makeColorReplacement( bool colorFilter,
 inline SpriteProperties makeSpriteProperties(float x,
                                              float y,
                                              float w,
-                                             float h)
+                                             float h,
+                                             float rotation=0.0f)
 {
     SpriteProperties spriteProperties;
     spriteProperties.x = x;
     spriteProperties.y = y;
     spriteProperties.w = w;
     spriteProperties.h = h;
+    spriteProperties.rotation = rotation;
     
     return spriteProperties;
 }

@@ -13,6 +13,8 @@ class PlatformManager
 {
 public:
 
+    virtual void initialize() {};
+    
     virtual void setOffsetY(float y) = 0;
     
     virtual void renderTexture(const DrawCall& drawCall) = 0;

@@ -7,6 +7,7 @@
                 "${workspaceFolder}/opengl-backend/**",
                 "${workspaceFolder}/sdl-backend/**",
                 "${workspaceFolder}/third-party/**",
+                "${workspaceFolder}/third-party/glad/includes/**",
                 "${workspaceFolder}/projects/osx-opengl-backend/**",
                 "${workspaceFolder}/projects/sample-game/**"
             ],

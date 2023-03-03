@@ -1,70 +1,99 @@
 #include "OpenGLRenderer.h"
 
 #include "view/Game.hpp"
+#include "OpenGLPlatformManager.hpp"
 
-#ifdef __APPLE__
-#include <GLUT/glut.h>
-#else
-#include <GL/glut.h>
-#endif
+#include <iostream>
+#include "OpenGLHeaders.h"
+#include <GLFW/glfw3.h>
 
 OpenGLRenderer openGLRenderer;
 
-void render()
+void render(Game* pGame)
 {
-    glClear(GL_COLOR_BUFFER_BIT);  // clear frame buffer (also called the color buffer)
+    glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT);
     
-    openGLRenderer.pGame->render();
-    
-    glFlush();         // Render (draw) the object
-    glutSwapBuffers(); // Swap buffers in double buffering.
+    pGame->render();
 }
 
-void resizeWindow(int w, int h)
+void framebuffer_size_callback(GLFWwindow* pWindow, int width, int height)
 {
-    glViewport(0, 0, w, h);           // Viewport within the graphics window.
+    glViewport(0, 0, width, height);
+}  
 
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    gluOrtho2D(0.0, (GLdouble) w, 0.0, (GLdouble) h);
-
-    openGLRenderer.screenWidth = w;
-    openGLRenderer.screenHeight = h;
+void processInput(GLFWwindow *pWindow)
+{
+    if(glfwGetKey(pWindow, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+    {
+        glfwSetWindowShouldClose(pWindow, true);
+    }    
 }
 
-void update()
+GLFWwindow* initializeOpenGLRenderer(int argc, char **argv, int screenWidth, int screenHeight, const string& gameName)
 {
-    float currentTimeSeconds = glutGet(GLUT_ELAPSED_TIME) / 1000.0f;
-    float deltaTime = currentTimeSeconds - openGLRenderer.previousTimeSeconds;
-    openGLRenderer.previousTimeSeconds = currentTimeSeconds;
+    glfwInit();
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+    glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
-    openGLRenderer.pGame->update(deltaTime);
-	glutPostRedisplay();
-}
+    #ifdef __APPLE__
+        glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+    #endif
 
-void initialize(int argc, char **argv, Game* pGame, int screenWidth, int screenHeight)
-{
-    assert (pGame != nullptr);
+    GLFWwindow* pWindow = glfwCreateWindow(screenWidth, screenHeight, gameName.c_str(), NULL, NULL);
+    if (pWindow == NULL)
+    {
+        std::cout << "Failed to create GLFW window" << std::endl;
+        glfwTerminate();
+        return nullptr;
+    }
+    glfwMakeContextCurrent(pWindow);
 
-    openGLRenderer.pGame = pGame;
-    openGLRenderer.screenWidth = screenWidth;
-    openGLRenderer.screenHeight = screenHeight;
+    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
+    {
+        std::cout << "Failed to initialize GLAD" << std::endl;
+        return nullptr;
+    }
 
-    glutInit(&argc, argv);
-    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB); // double-buffering and RGB color mode.
-    glutInitWindowSize(screenWidth, screenHeight);
-    glutCreateWindow(openGLRenderer.pGame->getGameName().c_str());
+    glViewport(0, 0, screenWidth, screenHeight);
+    glEnable(GL_CULL_FACE);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    glutDisplayFunc(render);
-
-    glutReshapeFunc(resizeWindow);
-
-    // glutMouseFunc(mouse);  // for mouse 
-    // glutKeyboardFunc(key); // for keyboard 
+    glfwSetFramebufferSizeCallback(pWindow, framebuffer_size_callback);
     
-    glutIdleFunc(update);
+    return pWindow;
+}
 
-    glClearColor(0.0, 0.0, 0.0, 0.0); 
+int mainLoopOpenGLRenderer(GLFWwindow* pWindow, Game* pGame, int screenWidth, int screenHeight, PlatformManager* pPlatformManager)
+{ 
+    pGame->initialize(pPlatformManager);
 
-    glutMainLoop();
+    // DeltaTime variables
+    GLfloat deltaTime = 0.0f;
+    GLfloat lastFrame = 0.0f;
+
+    while(!glfwWindowShouldClose(pWindow))
+    {
+        // Calculate delta time
+        GLfloat currentFrame = glfwGetTime();
+        deltaTime = currentFrame - lastFrame;
+        lastFrame = currentFrame;
+        
+        pGame->update(deltaTime);
+        
+        processInput(pWindow);
+
+        render(pGame);
+
+        glfwSwapBuffers(pWindow);
+        glfwPollEvents();
+    }
+
+    glfwTerminate();
+    
+    return 0;
 }

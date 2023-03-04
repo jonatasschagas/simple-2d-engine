@@ -68,4 +68,5 @@
         "array": "cpp"
     },
     "cmake.sourceDirectory": "${workspaceFolder}/projects/osx-opengl-backend",
+    "editor.formatOnSave": true
 }

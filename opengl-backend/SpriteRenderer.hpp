@@ -11,39 +11,32 @@
 #define SPRITE_RENDERER_H
 
 #include "OpenGLHeaders.h"
+#include "Shader.hpp"
+#include "Texture2D.hpp"
+#include <glad/glad.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
-
-#include "Texture2D.hpp"
-#include "Shader.hpp"
-
-#include <glad/glad.h> 
-
-#include <string>
 #include <map>
+#include <string>
 
 using namespace std;
 
-class SpriteRenderer
-{
-public:
-    SpriteRenderer();
-    // Constructor (inits shaders/shapes)
-    SpriteRenderer(Shader &shader);
-    // Destructor
-    ~SpriteRenderer();
-    // Renders a defined quad textured with given sprite
-    void DrawSprite(Texture2D &texture, glm::vec2 position, glm::vec2 size = glm::vec2(10.0f, 10.0f), glm::vec4 textureCoordinates = glm::vec4(0,0,0,0), float rotate = 0.0f);
-private:
-    
-    void createQuadVAO(string quadName, glm::vec2 textureSize, glm::vec4 textureCoordinates);
-    
-    // Render state
-    Shader&       shader; 
-    unsigned int quadVAO;
-    map<string, unsigned int> m_quadVAOs;
-    // Initializes and configures the quad's buffer and vertex attributes
-    void initRenderData();
+class SpriteRenderer {
+ public:
+  SpriteRenderer();
+  ~SpriteRenderer();
+
+  void drawSprite(Shader& rShader, Texture2D const& rTexture,
+                  glm::vec2 const& rPosition, glm::vec2 const& rSize,
+                  glm::vec4 const& rTextureCoordinates, float rotate);
+
+ private:
+  void createTextureVAO(string textureName, glm::vec2 textureSize,
+                        glm::vec4 textureCoordinates);
+
+  map<string, unsigned int> m_textureVAOs;
+
+  void initializeMembers() { m_textureVAOs.clear(); }
 };
 
 #endif

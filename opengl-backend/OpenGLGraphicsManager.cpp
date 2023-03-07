@@ -1,11 +1,11 @@
-#include "OpenGLPlatformManager.hpp"
+#include "OpenGLGraphicsManager.hpp"
 #include "ResourceManager.hpp"
 #include "Shader.hpp"
 #include "Texture2D.hpp"
 
-OpenGLPlatformManager::OpenGLPlatformManager(int screenWidth, int screenHeight,
+OpenGLGraphicsManager::OpenGLGraphicsManager(int screenWidth, int screenHeight,
                                              int screenWidthInGameUnits)
-    : PlatformManager() {
+    : GraphicsManager() {
   initializeMembers();
 
   m_screenWidth = screenWidth;
@@ -22,9 +22,9 @@ OpenGLPlatformManager::OpenGLPlatformManager(int screenWidth, int screenHeight,
   m_scaleFactorY = ((float)screenHeight) / m_screenHeightInGameUnits;
 }
 
-OpenGLPlatformManager::~OpenGLPlatformManager() {}
+OpenGLGraphicsManager::~OpenGLGraphicsManager() {}
 
-void OpenGLPlatformManager::initialize() {
+void OpenGLGraphicsManager::initialize() {
   // load shaders
   ResourceManager::getInstance()->loadShader(
       "assets/shaders/sprite.vs", "assets/shaders/sprite.frag", "sprite");
@@ -37,9 +37,12 @@ void OpenGLPlatformManager::initialize() {
                                                                  projection);
 }
 
-void OpenGLPlatformManager::setOffsetY(float y) { m_offsetY = y; }
+void OpenGLGraphicsManager::setOffset(float x, float y) {
+  m_offsetX = x;
+  m_offsetY = y;
+}
 
-void OpenGLPlatformManager::renderTexture(DrawCall const& drawCall) {
+void OpenGLGraphicsManager::renderTexture(DrawCall const& drawCall) {
   float width = drawCall.spriteProperties.w;
   float height = drawCall.spriteProperties.h;
   float worldX = drawCall.spriteProperties.x;
@@ -65,47 +68,24 @@ void OpenGLPlatformManager::renderTexture(DrawCall const& drawCall) {
       drawCall.spriteProperties.rotation);
 }
 
-void OpenGLPlatformManager::playSoundEffect(string const& name) {}
-
-void OpenGLPlatformManager::playMusic(string const& path) {}
-
-void OpenGLPlatformManager::stopSounds() {}
-
-bool OpenGLPlatformManager::loadMusic(string const& path) { return false; }
-
-bool OpenGLPlatformManager::loadSoundEffect(string const& name,
-                                            string const& path) {
-  return false;
-}
-
-void* OpenGLPlatformManager::loadTexture(string const& path) {
+void* OpenGLGraphicsManager::loadTexture(string const& path) {
   return &ResourceManager::getInstance()->loadTexture(path, path);
 }
 
-int const OpenGLPlatformManager::getWorldLocationXFromScreenCoordinates(
+int const OpenGLGraphicsManager::getWorldLocationXFromScreenCoordinates(
     int x) const {
   return 0;
 }
 
-int const OpenGLPlatformManager::getWorldLocationYFromScreenCoordinates(
+int const OpenGLGraphicsManager::getWorldLocationYFromScreenCoordinates(
     int y) const {
   return 0;
 }
 
-const Vector2 OpenGLPlatformManager::getScreenSizeInGameUnits() const {
+const Vector2 OpenGLGraphicsManager::getScreenSizeInGameUnits() const {
   return Vector2(m_screenWidthInGameUnits, m_screenHeightInGameUnits);
 }
 
-int OpenGLPlatformManager::getScreenWidth() const { return m_screenWidth; }
+int OpenGLGraphicsManager::getScreenWidth() const { return m_screenWidth; }
 
-int OpenGLPlatformManager::getScreenHeight() const { return m_screenHeight; }
-
-void OpenGLPlatformManager::setDebugMode(bool debugMode) {
-  m_debugMode = debugMode;
-}
-
-bool OpenGLPlatformManager::isDebugMode() const { return m_debugMode; }
-
-unsigned int OpenGLPlatformManager::getTicks() const { return 0; }
-
-bool OpenGLPlatformManager::shouldScale() const { return false; }
+int OpenGLGraphicsManager::getScreenHeight() const { return m_screenHeight; }

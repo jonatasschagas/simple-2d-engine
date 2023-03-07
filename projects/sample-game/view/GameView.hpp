@@ -2,29 +2,22 @@
 #ifndef GameView_hpp
 #define GameView_hpp
 
-#include "view/View.h"
 #include "core/AnimatedSprite.hpp"
-#include "platform/PlatformManager.h"
 #include "data/DataCacheManager.hpp"
+#include "view/View.h"
 
-class GameView : public View
-{
-public:
-    
-    GameView(PlatformManager& rPlatformManager, DataCacheManager& rDataCacheManager);
-    ~GameView();
-    
-    void initialize(ViewManager* pViewManager) override;
-    virtual void receiveEvent(Event* pEvent) override;
-    virtual void readInput(int x, int y, bool pressed) override;
-    virtual void updateEditor() override;
+class GameView : public View {
+ public:
+  GameView();
+  ~GameView();
 
-private:
+  void initialize(ViewManager* pViewManager) override;
+  virtual void receiveEvent(Event* pEvent) override;
+  virtual void readInput(int x, int y, bool pressed) override;
+  virtual void updateEditor() override;
 
-    AnimatedSprite m_characterSprite;
-    PlatformManager& m_rPlatformManager;
-    DataCacheManager& m_rDataCacheManager;
-
+ private:
+  AnimatedSprite m_characterSprite;
 };
 
 #endif /* GameView_hpp */

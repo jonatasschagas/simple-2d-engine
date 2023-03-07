@@ -2,37 +2,59 @@
 #ifndef DataCacheManager_hpp
 #define DataCacheManager_hpp
 
+#include "AnimatedSpriteData.hpp"
+#include "DataCache.hpp"
+#include "SpritesheetData.hpp"
+#include <mutex>
 #include <stdio.h>
 #include <string>
 
-#include "DataCache.hpp"
-#include "SpritesheetData.hpp"
-#include "AnimatedSpriteData.hpp"
-#include "TileMapData.hpp"
-
 using namespace std;
 
-class DataCacheManager
-{
-public:
-    
-    DataCacheManager();
-    ~DataCacheManager();
-    
-    SpritesheetData* getSprite(const string& config, const string& img);
-    AnimatedSpriteData* getAnimatedSprite(const string& config);
+class DataCacheManagerDestroyer;
 
-    void updateEditor();
-    
-private:
-    
-    DataCache<SpritesheetData> m_spriteCache;
-    DataCache<AnimatedSpriteData> m_animatedSpriteCache;
-    
-    void initializeMembers()
-    {
-    }
-    
+class DataCacheManager {
+ public:
+  /**
+   * DataCacheManager should not be cloneable.
+   */
+  DataCacheManager(DataCacheManager& other) = delete;
+
+  /**
+   * DataCacheManager should not be assignable.
+   */
+  void operator=(DataCacheManager const&) = delete;
+
+  static DataCacheManager* getInstance();
+
+  SpritesheetData const& getSprite(string const& config, string const& img);
+  AnimatedSpriteData const& getAnimatedSprite(string const& config);
+
+  void updateEditor();
+
+ protected:
+  friend class DataCacheManagerDestroyer;
+  virtual ~DataCacheManager();
+
+ private:
+  DataCacheManager();
+
+  static DataCacheManager* sm_pInstance;
+  static DataCacheManagerDestroyer sm_destroyer;
+  static mutex sm_mutexInstance;
+
+  DataCache<SpritesheetData> m_spriteCache;
+  DataCache<AnimatedSpriteData> m_animatedSpriteCache;
+};
+
+class DataCacheManagerDestroyer {
+ public:
+  DataCacheManagerDestroyer(DataCacheManager* = 0);
+  ~DataCacheManagerDestroyer();
+  void setSingleton(DataCacheManager* pDataCacheManager);
+
+ private:
+  DataCacheManager* m_pDataCacheManager;
 };
 
 #endif /* DataCacheManager_hpp */

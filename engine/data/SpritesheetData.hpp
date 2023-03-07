@@ -8,31 +8,27 @@
 
 using namespace std;
 
-class SpritesheetData
-{
-public:
+class SpritesheetData {
+ public:
+  SpritesheetData();
+  SpritesheetData(string const& configurationJSONFilename,
+                  string const& imageJSONFilename);
+  ~SpritesheetData();
 
-    SpritesheetData(const string& configurationJSONFilename, const string& imageJSONFilename);
-    ~SpritesheetData();
+  string const& getConfigurationJSONFilename() const;
+  string const& getImageFilename() const;
+  SpriteData const* getSpriteByName(string const& name) const;
 
-    const string& getConfigurationJSONFilename() const;
-    const string& getImageFilename() const;
-    SpriteData* getSpriteByName(const string& name) const;
-    
-private:
+ private:
+  vector<SpriteData> m_sprites;
+  string m_configurationJSONFilename;
+  string m_imageFilename;
 
-    vector<SpriteData*>* m_pSprites;
-    string m_configurationJSONFilename;
-    string m_imageFilename;
-
-    void initializeMembers()
-    {
-        m_pSprites = NULL;
-        m_configurationJSONFilename = "";
-        m_imageFilename = "";
-    }
-
+  void initializeMembers() {
+    m_configurationJSONFilename = "";
+    m_imageFilename = "";
+    m_sprites.clear();
+  }
 };
 
-
-#endif //SPRITESHEETDATA_HPP
+#endif  // SPRITESHEETDATA_HPP

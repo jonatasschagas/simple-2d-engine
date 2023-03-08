@@ -12,19 +12,19 @@ using namespace std;
 class AnimationStateData {
  public:
   AnimationStateData();
-  AnimationStateData(JSONObject* pJSON);
+  explicit AnimationStateData(JSONObject* pJSON);
   ~AnimationStateData() { initializeMembers(); }
 
   string const& getName() const { return m_name; };
   string const& getSoundEffect() const { return m_soundEffect; };
-  bool const isPlayOnce() const { return m_playOnce; };
-  bool const isAdvanceAnimationManually() const {
+  bool isPlayOnce() const { return m_playOnce; };
+  bool isAdvanceAnimationManually() const {
     return m_advanceAnimationManually;
   };
   vector<string> const& getSpriteNames() const { return m_spriteNames; };
-  float const getTimePerSprite() const { return m_timePerSprite; };
-  float const getOffsetX() const { return m_offsetX; };
-  float const getOffsetY() const { return m_offsetY; };
+  float getTimePerSprite() const { return m_timePerSprite; };
+  float getOffsetX() const { return m_offsetX; };
+  float getOffsetY() const { return m_offsetY; };
 
  private:
   string m_name;

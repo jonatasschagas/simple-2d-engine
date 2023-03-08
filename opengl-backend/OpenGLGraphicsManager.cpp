@@ -14,7 +14,6 @@ OpenGLGraphicsManager::OpenGLGraphicsManager(int screenWidth, int screenHeight,
 
   float aspectRatio = screenWidth / (screenHeight * 1.f);
 
-  m_screenWidthInGameUnits = 100;
   // the number of vertical units depends on the aspect ratio from the device
   m_screenHeightInGameUnits = ceil(m_screenWidthInGameUnits / aspectRatio);
 

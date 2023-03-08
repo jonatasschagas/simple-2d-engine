@@ -19,7 +19,7 @@ AnimatedSpriteData::AnimatedSpriteData(
   auto spritesArray =
       configurationDocument.FindMember("states")->value.GetArray();
 
-  for (int i = 0; i < spritesArray.Size(); i++) {
+  for (unsigned int i = 0; i < spritesArray.Size(); i++) {
     JSONObject spriteJSON = spritesArray[i].GetObject();
     string spriteName = spriteJSON.FindMember("name")->value.GetString();
     AnimationStateData animationStateData(&spriteJSON);

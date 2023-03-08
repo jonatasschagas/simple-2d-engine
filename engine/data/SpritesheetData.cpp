@@ -38,7 +38,7 @@ SpritesheetData::SpritesheetData(string const& configurationJSONFilename,
 SpritesheetData::~SpritesheetData() { initializeMembers(); }
 
 SpriteData const* SpritesheetData::getSpriteByName(string const& name) const {
-  for (int i = 0; i < m_sprites.size(); i++) {
+  for (unsigned long i = 0; i < m_sprites.size(); i++) {
     SpriteData const& spriteData = m_sprites.at(i);
     if (spriteData.getName().compare(name) == 0) {
       return &m_sprites.at(i);

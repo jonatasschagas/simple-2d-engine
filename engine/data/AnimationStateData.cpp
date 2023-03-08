@@ -24,7 +24,7 @@ AnimationStateData::AnimationStateData(JSONObject* pJSON) {
 
   auto pSpritesArray = pJSON->FindMember("sprites")->value.GetArray();
 
-  for (int i = 0; i < pSpritesArray.Size(); i++) {
+  for (unsigned int i = 0; i < pSpritesArray.Size(); i++) {
     m_spriteNames.push_back(pSpritesArray[i].GetString());
   }
 }

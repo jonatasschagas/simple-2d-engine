@@ -59,7 +59,7 @@ class ResourceManager {
 
 class ResourceManagerDestroyer {
  public:
-  ResourceManagerDestroyer(ResourceManager* = 0);
+  explicit ResourceManagerDestroyer(ResourceManager* = 0);
   ~ResourceManagerDestroyer();
   void setSingleton(ResourceManager* pResourceManager);
 

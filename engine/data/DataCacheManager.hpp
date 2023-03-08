@@ -49,7 +49,7 @@ class DataCacheManager {
 
 class DataCacheManagerDestroyer {
  public:
-  DataCacheManagerDestroyer(DataCacheManager* = 0);
+  explicit DataCacheManagerDestroyer(DataCacheManager* = 0);
   ~DataCacheManagerDestroyer();
   void setSingleton(DataCacheManager* pDataCacheManager);
 

@@ -65,7 +65,9 @@
         "cmath": "cpp",
         "iostream": "cpp",
         "numeric": "cpp",
-        "array": "cpp"
+        "array": "cpp",
+        "list": "cpp",
+        "queue": "cpp"
     },
     "cmake.sourceDirectory": "${workspaceFolder}/projects/osx-opengl-backend",
     "editor.formatOnSave": true

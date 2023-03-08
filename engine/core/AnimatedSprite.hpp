@@ -5,6 +5,7 @@
 #include "../core/Sprite.hpp"
 #include <functional>
 #include <map>
+#include <memory>
 #include <stdio.h>
 #include <string>
 
@@ -31,8 +32,6 @@ class AnimatedSprite : public Sprite {
   string const& getCurrentAnimationName() const;
   bool const isPlaying(string const& animationName) const;
   float getProgressAnimation() const;
-
-  bool isVisibleInParent(Sprite* pChild) const override;
 
   void stopAnimation();
   void resumeAnimation();

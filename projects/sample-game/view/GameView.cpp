@@ -1,5 +1,6 @@
 #include "GameView.hpp"
 #include "core/SpriteFactory.hpp"
+#include <memory>
 
 GameView::GameView()
     : View(),

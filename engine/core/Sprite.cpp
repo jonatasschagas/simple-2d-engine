@@ -1,6 +1,13 @@
 #include "Sprite.hpp"
 #include <glm/gtx/transform.hpp>
 
+class SpriteCmp {
+ public:
+  bool operator()(Sprite const* p1, Sprite const* p2) const {
+    return p1->getY() > p2->getY();
+  }
+};
+
 Sprite::Sprite() {
   initializeMembers();
 
@@ -8,13 +15,7 @@ Sprite::Sprite() {
   m_rotation = glm::rotate(0.0f, glm::vec3(1.0f));
 }
 
-Sprite::~Sprite() {
-  // removeAllChildren();
-
-  // delete m_pDrawCall;
-
-  initializeMembers();
-}
+Sprite::~Sprite() { initializeMembers(); }
 
 void Sprite::loadTexture(string const& textureFileName) {
   m_textureFilename = textureFileName;
@@ -30,10 +31,6 @@ void Sprite::processSounds(SoundManager& rSoundManager) {
 
 void Sprite::render(GraphicsManager& rGraphicsManager) {
   if (!m_visible) return;
-
-  bool const notVisibleInParent =
-      m_pParent != nullptr && !m_pParent->isVisibleInParent(this);
-  if (notVisibleInParent) return;
 
   if (hasTexture() && !m_textureLoaded) {
     rGraphicsManager.loadTexture(m_textureFilename);
@@ -59,8 +56,7 @@ void Sprite::render(GraphicsManager& rGraphicsManager) {
     rGraphicsManager.renderTexture(m_drawCall);
   }
 
-  for (int i = 0; i < m_children.size(); i++) {
-    Sprite* pChild = m_children[i];
+  for (Sprite* pChild : m_children) {
     pChild->render(rGraphicsManager);
   }
 }
@@ -68,10 +64,16 @@ void Sprite::render(GraphicsManager& rGraphicsManager) {
 void Sprite::update(float deltaTime) {
   if (!m_visible) return;
 
+  // cleaning up
   if (m_childrenToRemove.size() > 0) {
-    for (int i = 0; i < m_childrenToRemove.size(); i++) {
-      Sprite* pChildToRemove = m_childrenToRemove[i];
-      removeChildForced(pChildToRemove);
+    for (Sprite const* pChildToRemove : m_childrenToRemove) {
+      auto i = m_children.begin();
+      while (i != m_children.end()) {
+        if ((*i) == pChildToRemove) {
+          i = m_children.erase(i);
+        }
+        ++i;
+      }
     }
     m_childrenToRemove.clear();
   }
@@ -80,9 +82,7 @@ void Sprite::update(float deltaTime) {
   float h = m_size.y;
 
   if (m_pParent != nullptr) {
-    if (!m_pParent->isVisibleInParent(this)) return;
-
-    m_transform = calculateTransform(this);
+    m_transform = calculateTransform();
     m_worldTransform = m_pParent->m_worldTransform * m_transform;
 
     m_points[0] = m_worldTransform * glm::vec4(0.0f, 0.0f, 1.0, 1.0);
@@ -112,27 +112,26 @@ void Sprite::update(float deltaTime) {
       m_points[1] = m_worldTransform * glm::vec4(w, h, 1.0, 1.0);
     }
   } else {
-    m_transform = calculateTransform(this);
+    m_transform = calculateTransform();
 
     m_points[0] = m_transform * glm::vec4(0.0f, 0.0f, 1.0, 1.0);
     m_points[1] = m_transform * glm::vec4(w, h, 1.0, 1.0);
     m_worldTransform = m_transform;
   }
 
-  for (int i = 0; i < m_children.size(); i++) {
-    Sprite* pChild = m_children[i];
+  for (Sprite* pChild : m_children) {
     pChild->update(deltaTime);
   }
 }
 
-glm::mat4 Sprite::calculateTransform(Sprite* pSprite) {
+glm::mat4 Sprite::calculateTransform() {
   glm::vec2 pivot;
 
-  if (m_pivotCentered)
-    pivot = glm::vec2(pSprite->m_coords.x + pSprite->m_size.x / 2,
-                      pSprite->m_coords.y + pSprite->m_size.y / 2);
-  else
-    pivot = glm::vec2(pSprite->m_coords.x, pSprite->m_coords.y);
+  if (m_pivotCentered) {
+    pivot = glm::vec2(m_coords.x + m_size.x / 2, m_coords.y + m_size.y / 2);
+  } else {
+    pivot = glm::vec2(m_coords.x, m_coords.y);
+  }
 
   glm::mat4 moveToOrigin =
       glm::translate(glm::mat4(1.0f), glm::vec3(-pivot.x, -pivot.y, 1.0f));
@@ -143,9 +142,9 @@ glm::mat4 Sprite::calculateTransform(Sprite* pSprite) {
   float x = m_centeredOnParentX ? 0 : m_coords.x;
   float y = m_centeredOnParentY ? 0 : m_coords.y;
 
-  pSprite->m_transform = glm::translate(glm::mat4(1.0f), glm::vec3(x, y, 1.0f));
-  transformationMatrix = moveBackToPivot * pSprite->m_rotation *
-                         pSprite->m_scale * moveToOrigin * pSprite->m_transform;
+  m_transform = glm::translate(glm::mat4(1.0f), glm::vec3(x, y, 1.0f));
+  transformationMatrix =
+      moveBackToPivot * m_rotation * m_scale * moveToOrigin * m_transform;
 
   return transformationMatrix;
 }
@@ -160,14 +159,7 @@ void Sprite::addChild(Sprite* pChild) {
 
   if (!m_sortChildren) return;
 
-  // sort sprites by Y coordinate
-  // sprites with lower Y are in front of the sprites with higher Y
-  struct less_than_y {
-    inline bool operator()(Sprite* pS1, Sprite* pS2) {
-      return pS1->getY() > pS2->getY();
-    }
-  };
-  sort(m_children.begin(), m_children.end(), less_than_y());
+  m_children.sort(SpriteCmp());
 }
 
 void Sprite::setX(float x) { m_coords = glm::vec2(x, m_coords.y); }
@@ -195,25 +187,8 @@ void Sprite::setPivotAtCenter(bool pivotAtCenter) {
   m_pivotCentered = pivotAtCenter;
 }
 
-void Sprite::removeChild(int const index) {
-  m_children.erase(m_children.begin() + index);
-}
-
 void Sprite::removeChild(Sprite* pChildToRemove) {
   m_childrenToRemove.push_back(pChildToRemove);
-}
-
-void Sprite::removeChildForced(Sprite* pChildToRemove) {
-  int indexToRemove = -1;
-  for (int i = 0; i < m_children.size(); i++) {
-    Sprite* pChild = m_children[i];
-    if (pChild == pChildToRemove) {
-      indexToRemove = i;
-      delete pChild;
-      break;
-    }
-  }
-  if (indexToRemove > -1) removeChild(indexToRemove);
 }
 
 bool Sprite::isVisibleInParent(Sprite* pChild) const {
@@ -222,33 +197,17 @@ bool Sprite::isVisibleInParent(Sprite* pChild) const {
   return true;
 }
 
-void Sprite::removeAllChildren() {
-  for (int i = 0; i < m_children.size(); i++) {
-    Sprite* pChild = m_children[i];
-    delete pChild;
-  }
-  m_children.clear();
-}
+void Sprite::removeAllChildren() { m_children.clear(); }
 
 void Sprite::setAlpha(float const alpha) {
   m_alpha = alpha;
-  for (int i = 0; i < m_children.size(); i++) {
-    Sprite* pChild = m_children[i];
+  for (Sprite* pChild : m_children) {
     pChild->setAlpha(alpha);
   }
 }
 
-void Sprite::setVertices(vector<Vertex>& vertices) {
+void Sprite::setVertices(vector<Vertex> const& vertices) {
   m_drawCall.vertices = vertices;
-}
-
-void Sprite::destroy() {
-  if (m_pParent != nullptr) {
-    m_pParent->removeChild(this);
-  } else {
-    removeAllChildren();
-    delete this;
-  }
 }
 
 Vector2 Sprite::getScreenPosition() {
@@ -274,3 +233,5 @@ bool Sprite::hasTexture() const { return m_textureFilename.size() > 0; };
 bool const Sprite::isFlipped() const { return m_flip; }
 
 void Sprite::setFlip(bool const flip) { m_flip = flip; }
+
+Sprite* Sprite::getParent() const { return m_pParent; }

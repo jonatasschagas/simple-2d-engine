@@ -141,8 +141,6 @@ bool const AnimatedSprite::hasAnimation(string const& animationName) const {
   return m_rAnimatedSpriteData.hasAnimation(animationName);
 }
 
-bool AnimatedSprite::isVisibleInParent(Sprite* pChild) const { return true; }
-
 bool AnimatedSprite::isAtLastSprite() const {
   vector<string> spriteNames = m_pCurrentAnimationStateData->getSpriteNames();
   return m_currentAnimationStateIndex >= (spriteNames.size() - 1);

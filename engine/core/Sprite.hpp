@@ -7,14 +7,14 @@
 #include "platform/DrawCall.h"
 #include "platform/GraphicsManager.hpp"
 #include "platform/SoundManager.hpp"
+#include <list>
 #include <queue>
 #include <stdio.h>
 #include <string>
-#include <vector>
 
 using namespace std;
 
-class Sprite {
+class Sprite : enable_shared_from_this<Sprite> {
  public:
   Sprite();
   virtual ~Sprite();
@@ -51,7 +51,6 @@ class Sprite {
   void setAlpha(float const alpha);
   void setFlip(bool const flip);
   void setTileMap(bool const tileMap);
-  void addChild(Sprite* pChild);
   void setVisible(bool visible);
   bool isVisible() const;
 
@@ -59,22 +58,20 @@ class Sprite {
   virtual void render(GraphicsManager& rGraphicsManager);
   virtual void processSounds(SoundManager& rSoundManager);
 
-  vector<Sprite*> const& getChildren() const;
-  void removeChild(int const index);
-  void removeChild(Sprite* pChildToRemove);
-  void removeChildForced(Sprite* pChildToRemove);
+  void addChild(Sprite* pChild);
+  list<Sprite*> const& getChildren() const;
+  void removeChild(Sprite* pChild);
   void removeAllChildren();
 
-  void destroy();
+  Sprite* getParent() const;
 
   virtual bool isVisibleInParent(Sprite* pChild) const;
+
   bool hasTexture() const;
 
   void setSortChildren(bool sortChildren);
 
-  void setVertices(vector<Vertex>& vertices);
-
-  Sprite* getParent() const { return m_pParent; }
+  void setVertices(vector<Vertex> const& vertices);
 
  protected:
   Sprite* m_pParent;
@@ -84,7 +81,7 @@ class Sprite {
  private:
   glm::vec2 m_coords;
 
-  glm::mat4 calculateTransform(Sprite* pSprite);
+  glm::mat4 calculateTransform();
 
   string m_textureFilename;
   bool m_textureLoaded;
@@ -109,17 +106,17 @@ class Sprite {
   glm::mat4 m_rotation;
   glm::mat4 m_scale;
 
-  std::vector<Sprite*> m_children;
-  std::vector<Sprite*> m_childrenToRemove;
+  list<Sprite*> m_children;
+  list<Sprite*> m_childrenToRemove;
 
   bool m_sortChildren;
 
   void initializeMembers() {
+    m_pParent = nullptr;
     m_textureFilename = "";
     m_textureLoaded = false;
     m_alpha = 1.f;
     m_angle = 0;
-    m_pParent = nullptr;
     m_flip = false;
     m_children.clear();
     m_pivotCentered = false;

@@ -13,7 +13,7 @@ using namespace std;
 class AnimatedSpriteData {
  public:
   AnimatedSpriteData();
-  explicit AnimatedSpriteData(string const& configurationJSONFilename);
+  explicit AnimatedSpriteData(string const& configurationJSON);
   ~AnimatedSpriteData();
 
   string const& getConfigFile() const { return m_spritesheetConfigFile; };

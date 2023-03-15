@@ -1,6 +1,7 @@
 #ifndef DataCache_hpp
 #define DataCache_hpp
 
+#include "platform/ResourceProvider.hpp"
 #include <map>
 #include <stdio.h>
 #include <string>
@@ -11,15 +12,20 @@ using namespace std;
 template <class T>
 class DataCache {
  public:
-  DataCache() { initializeMembers(); }
+  DataCache(ResourceProvider& rResourceProvider)
+      : m_rResourceProvider(rResourceProvider) {
+    initializeMembers();
+  }
 
   ~DataCache() { initializeMembers(); }
 
   T const& getData(string const& configName) {
     auto it = m_dataMap.find(configName);
     if (it == m_dataMap.end()) {
+      string configValue = "";
+      m_rResourceProvider.readContentsFromFile(configName, &configValue);
       // element not found;
-      T t(configName);
+      T t(configValue);
       m_dataMap[configName] = t;
       m_items.push_back(t);
     }
@@ -33,7 +39,11 @@ class DataCache {
 
     if (it == m_dataMap.end()) {
       // element not found;
-      T t(f1, f2);
+      string const& configPath = f1;
+      string configValue = "";
+      m_rResourceProvider.readContentsFromFile(configPath, &configValue);
+
+      T t(configValue, f2);
       m_dataMap[key] = t;
     }
 
@@ -45,6 +55,7 @@ class DataCache {
  private:
   map<string, T> m_dataMap;
   vector<T> m_items;
+  ResourceProvider& m_rResourceProvider;
 
   void initializeMembers() {
     m_dataMap.clear();

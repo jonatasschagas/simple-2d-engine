@@ -2,9 +2,10 @@
 #ifndef ResourceManager_hpp
 #define ResourceManager_hpp
 
+#include "OpenGLHeaders.h"
 #include "Shader.hpp"
 #include "Texture2D.hpp"
-#include <glad/glad.h>
+#include "platform/ResourceProvider.hpp"
 #include <map>
 #include <memory>
 #include <mutex>
@@ -29,11 +30,13 @@ class ResourceManager {
   static ResourceManager* getInstance();
 
   Shader& loadShader(string const& vertexShaderFile,
-                     string const& fragShaderFile, string const& name);
+                     string const& fragShaderFile, string const& name,
+                     ResourceProvider& rResourceProvider);
 
   Shader& getShader(string const& name);
 
-  Texture2D& loadTexture(string const& file, string const& name);
+  Texture2D& loadTexture(string const& file, string const& name,
+                         ResourceProvider& rResourceProvider);
 
   Texture2D& getTexture(string const& name);
 

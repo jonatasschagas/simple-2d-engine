@@ -11,7 +11,7 @@ using namespace std;
 class SpritesheetData {
  public:
   SpritesheetData();
-  SpritesheetData(string const& configurationJSONFilename,
+  SpritesheetData(string const& configurationJSON,
                   string const& imageJSONFilename);
   ~SpritesheetData();
 

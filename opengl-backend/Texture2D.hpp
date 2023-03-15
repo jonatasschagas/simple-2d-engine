@@ -2,7 +2,7 @@
 #ifndef Texture2d_hpp
 #define Texture2d_hpp
 
-#include <glad/glad.h>
+#include "OpenGLHeaders.h"
 
 class Texture2D {
  public:
@@ -11,7 +11,7 @@ class Texture2D {
   ~Texture2D();
 
   // generates texture from image data
-  void generate(unsigned int width, unsigned int height, unsigned char* pData);
+  void generate(unsigned int width, unsigned int height, void* pData);
 
   // binds the texture as the current active GL_TEXTURE_2D texture object
   void bind() const;

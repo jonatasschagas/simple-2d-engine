@@ -3,11 +3,9 @@
 
 AnimatedSpriteData::AnimatedSpriteData() { initializeMembers(); }
 
-AnimatedSpriteData::AnimatedSpriteData(
-    string const& configurationJSONFilename) {
+AnimatedSpriteData::AnimatedSpriteData(string const& configurationJSON) {
   initializeMembers();
 
-  string configurationJSON = loadFile(configurationJSONFilename);
   Document configurationDocument;
   configurationDocument.Parse(configurationJSON.c_str());
 

@@ -1,11 +1,9 @@
 #include "ResourceManager.hpp"
 #include "OpenGLHeaders.h"
+#include "utils/FileUtils.h"
 #include <fstream>
 #include <iostream>
 #include <sstream>
-#define STB_IMAGE_IMPLEMENTATION
-#include "stb_image.h"
-#include "utils/FileUtils.h"
 
 ResourceManager* ResourceManager::sm_pInstance{nullptr};
 mutex ResourceManager::sm_mutexInstance;
@@ -26,9 +24,12 @@ ResourceManager* ResourceManager::getInstance() {
 
 Shader& ResourceManager::loadShader(string const& vertexShaderFile,
                                     string const& fragShaderFile,
-                                    string const& name) {
-  string vertexCode = loadFile(vertexShaderFile);
-  string fragmentCode = loadFile(fragShaderFile);
+                                    string const& name,
+                                    ResourceProvider& rResourceProvider) {
+  string vertexCode;
+  rResourceProvider.readContentsFromFile(vertexShaderFile, &vertexCode);
+  string fragmentCode;
+  rResourceProvider.readContentsFromFile(fragShaderFile, &fragmentCode);
 
   unique_ptr<Shader> pShader = make_unique<Shader>();
   pShader->compile(vertexCode.c_str(), fragmentCode.c_str());
@@ -42,17 +43,16 @@ Shader& ResourceManager::getShader(string const& name) {
   return *m_shadersMap[name];
 }
 
-Texture2D& ResourceManager::loadTexture(string const& file,
-                                        string const& name) {
+Texture2D& ResourceManager::loadTexture(string const& file, string const& name,
+                                        ResourceProvider& rResourceProvider) {
   unique_ptr<Texture2D> pTexture = make_unique<Texture2D>();
 
-  int width, height, nrChannels;
-  unsigned char* data =
-      stbi_load(file.c_str(), &width, &height, &nrChannels, 0);
+  int width, height;
+  void* data = rResourceProvider.loadTexture(file, &width, &height);
 
   pTexture->generate(width, height, data);
 
-  stbi_image_free(data);
+  delete[] data;
 
   m_texturesMap[name] = move(pTexture);
 

@@ -8,14 +8,11 @@ using namespace rapidjson;
 
 SpritesheetData::SpritesheetData() { initializeMembers(); }
 
-SpritesheetData::SpritesheetData(string const& configurationJSONFilename,
+SpritesheetData::SpritesheetData(string const& configurationJSON,
                                  string const& imageJSONFilename) {
   initializeMembers();
 
-  m_configurationJSONFilename = configurationJSONFilename;
   m_imageFilename = imageJSONFilename;
-
-  string configurationJSON = loadFile(configurationJSONFilename);
 
   Document configurationDocument;
   configurationDocument.Parse(configurationJSON.c_str());

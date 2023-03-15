@@ -2,19 +2,24 @@
 #include "ResourceManager.hpp"
 #include "Shader.hpp"
 #include "Texture2D.hpp"
+#include "data/DataCacheManager.hpp"
 
-OpenGLGraphicsManager::OpenGLGraphicsManager(int screenWidth, int screenHeight,
-                                             int screenWidthInGameUnits)
-    : GraphicsManager() {
+OpenGLGraphicsManager::OpenGLGraphicsManager(
+    int screenWidth, int screenHeight, int screenWidthInGameUnits,
+    ResourceProvider& rResourceProvider, string& rVertexShaderPath,
+    string& rFragmentShaderPath)
+    : GraphicsManager(), m_rResourceProvider(rResourceProvider) {
   initializeMembers();
 
   m_screenWidth = screenWidth;
   m_screenHeight = screenHeight;
   m_screenWidthInGameUnits = screenWidthInGameUnits;
+  m_vertexShaderPath = rVertexShaderPath;
+  m_fragmentShaderPath = rFragmentShaderPath;
 
   float aspectRatio = screenWidth / (screenHeight * 1.f);
 
-  // the number of vertical units depends on the aspect ratio from the device
+  // the number of vertical units depends on the aspect ratio of the device
   m_screenHeightInGameUnits = ceil(m_screenWidthInGameUnits / aspectRatio);
 
   m_scaleFactorX = ((float)screenWidth) / m_screenWidthInGameUnits;
@@ -24,16 +29,17 @@ OpenGLGraphicsManager::OpenGLGraphicsManager(int screenWidth, int screenHeight,
 OpenGLGraphicsManager::~OpenGLGraphicsManager() {}
 
 void OpenGLGraphicsManager::initialize() {
+  DataCacheManager::getInstance()->setResourceProvider(&m_rResourceProvider);
+
   // load shaders
   ResourceManager::getInstance()->loadShader(
-      "assets/shaders/sprite.vs", "assets/shaders/sprite.frag", "sprite");
+      m_vertexShaderPath, m_fragmentShaderPath, "sprite", m_rResourceProvider);
   // configure shaders
   glm::mat4 projection = glm::ortho(0.0f, (float)m_screenWidth,
                                     (float)m_screenHeight, 0.0f, -1.0f, 1.0f);
-  ResourceManager::getInstance()->getShader("sprite").use().setInteger("image",
-                                                                       0);
-  ResourceManager::getInstance()->getShader("sprite").setMatrix4("projection",
-                                                                 projection);
+  Shader& rShader = ResourceManager::getInstance()->getShader("sprite");
+  rShader.use().setInteger("image", 0);
+  rShader.setMatrix4("projection", projection);
 }
 
 void OpenGLGraphicsManager::setOffset(float x, float y) {
@@ -68,7 +74,8 @@ void OpenGLGraphicsManager::renderTexture(DrawCall const& drawCall) {
 }
 
 void* OpenGLGraphicsManager::loadTexture(string const& path) {
-  return &ResourceManager::getInstance()->loadTexture(path, path);
+  return &ResourceManager::getInstance()->loadTexture(path, path,
+                                                      m_rResourceProvider);
 }
 
 int const OpenGLGraphicsManager::getWorldLocationXFromScreenCoordinates(

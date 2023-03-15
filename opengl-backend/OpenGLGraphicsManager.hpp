@@ -4,11 +4,17 @@
 
 #include "SpriteRenderer.hpp"
 #include "platform/GraphicsManager.hpp"
+#include "platform/ResourceProvider.hpp"
+#include <string>
+
+using namespace std;
 
 class OpenGLGraphicsManager : public GraphicsManager {
  public:
   OpenGLGraphicsManager(int screenWidth, int screenHeight,
-                        int screenWidthInGameUnits);
+                        int screenWidthInGameUnits,
+                        ResourceProvider& rResourceProvider,
+                        string& rVertexShaderPath, string& rFragmentShaderPath);
   ~OpenGLGraphicsManager();
 
   void initialize() override;
@@ -26,6 +32,7 @@ class OpenGLGraphicsManager : public GraphicsManager {
 
  private:
   SpriteRenderer m_spriteRenderer;
+  ResourceProvider& m_rResourceProvider;
   float m_offsetX;
   float m_offsetY;
   int m_screenWidth;
@@ -34,6 +41,8 @@ class OpenGLGraphicsManager : public GraphicsManager {
   int m_screenHeightInGameUnits;
   float m_scaleFactorX;
   float m_scaleFactorY;
+  string m_vertexShaderPath;
+  string m_fragmentShaderPath;
 
   void initializeMembers() {
     m_offsetX = 0.0f;
@@ -44,6 +53,8 @@ class OpenGLGraphicsManager : public GraphicsManager {
     m_screenHeightInGameUnits = 0;
     m_scaleFactorX = 0;
     m_scaleFactorY = 0;
+    m_vertexShaderPath = "";
+    m_fragmentShaderPath = "";
   }
 };
 

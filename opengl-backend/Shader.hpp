@@ -2,7 +2,7 @@
 #ifndef Shader_hpp
 #define Shader_hpp
 
-#include <glad/glad.h>
+#include "OpenGLHeaders.h"
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <string>

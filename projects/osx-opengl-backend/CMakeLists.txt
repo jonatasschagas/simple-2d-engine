@@ -41,7 +41,7 @@ if(APPLE)
 endif()
 
 # Add -O0 to remove optimizations when using gcc
-set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -O0 --std=c++14")
+set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DAPPLE -O0 --std=c++17")
 set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -O0")
 
 # adding source files

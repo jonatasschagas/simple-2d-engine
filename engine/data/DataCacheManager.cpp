@@ -14,9 +14,13 @@ DataCacheManager* DataCacheManager::sm_pInstance{nullptr};
 mutex DataCacheManager::sm_mutexInstance;
 DataCacheManagerDestroyer DataCacheManager::sm_destroyer;
 
-DataCacheManager::DataCacheManager() {}
+DataCacheManager::DataCacheManager() { initializeMembers(); }
 
-DataCacheManager::~DataCacheManager() {}
+DataCacheManager::~DataCacheManager() {
+  delete m_pSpriteCache;
+  delete m_pAnimatedSpriteCache;
+  initializeMembers();
+}
 
 DataCacheManager* DataCacheManager::getInstance() {
   lock_guard<mutex> lock(sm_mutexInstance);
@@ -29,12 +33,16 @@ DataCacheManager* DataCacheManager::getInstance() {
 
 SpritesheetData const& DataCacheManager::getSprite(string const& config,
                                                    string const& img) {
-  return m_spriteCache.getData(config, img);
+  // make sure to set the resource provider before using the data cache manager
+  assert(m_pSpriteCache != nullptr);
+  return m_pSpriteCache->getData(config, img);
 }
 
 AnimatedSpriteData const& DataCacheManager::getAnimatedSprite(
     string const& config) {
-  return m_animatedSpriteCache.getData(config);
+  // make sure to set the resource provider before using the data cache manager
+  assert(m_pAnimatedSpriteCache != nullptr);
+  return m_pAnimatedSpriteCache->getData(config);
 }
 
 void DataCacheManager::updateEditor() {}
@@ -51,4 +59,13 @@ DataCacheManagerDestroyer::~DataCacheManagerDestroyer() {
 void DataCacheManagerDestroyer::setSingleton(
     DataCacheManager* pDataCacheManager) {
   m_pDataCacheManager = pDataCacheManager;
+}
+
+void DataCacheManager::setResourceProvider(
+    ResourceProvider* pResourceProvider) {
+  m_pResourceProvider = pResourceProvider;
+
+  m_pSpriteCache = new DataCache<SpritesheetData>(*m_pResourceProvider);
+  m_pAnimatedSpriteCache =
+      new DataCache<AnimatedSpriteData>(*m_pResourceProvider);
 }

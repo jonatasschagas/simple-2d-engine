@@ -5,6 +5,7 @@
 #include "AnimatedSpriteData.hpp"
 #include "DataCache.hpp"
 #include "SpritesheetData.hpp"
+#include "platform/ResourceProvider.hpp"
 #include <mutex>
 #include <stdio.h>
 #include <string>
@@ -32,6 +33,8 @@ class DataCacheManager {
 
   void updateEditor();
 
+  void setResourceProvider(ResourceProvider* pResourceProvider);
+
  protected:
   friend class DataCacheManagerDestroyer;
   virtual ~DataCacheManager();
@@ -43,8 +46,15 @@ class DataCacheManager {
   static DataCacheManagerDestroyer sm_destroyer;
   static mutex sm_mutexInstance;
 
-  DataCache<SpritesheetData> m_spriteCache;
-  DataCache<AnimatedSpriteData> m_animatedSpriteCache;
+  ResourceProvider* m_pResourceProvider;
+  DataCache<SpritesheetData>* m_pSpriteCache;
+  DataCache<AnimatedSpriteData>* m_pAnimatedSpriteCache;
+
+  void initializeMembers() {
+    m_pResourceProvider = nullptr;
+    m_pSpriteCache = nullptr;
+    m_pAnimatedSpriteCache = nullptr;
+  }
 };
 
 class DataCacheManagerDestroyer {

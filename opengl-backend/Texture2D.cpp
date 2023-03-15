@@ -13,7 +13,7 @@ Texture2D::~Texture2D() {
 }
 
 void Texture2D::generate(unsigned int width, unsigned int height,
-                         unsigned char* pData) {
+                         void* pData) {
   m_width = width;
   m_height = height;
 

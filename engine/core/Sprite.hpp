@@ -41,8 +41,8 @@ class Sprite : enable_shared_from_this<Sprite> {
   float getHeight() const;
   float getTransformedX() const;
   float getTransformedY() const;
-  Vector2 getScreenPosition();
-  Vector2 getGamePosition();
+  Vector2 getScreenPosition() const;
+  Vector2 getGamePosition() const;
 
   void fillParent();
 
@@ -65,7 +65,7 @@ class Sprite : enable_shared_from_this<Sprite> {
 
   Sprite* getParent() const;
 
-  virtual bool isVisibleInParent(Sprite* pChild) const;
+  virtual bool isVisibleInParent(GraphicsManager const& rGraphicsManager) const;
 
   bool hasTexture() const;
 
@@ -123,6 +123,7 @@ class Sprite : enable_shared_from_this<Sprite> {
     m_centeredOnParentX = false;
     m_centeredOnParentY = false;
     m_visible = true;
+    m_tileMap = false;
 
     m_coords.x = 0;
     m_coords.y = 0;

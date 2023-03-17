@@ -4,6 +4,8 @@
 
 #include "AnimatedSprite.hpp"
 #include "Sprite.hpp"
+#include "TileMapSprite.hpp"
+#include "Vector2.h"
 #include <string>
 
 using namespace std;
@@ -14,6 +16,12 @@ class SpriteFactory {
       string const& animationConfiguration);
 
   static Sprite buildSprite();
+
+  static TileMapSprite buildTileMapSprite(string const& tileMapConfiguration,
+                                          string const& levelsLocation,
+                                          string const& tileSetLocation,
+                                          Vector2 const& tileSizeInWorldUnits,
+                                          string const& metaLayerName);
 };
 
 #endif /* SpriteFactory_hpp */

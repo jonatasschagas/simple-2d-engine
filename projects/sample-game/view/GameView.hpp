@@ -3,6 +3,7 @@
 #define GameView_hpp
 
 #include "core/AnimatedSprite.hpp"
+#include "core/TileMapSprite.hpp"
 #include "data/DataCacheManager.hpp"
 #include "view/View.h"
 
@@ -18,6 +19,7 @@ class GameView : public View {
 
  private:
   AnimatedSprite m_characterSprite;
+  TileMapSprite m_tileMapSprite;
 };
 
 #endif /* GameView_hpp */

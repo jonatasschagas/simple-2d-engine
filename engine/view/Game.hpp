@@ -10,7 +10,7 @@ using namespace std;
 
 class Game : public EventListener {
  public:
-  virtual void initialize() = 0;
+  virtual void initialize(Vector2 const& screenSizeInGameUnits) = 0;
   virtual void receiveEvent(Event* pEvent) = 0;
   virtual void update(float const deltaTime) = 0;
   virtual void updateEditor(float const deltaTime) = 0;

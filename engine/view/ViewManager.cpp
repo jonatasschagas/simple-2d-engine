@@ -1,6 +1,9 @@
 #include "ViewManager.hpp"
 
-ViewManager::ViewManager() { initializeMembers(); }
+ViewManager::ViewManager(Vector2 const& screenSizeInGameUnits)
+    : m_screenSizeInGameUnits(screenSizeInGameUnits) {
+  initializeMembers();
+}
 
 ViewManager::~ViewManager() {
   // delete the views
@@ -56,5 +59,8 @@ void ViewManager::switchView(string const& viewName) {
 
 void ViewManager::addView(string const& viewName, View* pView) {
   m_views[viewName] = pView;
+  pView->setXY(0, 0);
+  pView->setPivotAtCenter(true);
+  pView->setSize(m_screenSizeInGameUnits.x, m_screenSizeInGameUnits.y);
   pView->initialize(this);
 }

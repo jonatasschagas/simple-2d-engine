@@ -32,6 +32,10 @@ void Sprite::processSounds(SoundManager& rSoundManager) {
 void Sprite::render(GraphicsManager& rGraphicsManager) {
   if (!m_visible) return;
 
+  if (!isVisibleInParent(rGraphicsManager)) {
+    return;
+  }
+
   if (hasTexture() && !m_textureLoaded) {
     rGraphicsManager.loadTexture(m_textureFilename);
     m_textureLoaded = true;
@@ -191,9 +195,7 @@ void Sprite::removeChild(Sprite* pChildToRemove) {
   m_childrenToRemove.push_back(pChildToRemove);
 }
 
-bool Sprite::isVisibleInParent(Sprite* pChild) const {
-  if (m_pParent != nullptr) return m_pParent->isVisibleInParent(pChild);
-
+bool Sprite::isVisibleInParent(GraphicsManager const& rGraphicsManager) const {
   return true;
 }
 
@@ -210,11 +212,13 @@ void Sprite::setVertices(vector<Vertex> const& vertices) {
   m_drawCall.vertices = vertices;
 }
 
-Vector2 Sprite::getScreenPosition() {
+Vector2 Sprite::getScreenPosition() const {
   return Vector2(getTransformedX(), getTransformedY());
 }
 
-Vector2 Sprite::getGamePosition() { return Vector2(m_coords.x, m_coords.y); }
+Vector2 Sprite::getGamePosition() const {
+  return Vector2(m_coords.x, m_coords.y);
+}
 
 float Sprite::getX() const { return m_coords.x; }
 
@@ -235,3 +239,14 @@ bool const Sprite::isFlipped() const { return m_flip; }
 void Sprite::setFlip(bool const flip) { m_flip = flip; }
 
 Sprite* Sprite::getParent() const { return m_pParent; }
+
+void Sprite::setTileMap(bool tileMap) { m_tileMap = tileMap; }
+
+void Sprite::fillParent() {
+  if (m_pParent == nullptr) return;
+
+  float parentWidth = m_pParent->getWidth();
+  float parentHeight = m_pParent->getHeight();
+
+  setSize(parentWidth, parentHeight);
+}

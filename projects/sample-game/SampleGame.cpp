@@ -2,19 +2,21 @@
 #include "view/GameView.hpp"
 #include <glm/glm.hpp>
 
-SampleGame::SampleGame() { initializeMembers(); }
+SampleGame::SampleGame() : m_viewManager(Vector2::ZERO) { initializeMembers(); }
 
 SampleGame::~SampleGame() { initializeMembers(); }
 
-void SampleGame::initialize() {
-  m_viewManager = ViewManager();
+void SampleGame::initialize(Vector2 const& screenSizeInGameUnits) {
+  m_viewManager = ViewManager(screenSizeInGameUnits);
 
   GameView* pGameView = new GameView();
   m_viewManager.addView("game-view", pGameView);
   m_viewManager.switchView("game-view");
 }
 
-void SampleGame::receiveEvent(Event* pEvent) {}
+void SampleGame::receiveEvent(Event* pEvent) {
+  m_viewManager.receiveEvent(pEvent);
+}
 
 void SampleGame::update(float const deltaTime) {
   m_viewManager.update(deltaTime);

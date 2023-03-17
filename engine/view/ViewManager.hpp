@@ -15,7 +15,7 @@ using namespace std;
 
 class ViewManager : public EventListener {
  public:
-  ViewManager();
+  ViewManager(Vector2 const& screenSizeInGameUnits);
   ~ViewManager();
 
   void receiveEvent(Event* pEvent) override;
@@ -30,6 +30,7 @@ class ViewManager : public EventListener {
   void switchView(string const& viewName);
 
  private:
+  Vector2 m_screenSizeInGameUnits;
   View* m_pCurrentView;
   View* m_pPreviousView;
 

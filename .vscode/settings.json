@@ -69,6 +69,7 @@
         "list": "cpp",
         "queue": "cpp"
     },
+    //"cmake.sourceDirectory": "${workspaceFolder}/projects/osx-sdl-backend",
     "cmake.sourceDirectory": "${workspaceFolder}/projects/osx-opengl-backend",
     "editor.formatOnSave": true
 }

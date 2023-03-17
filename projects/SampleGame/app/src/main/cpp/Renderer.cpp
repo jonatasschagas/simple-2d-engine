@@ -183,7 +183,7 @@ void Renderer::updateRenderArea() {
         m_pMuteSoundManager = new MuteSoundManager();
 
         m_pGraphicsManager->initialize();
-        m_pSampleGame->initialize();
+        m_pSampleGame->initialize(m_pGraphicsManager->getScreenSizeInGameUnits());
     }
 }
 

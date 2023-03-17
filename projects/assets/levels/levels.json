@@ -1,0 +1,353 @@
+{
+    "levelsFolder": "assets/levels/",
+    "tileSetsFolder": "assets/levels/",
+    "tileSize": {
+        "x": 5,
+        "y": 5
+    },
+    "levels": [
+        {
+            "character": "assets/characters/masked/masked_animation.json",
+            "title": "Welcome! Let's start with some jumps!",
+            "configFile": "assets/levels/green-zone1.json",
+            "background": "assets/levels/backgrounds/Brown.png",
+            "backgroundMusic": "assets/music/POL-treasure-match-short.wav",
+            "backgroundTileSize": {
+                "x": 20,
+                "y": 20
+            },
+            "backgroundTextureSize": {
+                "x": 64,
+                "y": 64
+            },
+            "numFruits": 52,
+            "platforms": [
+                {
+                    "type": "moving-platform-wood",
+                    "widthInTiles": 2,
+                    "heightInTiles": 0.5,
+                    "tileX": 89,
+                    "tileY": 11,
+                    "targetTileX": 93,
+                    "targetTileY": 11,
+                    "speed": 200
+                },
+                {
+                    "type": "moving-platform-wood",
+                    "widthInTiles": 2,
+                    "heightInTiles": 0.5,
+                    "tileX": 132,
+                    "tileY": 6,
+                    "targetTileX": 136,
+                    "targetTileY": 6,
+                    "speed": 200
+                }
+            ],
+            "traps": [],
+            "trampolines": [],
+            "fallingBlocks": []
+        },
+        {
+            "character": "assets/characters/masked/masked_animation.json",
+            "title": "Hello Trampolines!",
+            "configFile": "assets/levels/green-zone2.json",
+            "background": "assets/levels/backgrounds/Brown.png",
+            "backgroundMusic": "assets/music/POL-treasure-match-short.wav",
+            "backgroundTileSize": {
+                "x": 20,
+                "y": 20
+            },
+            "backgroundTextureSize": {
+                "x": 64,
+                "y": 64
+            },
+            "numFruits": 13,
+            "platforms": [
+                {
+                    "type": "moving-platform-wood",
+                    "widthInTiles": 2,
+                    "heightInTiles": 0.5,
+                    "tileX": 17,
+                    "tileY": 13,
+                    "targetTileX": 23,
+                    "targetTileY": 13,
+                    "speed": 200
+                },
+                {
+                    "type": "moving-platform-wood",
+                    "widthInTiles": 2,
+                    "heightInTiles": 0.5,
+                    "tileX": 41,
+                    "tileY": 8,
+                    "targetTileX": 48,
+                    "targetTileY": 8,
+                    "speed": 200
+                }
+            ],
+            "traps": [],
+            "trampolines": [
+                {
+                    "tileX": 32,
+                    "tileY": 12,
+                    "bounciness": 1
+                }
+            ],
+            "fallingBlocks": []
+        },
+        {
+            "character": "assets/characters/masked/masked_animation.json",
+            "title": "It's time to GRAB SOME FRUITS!",
+            "configFile": "assets/levels/level1.json",
+            "background": "assets/levels/backgrounds/Brown.png",
+            "backgroundMusic": "assets/music/POL-treasure-match-short.wav",
+            "backgroundTileSize": {
+                "x": 20,
+                "y": 20
+            },
+            "backgroundTextureSize": {
+                "x": 64,
+                "y": 64
+            },
+            "numFruits": 24,
+            "platforms": [],
+            "traps": [],
+            "trampolines": [],
+            "fallingBlocks": []
+        },
+        {
+            "character": "assets/characters/ninja-frog/ninja-frog_animation.json",
+            "title": "Platforms!",
+            "configFile": "assets/levels/level2.json",
+            "background": "assets/levels/backgrounds/Blue.png",
+            "backgroundMusic": "assets/music/POL-treasure-match-short.wav",
+            "backgroundTileSize": {
+                "x": 20,
+                "y": 20
+            },
+            "backgroundTextureSize": {
+                "x": 64,
+                "y": 64
+            },
+            "numFruits": 18,
+            "platforms": [
+                {
+                    "type": "toggle-platform",
+                    "widthInTiles": 2,
+                    "heightInTiles": 1,
+                    "tileX": 18,
+                    "tileY": 7,
+                    "targetTileX": 24,
+                    "targetTileY": 7,
+                    "speed": 50
+                },
+                {
+                    "type": "moving-platform-wood",
+                    "widthInTiles": 2,
+                    "heightInTiles": 0.3,
+                    "tileX": 39,
+                    "tileY": 7,
+                    "targetTileX": 46,
+                    "targetTileY": 7,
+                    "speed": 350
+                }
+                ,
+                {
+                    "type": "moving-platform-iron",
+                    "widthInTiles": 2,
+                    "heightInTiles": 0.3,
+                    "tileX": 58,
+                    "tileY": 7,
+                    "targetTileX": 65,
+                    "targetTileY": 7,
+                    "speed": 350
+                }
+            ],
+            "traps": [],
+            "trampolines": [],
+            "fallingBlocks": []
+        },
+        {
+            "character": "assets/characters/virtual-guy/virtual-guy_animation.json",
+            "title": "SAW BLADES!",
+            "configFile": "assets/levels/level3.json",
+            "background": "assets/levels/backgrounds/Yellow.png",
+            "backgroundMusic": "assets/music/POL-treasure-match-short.wav",
+            "backgroundTileSize": {
+                "x": 20,
+                "y": 20
+            },
+            "backgroundTextureSize": {
+                "x": 64,
+                "y": 64
+            },
+            "numFruits": 15,
+            "platforms": [],
+            "traps": [
+                {
+                    "type": "saw",
+                    "widthInTiles": 2,
+                    "heightInTiles": 2,
+                    "tileX": 23,
+                    "tileY": 11,
+                    "targetTileX": 33,
+                    "targetTileY": 11
+                },
+                {
+                    "type": "saw",
+                    "widthInTiles": 2,
+                    "heightInTiles": 2,
+                    "tileX": 33,
+                    "tileY": 8,
+                    "targetTileX": 23,
+                    "targetTileY": 8
+                }
+            ],
+            "trampolines": [],
+            "fallingBlocks": []
+        },
+        {
+            "character": "assets/characters/pink-man/pink-man_animation.json",
+            "title": "Trampoline away!",
+            "configFile": "assets/levels/level4.json",
+            "background": "assets/levels/backgrounds/Purple.png",
+            "backgroundMusic": "assets/music/POL-treasure-match-short.wav",
+            "backgroundTileSize": {
+                "x": 20,
+                "y": 20
+            },
+            "backgroundTextureSize": {
+                "x": 64,
+                "y": 64
+            },
+            "numFruits": 20,
+            "platforms": [],
+            "traps": [],
+            "trampolines": [
+                {
+                    "tileX": 8,
+                    "tileY": 29,
+                    "bounciness": 1
+                },
+                {
+                    "tileX": 13,
+                    "tileY": 21,
+                    "bounciness": 1
+                },
+                {
+                    "tileX": 8,
+                    "tileY": 14,
+                    "bounciness": 1
+                }
+            ],
+            "fallingBlocks": []
+        },
+        {
+            "character": "assets/characters/virtual-guy/virtual-guy_animation.json",
+            "title": "Never look back! (falling blocks)",
+            "configFile": "assets/levels/falling-blocks.json",
+            "background": "assets/levels/backgrounds/Pink.png",
+            "backgroundMusic": "assets/music/POL-treasure-match-short.wav",
+            "backgroundTileSize": {
+                "x": 20,
+                "y": 20
+            },
+            "backgroundTextureSize": {
+                "x": 64,
+                "y": 64
+            },
+            "numFruits": 12,
+            "platforms": [],
+            "traps": [],
+            "trampolines": [],
+            "fallingBlocks": [
+                {
+                    "tileX": 5,
+                    "tileY": 7,
+                    "distanceToGroundInTiles": 5,
+                    "weight": 1000
+                },
+                {
+                    "tileX": 10,
+                    "tileY": 7,
+                    "distanceToGroundInTiles": 5,
+                    "weight": 1000
+                },
+                {
+                    "tileX": 14,
+                    "tileY": 7,
+                    "distanceToGroundInTiles": 5,
+                    "weight": 1000
+                },
+                {
+                    "tileX": 18,
+                    "tileY": 7,
+                    "distanceToGroundInTiles": 5,
+                    "weight": 1000
+                },
+                {
+                    "tileX": 22,
+                    "tileY": 7,
+                    "distanceToGroundInTiles": 5,
+                    "weight": 1000
+                },
+                {
+                    "tileX": 26,
+                    "tileY": 7,
+                    "distanceToGroundInTiles": 5,
+                    "weight": 1000
+                },
+                {
+                    "tileX": 31,
+                    "tileY": 7,
+                    "distanceToGroundInTiles": 5,
+                    "weight": 1000
+                },
+                {
+                    "tileX": 35,
+                    "tileY": 7,
+                    "distanceToGroundInTiles": 5,
+                    "weight": 1000
+                }
+            ]
+        },
+        {
+            "character": "assets/characters/virtual-guy/virtual-guy_animation.json",
+            "title": "Rock Head!",
+            "configFile": "assets/levels/rock-head.json",
+            "background": "assets/levels/backgrounds/Gray.png",
+            "backgroundMusic": "assets/music/POL-treasure-match-short.wav",
+            "backgroundTileSize": {
+                "x": 20,
+                "y": 20
+            },
+            "backgroundTextureSize": {
+                "x": 64,
+                "y": 64
+            },
+            "numFruits": 15,
+            "platforms": [],
+            "traps": [
+                {
+                    "type": "rock-head",
+                    "widthInTiles": 2,
+                    "heightInTiles": 2,
+                    "tileX": 10,
+                    "tileY": 20,
+                    "crushTime": 10,
+                    "idleTime": 2
+                },
+                {
+                    "type": "rock-head",
+                    "widthInTiles": 2,
+                    "heightInTiles": 2,
+                    "tileX": 29,
+                    "tileY": 20,
+                    "crushTime": 10,
+                    "idleTime": 20
+                }
+            ],
+            "trampolines": [],
+            "fallingBlocks": []
+        }
+    ]
+}

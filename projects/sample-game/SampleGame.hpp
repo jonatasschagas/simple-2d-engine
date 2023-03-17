@@ -14,7 +14,7 @@ class SampleGame : public Game {
   SampleGame();
   ~SampleGame();
 
-  void initialize() override;
+  void initialize(Vector2 const& screenSizeInGameUnits) override;
   void receiveEvent(Event* pEvent) override;
   void update(float const deltaTime) override;
   void updateEditor(float const deltaTime) override;

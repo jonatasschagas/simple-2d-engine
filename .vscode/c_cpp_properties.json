@@ -9,6 +9,7 @@
                 "${workspaceFolder}/third-party/**",
                 "${workspaceFolder}/third-party/glad/includes/**",
                 "${workspaceFolder}/projects/osx-opengl-backend/**",
+                "${workspaceFolder}/projects/osx-sdl-backend/**",
                 "${workspaceFolder}/projects/sample-game/**"
             ],
             "defines": [],

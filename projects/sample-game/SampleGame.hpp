@@ -11,15 +11,15 @@ using namespace std;
 
 class SampleGame : public Game {
  public:
-  SampleGame();
+  SampleGame(GraphicsManager& rGraphicsManager, SoundManager& rSoundManager);
   ~SampleGame();
 
-  void initialize(Vector2 const& screenSizeInGameUnits) override;
+  void initialize() override;
   void receiveEvent(Event* pEvent) override;
   void update(float const deltaTime) override;
   void updateEditor(float const deltaTime) override;
-  void render(GraphicsManager& rGraphicsManager) override;
-  void processSounds(SoundManager& rSoundManager) override;
+  void render() override;
+  void processSounds() override;
   string const& getGameName() override;
 
  private:

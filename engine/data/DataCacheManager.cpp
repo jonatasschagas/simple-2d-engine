@@ -20,7 +20,6 @@ DataCacheManager::~DataCacheManager() {
   delete m_pSpriteCache;
   delete m_pAnimatedSpriteCache;
   delete m_pTileMapCache;
-  delete m_pResourceProvider;
   initializeMembers();
 }
 

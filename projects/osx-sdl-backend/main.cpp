@@ -1,5 +1,7 @@
 
 #include "SDLGame.hpp"
+#include "SDLGraphicsManager.hpp"
+#include "SDLSoundManager.hpp"
 #include "SampleGame.hpp"
 
 using namespace std;
@@ -11,9 +13,17 @@ int main(int argc, char** argv) {
   sdlGameConfigs.screenHeight = 480;
   sdlGameConfigs.backgroundColor = {0, 0, 0, 255};
 
-  SampleGame sampleGame;
+  SDLGame sdlGame(sdlGameConfigs);
 
-  SDLGame sdlGame(sdlGameConfigs, &sampleGame);
+  SDLGraphicsManager graphicsManager(sdlGame.getRenderer(),
+                                     sdlGameConfigs.screenWidth,
+                                     sdlGameConfigs.screenHeight);
+  SDLSoundManager soundManager;
+
+  SampleGame sampleGame(graphicsManager, soundManager);
+
+  sdlGame.setGame(&sampleGame);
+
   int code = sdlGame.run();
 
   return code;

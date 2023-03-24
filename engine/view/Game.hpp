@@ -10,13 +10,20 @@ using namespace std;
 
 class Game : public EventListener {
  public:
-  virtual void initialize(Vector2 const& screenSizeInGameUnits) = 0;
+  Game(GraphicsManager& rGraphicsManager, SoundManager& rSoundManager)
+      : m_rGraphicsManager(rGraphicsManager), m_rSoundManager(rSoundManager) {}
+
+  virtual void initialize() = 0;
   virtual void receiveEvent(Event* pEvent) = 0;
   virtual void update(float const deltaTime) = 0;
   virtual void updateEditor(float const deltaTime) = 0;
-  virtual void render(GraphicsManager& rGraphicsManager) = 0;
-  virtual void processSounds(SoundManager& rSoundManager) = 0;
+  virtual void render() = 0;
+  virtual void processSounds() = 0;
   virtual string const& getGameName() = 0;
+
+ protected:
+  GraphicsManager& m_rGraphicsManager;
+  SoundManager& m_rSoundManager;
 };
 
 #endif /* Game_hpp */

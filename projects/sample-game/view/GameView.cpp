@@ -2,13 +2,14 @@
 #include "core/SpriteFactory.hpp"
 #include <memory>
 
-GameView::GameView()
+GameView::GameView(GraphicsManager& rGraphicsManager)
     : View(),
       m_characterSprite(SpriteFactory::buildAnimatedSprite(
           "assets/characters/virtual-guy_animation.json")),
       m_tileMapSprite(SpriteFactory::buildTileMapSprite(
           "assets/levels/menu.json", "assets/levels", "assets/levels",
-          Vector2(5, 5), "meta")) {}
+          Vector2(5, 5), "meta")),
+      m_rGraphicsManager(rGraphicsManager) {}
 
 GameView::~GameView() {}
 

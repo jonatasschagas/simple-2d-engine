@@ -10,17 +10,15 @@
 int const SCREEN_FPS = 60;
 int const SCREEN_TICKS_PER_FRAME = 1000 / SCREEN_FPS;
 
-SDLGame::SDLGame(SDLGameConfigs const& sdlGameConfigs, Game* pGame)
+SDLGame::SDLGame(SDLGameConfigs const& sdlGameConfigs)
     : m_sdlGameConfigs(sdlGameConfigs) {
   initializeMembers();
 
-  m_pGame = pGame;
+  init();
 }
 
 SDLGame::~SDLGame() {
   delete m_pScreenRect;
-  delete m_pGraphicsManager;
-  delete m_pSoundManager;
 
   // Destroy window
   SDL_DestroyRenderer(m_pRenderer);
@@ -118,96 +116,81 @@ bool SDLGame::init() {
                                 &m_pScreenRect->h);
     }
 
-    m_pGraphicsManager =
-        new SDLGraphicsManager(m_pRenderer, m_pScreenRect->w, m_pScreenRect->h);
-    m_pSoundManager = new SDLSoundManager();
-
-    // initializing the game
-    int screenWidthInGameUnits = 100;
-    float aspectRatio = m_pScreenRect->w / (m_pScreenRect->h * 1.f);
-    // the number of vertical units depends on the aspect ratio of the device
-    int screenHeightInGameUnits = ceil(screenWidthInGameUnits / aspectRatio);
-
     DataCacheManager::getInstance()->setResourceProvider(
         new SDLResourceProvider());
-
-    m_pGame->initialize(
-        Vector2(screenWidthInGameUnits, screenHeightInGameUnits));
   }
 
   return true;
 }
 
 int SDLGame::run() {
-  // Start up SDL and create window
-  if (!init()) {
-    printf("Failed to initialize!\n");
-    return 1;
-  } else {
-    // Main loop flag
-    bool quit = false;
+  assert(m_pGame != nullptr);
 
-    // Event handler
-    SDL_Event sdlEvent;
+  m_pGame->initialize();
 
-    // The frames per second timer
-    LTimer fpsTimer;
+  // Main loop flag
+  bool quit = false;
 
-    // The frames per second cap timer
-    LTimer capTimer;
+  // Event handler
+  SDL_Event sdlEvent;
 
-    // Start counting frames per second
-    fpsTimer.start();
+  // The frames per second timer
+  LTimer fpsTimer;
 
-    // While application is running
-    while (!quit) {
-      // Start cap timer
-      capTimer.start();
+  // The frames per second cap timer
+  LTimer capTimer;
 
-      // Handle events on queue
-      while (SDL_PollEvent(&sdlEvent) != 0) {
-        // User requests quit
-        if (sdlEvent.type == SDL_QUIT) {
-          return 0;
-        }
+  // Start counting frames per second
+  fpsTimer.start();
 
-        handleInput(sdlEvent);
+  // While application is running
+  while (!quit) {
+    // Start cap timer
+    capTimer.start();
+
+    // Handle events on queue
+    while (SDL_PollEvent(&sdlEvent) != 0) {
+      // User requests quit
+      if (sdlEvent.type == SDL_QUIT) {
+        return 0;
       }
 
-      // Calculate time step`
-      float timeStep = fpsTimer.getTicks() / 1000.f;
-      if (timeStep > 0.16f) {
-        timeStep = 0.16f;
-      }
+      handleInput(sdlEvent);
+    }
 
-      m_pGame->update(timeStep);
+    // Calculate time step`
+    float timeStep = fpsTimer.getTicks() / 1000.f;
+    if (timeStep > 0.16f) {
+      timeStep = 0.16f;
+    }
 
-      // Clear screen
-      SDL_RenderClear(m_pRenderer);
+    m_pGame->update(timeStep);
 
-      // Clear screen
-      SDL_SetRenderDrawColor(m_pRenderer, m_sdlGameConfigs.backgroundColor.r,
-                             m_sdlGameConfigs.backgroundColor.g,
-                             m_sdlGameConfigs.backgroundColor.b,
-                             m_sdlGameConfigs.backgroundColor.a);
-      SDL_RenderClear(m_pRenderer);
+    // Clear screen
+    SDL_RenderClear(m_pRenderer);
 
-      // RENDERING
-      m_pGame->render(*m_pGraphicsManager);
+    // Clear screen
+    SDL_SetRenderDrawColor(m_pRenderer, m_sdlGameConfigs.backgroundColor.r,
+                           m_sdlGameConfigs.backgroundColor.g,
+                           m_sdlGameConfigs.backgroundColor.b,
+                           m_sdlGameConfigs.backgroundColor.a);
+    SDL_RenderClear(m_pRenderer);
 
-      // SOUNDS
-      m_pGame->processSounds(*m_pSoundManager);
+    // RENDERING
+    m_pGame->render();
 
-      m_pGame->updateEditor(timeStep);
+    // SOUNDS
+    m_pGame->processSounds();
 
-      // Update screen
-      SDL_RenderPresent(m_pRenderer);
+    m_pGame->updateEditor(timeStep);
 
-      int frameTicks = capTimer.getTicks();
-      if (frameTicks < SCREEN_TICKS_PER_FRAME) {
-        // Wait remaining time
-        SDL_Delay(SCREEN_TICKS_PER_FRAME - frameTicks);
-      }
+    // Update screen
+    SDL_RenderPresent(m_pRenderer);
+
+    int frameTicks = capTimer.getTicks();
+    if (frameTicks < SCREEN_TICKS_PER_FRAME) {
+      // Wait remaining time
+      SDL_Delay(SCREEN_TICKS_PER_FRAME - frameTicks);
     }
   }
 

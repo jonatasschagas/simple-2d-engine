@@ -3,8 +3,6 @@
 #define SDLGame_hpp
 
 #include "SDL.h"
-#include "SDLGraphicsManager.hpp"
-#include "SDLSoundManager.hpp"
 #include <stdio.h>
 #include <string>
 
@@ -19,10 +17,14 @@ struct SDLGameConfigs {
 
 class SDLGame {
  public:
-  SDLGame(SDLGameConfigs const& sdlGameConfigs, Game* pGame);
+  SDLGame(SDLGameConfigs const& sdlGameConfigs);
   ~SDLGame();
 
+  void setGame(Game* pGame) { m_pGame = pGame; };
+
   int run();
+
+  SDL_Renderer* getRenderer() { return m_pRenderer; }
 
  private:
   bool init();
@@ -39,9 +41,6 @@ class SDLGame {
   SDL_Renderer* m_pRenderer;
   SDL_Rect* m_pScreenRect;
 
-  SDLGraphicsManager* m_pGraphicsManager;
-  SDLSoundManager* m_pSoundManager;
-
   Game* m_pGame;
 
   void initializeMembers() {
@@ -50,8 +49,6 @@ class SDLGame {
     m_pRenderer = nullptr;
     m_pScreenRect = nullptr;
     m_pGame = nullptr;
-    m_pGraphicsManager = nullptr;
-    m_pSoundManager = nullptr;
   }
 };
 

@@ -2,14 +2,18 @@
 #include "view/GameView.hpp"
 #include <glm/glm.hpp>
 
-SampleGame::SampleGame() : m_viewManager(Vector2::ZERO) { initializeMembers(); }
+SampleGame::SampleGame(GraphicsManager& rGraphicsManager,
+                       SoundManager& rSoundManager)
+    : Game(rGraphicsManager, rSoundManager), m_viewManager(Vector2::ZERO) {
+  initializeMembers();
+}
 
 SampleGame::~SampleGame() { initializeMembers(); }
 
-void SampleGame::initialize(Vector2 const& screenSizeInGameUnits) {
-  m_viewManager = ViewManager(screenSizeInGameUnits);
+void SampleGame::initialize() {
+  m_viewManager = ViewManager(m_rGraphicsManager.getScreenSizeInGameUnits());
 
-  GameView* pGameView = new GameView();
+  GameView* pGameView = new GameView(m_rGraphicsManager);
   m_viewManager.addView("game-view", pGameView);
   m_viewManager.switchView("game-view");
 }
@@ -24,12 +28,10 @@ void SampleGame::update(float const deltaTime) {
 
 void SampleGame::updateEditor(float const deltaTime) {}
 
-void SampleGame::render(GraphicsManager& rGraphicsManager) {
-  m_viewManager.render(rGraphicsManager);
-}
+void SampleGame::render() { m_viewManager.render(m_rGraphicsManager); }
 
-void SampleGame::processSounds(SoundManager& rSoundManager) {
-  m_viewManager.processSounds(rSoundManager);
+void SampleGame::processSounds() {
+  m_viewManager.processSounds(m_rSoundManager);
 }
 
 string const& SampleGame::getGameName() { return m_gameName; }

@@ -6,11 +6,11 @@
 
 Game* pGame = nullptr;
 
-void render(Game& rGame, GraphicsManager& rGraphicsManager) {
+void render(Game& rGame) {
   glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
   glClear(GL_COLOR_BUFFER_BIT);
 
-  rGame.render(rGraphicsManager);
+  rGame.render();
 }
 
 void framebufferSizeCallback(GLFWwindow* pWindow, int width, int height) {
@@ -93,10 +93,9 @@ GLFWwindow* initializeOpenGLRenderer(int argc, char** argv, int screenWidth,
 }
 
 int mainLoopOpenGLRenderer(GLFWwindow* pWindow, Game& rGame, int screenWidth,
-                           int screenHeight, GraphicsManager& rGraphicsManager,
-                           SoundManager& rSoundManager) {
+                           int screenHeight) {
   pGame = &rGame;
-  rGame.initialize(rGraphicsManager.getScreenSizeInGameUnits());
+  rGame.initialize();
 
   // DeltaTime variables
   GLfloat deltaTime = 0.0f;
@@ -112,7 +111,7 @@ int mainLoopOpenGLRenderer(GLFWwindow* pWindow, Game& rGame, int screenWidth,
 
     processInput(pWindow);
 
-    render(rGame, rGraphicsManager);
+    render(rGame);
 
     glfwSwapBuffers(pWindow);
     glfwPollEvents();

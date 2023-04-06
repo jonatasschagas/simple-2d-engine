@@ -29,6 +29,10 @@ class ViewManager : public EventListener {
   void addView(string const& viewName, View* pView);
   void switchView(string const& viewName);
 
+  Vector2 const& getScreenSizeInGameUnits() const {
+    return m_screenSizeInGameUnits;
+  }
+
  private:
   Vector2 m_screenSizeInGameUnits;
   View* m_pCurrentView;

@@ -45,19 +45,38 @@ set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DAPPLE -O0 --std=c++17")
 set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -O0")
 
 # adding source files
-file(GLOB_RECURSE SOURCE_FILES *.cpp)
-file(GLOB_RECURSE OTHER_MODULES_SOURCE_FILES ${OPENGL_BACKEND_IMPL}/*.cpp ${ENGINE_IMPL}/*.cpp ${SAMPLE_GAME}/*.cpp)
-list(APPEND SOURCE_FILES ${OTHER_MODULES_SOURCE_FILES}) 
+file(GLOB SOURCE_FILES *.cpp)
+
+# adding opengl backend source files
+file(GLOB OPENG_GL_BACKEND_FILES ${OPENGL_BACKEND_IMPL}/*.cpp)
+list(APPEND SOURCE_FILES ${OPENG_GL_BACKEND_FILES}) 
+
+# adding sample game source files
+file(GLOB SAMPLE_GAME_FILES ${SAMPLE_GAME}/*.cpp ${SAMPLE_GAME}/view/*.cpp)
+list(APPEND SOURCE_FILES ${SAMPLE_GAME_FILES})
+
+# adding engine source files
+file (GLOB ENGINE_FILES ${ENGINE_IMPL}/core/*.cpp ${ENGINE_IMPL}/data/*.cpp ${ENGINE_IMPL}/event/*.cpp ${ENGINE_IMPL}/platform/*.cpp ${ENGINE_IMPL}/utils/*.cpp ${ENGINE_IMPL}/view/*.cpp)
+list(APPEND SOURCE_FILES ${ENGINE_FILES}) 
 
 # adding third-party deps source code
-file(GLOB_RECURSE GLM_CODE ${GLM}/*.h ${GLM}/*.hpp ${GLM}/*.inl)
-file(GLOB_RECURSE RAPID_JSON_CODE ${RAPID_JSON}/include/*.h ${RAPID_JSON}/include/*.hpp)
-file(GLOB_RECURSE GLAD_HEADERS ${GLAD}/includes/*.h ${GLAD}/includes/*.hpp)
+# glm
+file(GLOB GLM_CODE CONFIGURE_DEPENDS ${GLM}/*.h ${GLM}/*.hpp ${GLM}/*.inl)
 list(APPEND SOURCE_FILES ${GLM_CODE}) 
+
+# rapidjson
+file(GLOB RAPID_JSON_CODE CONFIGURE_DEPENDS ${RAPID_JSON}/include/*.h ${RAPID_JSON}/include/*.hpp)
 list(APPEND SOURCE_FILES ${RAPID_JSON_CODE})
+
+# stb
 list(APPEND SOURCE_FILES ${STB}/stb_image.h)
+
+# glad
+file(GLOB GLAD_HEADERS CONFIGURE_DEPENDS ${GLAD}/includes/*.h ${GLAD}/includes/*.hpp)
 list(APPEND SOURCE_FILES ${GLAD}/glad.c)
 list(APPEND SOURCE_FILES ${GLAD_HEADERS})
+
+# message(SOURCE_FILES="${SOURCE_FILES}")
 
 # Find the packages we need.
 find_package(glfw3 REQUIRED)

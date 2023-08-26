@@ -3,6 +3,13 @@
 #define GraphicsManager_h
 
 #include "DrawCall.h"
+#include <glm/glm.hpp>
+
+struct Texture {
+    string texturePath;
+    int width;
+    int height;
+};
 
 /**
  * GraphicsManager is an abstract class that defines the interface for
@@ -30,13 +37,15 @@ class GraphicsManager {
    */
   virtual void renderTexture(DrawCall const& drawCall) = 0;
 
+  virtual void renderTexture(const glm::mat4& transform, const glm::vec4& textureCoordinates, string const& texturePath) = 0;
+  
   /**
    * loadTexture is called by the Engine when a texture needs to be
    * loaded from disk into the graphics system.
    * @param path the path to the texture to load
-   * @return a pointer to the loaded texture
+   * @return Texture
    */
-  virtual void* loadTexture(string const& path) = 0;
+  virtual Texture loadTexture(string const& path) = 0;
 
   /**
    * getWorldLocationXFromScreenCoordinates is called by the Engine when

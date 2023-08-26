@@ -2,11 +2,9 @@
 #ifndef GameView_hpp
 #define GameView_hpp
 
-#include "core/AnimatedSprite.hpp"
-#include "core/TileMapSprite.hpp"
-#include "data/DataCacheManager.hpp"
 #include "platform/GraphicsManager.hpp"
 #include "view/View.h"
+#include "Earth.hpp"
 
 class GameView : public View {
  public:
@@ -19,9 +17,8 @@ class GameView : public View {
   virtual void updateEditor() override;
 
  private:
-  GraphicsManager& m_rGraphicsManager;
-  AnimatedSprite m_characterSprite;
-  TileMapSprite m_tileMapSprite;
+    GraphicsManager& m_rGraphicsManager;
+    Earth m_earth;
 };
 
 #endif /* GameView_hpp */

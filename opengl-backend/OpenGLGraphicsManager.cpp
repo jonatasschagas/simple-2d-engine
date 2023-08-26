@@ -47,6 +47,15 @@ void OpenGLGraphicsManager::setOffset(float x, float y) {
   m_offsetY = y;
 }
 
+void OpenGLGraphicsManager::renderTexture(const glm::mat4& transform, const glm::vec4& textureCoordinates, string const& texturePath)
+{
+  m_spriteRenderer.draw(ResourceManager::getInstance()->getShader("sprite"),
+                        transform,
+                        glm::vec2(m_scaleFactorX, m_scaleFactorY),
+                        ResourceManager::getInstance()->getTexture(texturePath),
+                        textureCoordinates);
+}
+
 void OpenGLGraphicsManager::renderTexture(DrawCall const& drawCall) {
   float width = drawCall.spriteProperties.w;
   float height = drawCall.spriteProperties.h;
@@ -73,9 +82,13 @@ void OpenGLGraphicsManager::renderTexture(DrawCall const& drawCall) {
       drawCall.spriteProperties.rotation);
 }
 
-void* OpenGLGraphicsManager::loadTexture(string const& path) {
-  return &ResourceManager::getInstance()->loadTexture(path, path,
-                                                      m_rResourceProvider);
+Texture OpenGLGraphicsManager::loadTexture(string const& path) {
+    Texture2D& texture2D = ResourceManager::getInstance()->loadTexture(path, path, m_rResourceProvider);
+    Texture texture;
+    texture.texturePath = path;
+    texture.width = texture2D.getWidth();
+    texture.height = texture2D.getHeight();
+    return texture;
 }
 
 int const OpenGLGraphicsManager::getWorldLocationXFromScreenCoordinates(

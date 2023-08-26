@@ -60,7 +60,7 @@ void ViewManager::switchView(string const& viewName) {
 void ViewManager::addView(string const& viewName, View* pView) {
   m_views[viewName] = pView;
   pView->setXY(0, 0);
-  pView->setPivotAtCenter(true);
+  pView->setPivot(0, 0);
   pView->setSize(m_screenSizeInGameUnits.x, m_screenSizeInGameUnits.y);
   pView->initialize(this);
 }

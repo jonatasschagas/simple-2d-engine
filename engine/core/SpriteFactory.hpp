@@ -16,6 +16,8 @@ class SpriteFactory {
       string const& animationConfiguration);
 
   static Sprite buildSprite();
+    
+  static Sprite buildSimpleTexturedSprite(string const& texturePath);
 
   static TileMapSprite buildTileMapSprite(string const& tileMapConfiguration,
                                           string const& levelsLocation,

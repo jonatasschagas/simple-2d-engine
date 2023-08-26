@@ -10,7 +10,35 @@ SpriteRenderer::~SpriteRenderer() {
   }
 }
 
-void SpriteRenderer::drawSprite(Shader& rShader, Texture2D const& rTexture,
+void SpriteRenderer::draw(Shader& rShader, glm::mat4 const& rTransform, glm::vec2 const& rScaleFactor, Texture2D const& rTexture, glm::vec4 const& rTextureCoordinates)
+{
+  rShader.use();
+  
+  glm::mat4 model = glm::scale(rTransform, glm::vec3(rScaleFactor.x, rScaleFactor.y, 1.0f));  // scale factor -> to game units
+  
+  rShader.setMatrix4("model", model);
+  
+  glActiveTexture(GL_TEXTURE0);
+  
+  rTexture.bind();
+  
+  string textureName = stringFormat(
+                                    "%d-(%.0f,%.0f,%.0f,%.0f)", rTexture.getId(), rTextureCoordinates.x,
+                                    rTextureCoordinates.y, rTextureCoordinates.z, rTextureCoordinates.w);
+  if (m_textureVAOs.find(textureName) == m_textureVAOs.end()) {
+    createTextureVAO(textureName,
+                     glm::vec2(rTexture.getWidth(), rTexture.getHeight()),
+                     rTextureCoordinates);
+  }
+  unsigned int textureVAO = m_textureVAOs[textureName];
+  
+  glBindVertexArray(textureVAO);
+  glDrawArrays(GL_TRIANGLES, 0, 6);
+  glBindVertexArray(0);
+}
+
+void SpriteRenderer::drawSprite(Shader& rShader,
+                                Texture2D const& rTexture,
                                 glm::vec2 const& rPosition,
                                 glm::vec2 const& rSize,
                                 glm::vec4 const& rTextureCoordinates,
@@ -18,11 +46,10 @@ void SpriteRenderer::drawSprite(Shader& rShader, Texture2D const& rTexture,
   rShader.use();
 
   glm::mat4 model = glm::mat4(1.0f);
-  model = glm::translate(
-      model, glm::vec3(rPosition,
-                       0.0f));  // first translate (transformations are: scale
-                                // happens first, then rotation, and then final
-                                // translation happens; reversed order)
+  model = glm::translate(model, glm::vec3(rPosition,0.0f));
+  // first translate (transformations are: scale
+  // happens first, then rotation, and then final
+  // translation happens; reversed order)
 
   model = glm::translate(
       model, glm::vec3(0.5f * rSize.x, 0.5f * rSize.y,

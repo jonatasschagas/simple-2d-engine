@@ -17,6 +17,9 @@ set(CMAKE_CXX_EXTENSIONS ON)
 set(CMAKE_BUILD_TYPE Debug)
 set(PROJECT_SOURCE_DIR ../..)
 
+# for xcode to create the folder structure
+set_property(GLOBAL PROPERTY USE_FOLDERS ON)
+
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ./)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/CMAKE")
 set(SOURCE_FILES    main.cpp)
@@ -78,6 +81,9 @@ list(APPEND SOURCE_FILES ${GLAD_HEADERS})
 
 # message(SOURCE_FILES="${SOURCE_FILES}")
 
+# create the xcode project with the folder structure
+source_group(TREE "${PROJECT_SOURCE_DIR}/../" PREFIX "Source Files" FILES ${SOURCE_FILES})
+
 # Find the packages we need.
 find_package(glfw3 REQUIRED)
 find_package(OpenGL REQUIRED)
@@ -91,6 +97,8 @@ add_custom_target(copy_assets
     COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_LIST_DIR}/../assets ${CMAKE_CURRENT_BINARY_DIR}/assets
 )
 add_dependencies(simple-2d-engine-opengl copy_assets)
+set_target_properties(${PROJECT_NAME} PROPERTIES XCODE_GENERATE_SCHEME TRUE XCODE_SCHEME_WORKING_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/../)
+
 
 # include
 include_directories(${CMAKE_RUNTIME_OUTPUT_DIRECTORY} ${GLM} ${RAPID_JSON}/include/ ${ENGINE_IMPL} ${OPENGL_BACKEND_IMPL} ${OPENGL_INCLUDE_DIR} ${GLUT_INCLUDE_DIR} ${SAMPLE_GAME} ${STB} ${GLAD}/includes)

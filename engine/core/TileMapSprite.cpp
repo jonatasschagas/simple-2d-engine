@@ -10,7 +10,7 @@ TileMapSprite::TileMapSprite(Vector2 const& tileSizeWorldUnits,
 
   m_tileSizeInWorldUnits = tileSizeWorldUnits;
 
-  setPivotAtCenter(true);
+  setPivotAtCenter();
   loadMap("meta");
 }
 
@@ -24,7 +24,7 @@ TileMapSprite::TileMapSprite(Vector2 const& tileSizeWorldUnits,
   m_tileSizeInWorldUnits = tileSizeWorldUnits;
   m_pTileMapMetaTileFactory = pTileMapMetaTileFactory;
 
-  setPivotAtCenter(true);
+  setPivotAtCenter();
   loadMap(metaLayerName);
 }
 
@@ -35,8 +35,8 @@ void TileMapSprite::update(float delta) {
 
   if (m_disableCamera) return;
 
-  float x = getTransformedX();
-  float y = getTransformedY();
+  float x = getGamePosition().x;
+  float y = getGamePosition().y;
   float targetX = -m_xOffSet;
   float targetY = -m_yOffSet;
 
@@ -57,7 +57,7 @@ void TileMapSprite::loadMap(string const& metaLayerName) {
 
   // creates the map as a huge sprite
   setXY(0, 0);
-  setPivotAtCenter(true);
+  setPivotAtCenter();
 
   m_mapSizeInGameUnits.x =
       m_pCurrentMapData->getWidth() * m_tileSizeInWorldUnits.x;
@@ -78,7 +78,7 @@ void TileMapSprite::loadMapLayers() {
       pSpriteLayer->setXY(0, 0);
       pSpriteLayer->setSize(pLayer->getWidth() * m_tileSizeInWorldUnits.x,
                             pLayer->getHeight() * m_tileSizeInWorldUnits.y);
-      pSpriteLayer->setPivotAtCenter(true);
+      pSpriteLayer->setPivotAtCenter();
       pSpriteLayer->setTileMap(true);
       addChild(pSpriteLayer);
 
@@ -190,7 +190,7 @@ void TileMapSprite::createTile(int x, int y, Sprite* pSpriteLayer,
   Sprite* pTileSprite = new Sprite();
   pTileSprite->setXY(x * width, y * height);
   pTileSprite->setSize(width, height);
-  pTileSprite->setPivotAtCenter(true);
+  pTileSprite->setPivotAtCenter();
   pTileSprite->setTextureCoordinates(pTileConfig->getX(), pTileConfig->getY(),
                                      pTileConfig->getWidth(),
                                      pTileConfig->getHeight());
@@ -246,7 +246,7 @@ void TileMapSprite::createMetaTile(int x, int y, Sprite* pSpriteLayer,
     pMetaTileSprite->setSize(size.x, size.y);
   }
 
-  pMetaTileSprite->setPivotAtCenter(true);
+  pMetaTileSprite->setPivotAtCenter();
   pMetaTileSprite->setTileMap(true);
 
   pSpriteLayer->addChild(pMetaTileSprite);

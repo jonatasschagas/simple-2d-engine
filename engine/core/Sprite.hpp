@@ -28,20 +28,16 @@ class Sprite : enable_shared_from_this<Sprite> {
   void setXY(float x, float y);
   void setSize(float w, float h);
   void setTextureCoordinates(float x, float y, float w, float h);
-  void setScale(float scaleLevel);
   void setRotation(float degrees);
-  void setTextureRotation(float degrees);
-  void setPivotAtCenter(bool pivotAtCenter);
-  void setCenteredOnParentX(bool centeredOnParentX);
-  void setCenteredOnParentY(bool centeredOnParentY);
-
+  void setPivotAtCenter();
+  void setPivot(float x, float y);
+  
+  void useFullTexture();
+    
   float getX() const;
   float getY() const;
   float getWidth() const;
   float getHeight() const;
-  float getTransformedX() const;
-  float getTransformedY() const;
-  Vector2 getScreenPosition() const;
   Vector2 getGamePosition() const;
 
   void fillParent();
@@ -75,24 +71,24 @@ class Sprite : enable_shared_from_this<Sprite> {
 
  protected:
   Sprite* m_pParent;
-  glm::vec2 m_size;
   float m_alpha;
 
  private:
-  glm::vec2 m_coords;
-
+  glm::vec3 m_coords;
+  glm::vec3 m_size;
+  glm::vec3 m_pivot; // between 0 and 1
+  
   glm::mat4 calculateTransform();
 
   string m_textureFilename;
   bool m_textureLoaded;
-
-  bool m_centeredOnParentX;
-  bool m_centeredOnParentY;
-  bool m_pivotCentered;
+  int m_textureWidth;
+  int m_textureHeight;
+  bool m_useWholeTexture;
+  
   bool m_visible;
   float m_angle;
 
-  glm::vec4 m_points[2];
   glm::vec4 m_textureCoordinates;
   bool m_flip;
   bool m_tileMap;
@@ -103,9 +99,7 @@ class Sprite : enable_shared_from_this<Sprite> {
 
   glm::mat4 m_worldTransform;
   glm::mat4 m_transform;
-  glm::mat4 m_rotation;
-  glm::mat4 m_scale;
-
+  
   list<Sprite*> m_children;
   list<Sprite*> m_childrenToRemove;
 
@@ -115,21 +109,26 @@ class Sprite : enable_shared_from_this<Sprite> {
     m_pParent = nullptr;
     m_textureFilename = "";
     m_textureLoaded = false;
+    m_textureWidth = 0;
+    m_textureHeight = 0;
+    m_useWholeTexture = false;
     m_alpha = 1.f;
     m_angle = 0;
     m_flip = false;
     m_children.clear();
-    m_pivotCentered = false;
-    m_centeredOnParentX = false;
-    m_centeredOnParentY = false;
     m_visible = true;
     m_tileMap = false;
 
     m_coords.x = 0;
     m_coords.y = 0;
+    m_coords.z = 0;
     m_size.x = 0;
     m_size.y = 0;
-
+    m_size.z = 0;
+    m_pivot.x = 0;
+    m_pivot.y = 0;
+    m_pivot.z = 0;
+    
     m_textureCoordinates.x = 0;
     m_textureCoordinates.y = 0;
     m_textureCoordinates.z = 0;

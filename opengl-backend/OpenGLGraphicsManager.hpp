@@ -20,8 +20,9 @@ class OpenGLGraphicsManager : public GraphicsManager {
   void initialize() override;
 
   void setOffset(float x, float y) override;
+  void renderTexture(const glm::mat4& transform, const glm::vec4& textureCoordinates, string const& texturePath) override;
   void renderTexture(DrawCall const& drawCall) override;
-  void* loadTexture(string const& path) override;
+  Texture loadTexture(string const& path) override;
 
   int const getWorldLocationXFromScreenCoordinates(int x) const override;
   int const getWorldLocationYFromScreenCoordinates(int y) const override;

@@ -2,38 +2,27 @@
 #include "core/SpriteFactory.hpp"
 #include <memory>
 
-GameView::GameView(GraphicsManager& rGraphicsManager)
-    : View(),
-      m_characterSprite(SpriteFactory::buildAnimatedSprite(
-          "assets/characters/virtual-guy_animation.json")),
-      m_tileMapSprite(SpriteFactory::buildTileMapSprite(
-          "assets/levels/menu.json", "assets/levels", "assets/levels",
-          Vector2(5, 5), "meta")),
-      m_rGraphicsManager(rGraphicsManager) {}
+GameView::GameView(GraphicsManager& rGraphicsManager) : View(), m_rGraphicsManager(rGraphicsManager){}
 
 GameView::~GameView() {}
 
 void GameView::initialize(ViewManager* pViewManager) {
-  addChild(&m_tileMapSprite);
-  m_tileMapSprite.fillParent();
-  m_tileMapSprite.setXY(0, 0);
-  m_tileMapSprite.setDisableCamera(true);
-  addChild(&m_characterSprite);
-  m_characterSprite.setXY(10, 10);
-  m_characterSprite.setSize(10, 10);
-  m_characterSprite.play("run");
+  loadTexture("assets/images/mountain-cartoony.png");
+  useFullTexture();
+  
+  addChild(&m_earth);
 }
 
 void GameView::receiveEvent(Event* pEvent) {
-  if (pEvent->getName() == "right") {
+  /*if (pEvent->getName().find("right") != std::string::npos) {
     m_tileMapSprite.setXY(m_tileMapSprite.getX() + 1, m_tileMapSprite.getY());
-  } else if (pEvent->getName() == "left") {
+  } else if (pEvent->getName().find("left") != std::string::npos) {
     m_tileMapSprite.setXY(m_tileMapSprite.getX() - 1, m_tileMapSprite.getY());
-  } else if (pEvent->getName() == "up") {
+  } else if (pEvent->getName().find("up") != std::string::npos) {
     m_tileMapSprite.setXY(m_tileMapSprite.getX(), m_tileMapSprite.getY() - 1);
-  } else if (pEvent->getName() == "down") {
+  } else if (pEvent->getName().find("down") != std::string::npos) {
     m_tileMapSprite.setXY(m_tileMapSprite.getX(), m_tileMapSprite.getY() + 1);
-  }
+  }*/
 }
 
 void GameView::readInput(int x, int y, bool pressed) {}

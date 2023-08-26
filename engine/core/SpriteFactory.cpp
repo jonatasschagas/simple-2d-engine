@@ -25,3 +25,10 @@ TileMapSprite SpriteFactory::buildTileMapSprite(
   TileMapSprite tileMapSprite(tileSizeInWorldUnits, &tileMapData);
   return tileMapSprite;
 }
+
+Sprite SpriteFactory::buildSimpleTexturedSprite(string const& texturePath)
+{
+    Sprite sprite;
+    sprite.loadTexture(texturePath);
+    return sprite;
+}

@@ -10,15 +10,17 @@ class SpriteCmp {
 
 Sprite::Sprite() {
   initializeMembers();
-
-  m_scale = glm::scale(glm::mat4(1.0f), glm::vec3(1.0f));
-  m_rotation = glm::rotate(0.0f, glm::vec3(1.0f));
+  setRotation(0);
 }
 
 Sprite::~Sprite() { initializeMembers(); }
 
 void Sprite::loadTexture(string const& textureFileName) {
   m_textureFilename = textureFileName;
+}
+
+void Sprite::useFullTexture() {
+  m_useWholeTexture = true;
 }
 
 void Sprite::processSounds(SoundManager& rSoundManager) {
@@ -37,27 +39,18 @@ void Sprite::render(GraphicsManager& rGraphicsManager) {
   }
 
   if (hasTexture() && !m_textureLoaded) {
-    rGraphicsManager.loadTexture(m_textureFilename);
+      // lazy loading...
+    Texture texture = rGraphicsManager.loadTexture(m_textureFilename);
     m_textureLoaded = true;
+    if (m_useWholeTexture) {
+      m_textureWidth = texture.width;
+      m_textureHeight = texture.height;
+      setTextureCoordinates(0, 0, m_textureWidth, m_textureHeight);
+    }
   }
 
-  if (hasTexture() || m_drawCall.vertices.size() > 0) {
-    m_drawCall.spriteProperties.x = m_points[0].x;
-    m_drawCall.spriteProperties.y = m_points[0].y;
-    m_drawCall.spriteProperties.w = m_points[1].x - m_points[0].x;
-    m_drawCall.spriteProperties.h = m_points[1].y - m_points[0].y;
-
-    m_drawCall.settings.tileMap = m_tileMap;
-    m_drawCall.settings.flipHorizontal = m_flip;
-
-    m_drawCall.textureSettings.name = m_textureFilename;
-    m_drawCall.textureSettings.x = (int)m_textureCoordinates.x;
-    m_drawCall.textureSettings.y = (int)m_textureCoordinates.y;
-    m_drawCall.textureSettings.w = (int)m_textureCoordinates.z;
-    m_drawCall.textureSettings.h = (int)m_textureCoordinates.w;
-    m_drawCall.textureSettings.alpha = m_alpha;
-
-    rGraphicsManager.renderTexture(m_drawCall);
+  if (hasTexture()) {
+    rGraphicsManager.renderTexture(m_worldTransform, m_textureCoordinates, m_textureFilename);
   }
 
   for (Sprite* pChild : m_children) {
@@ -82,44 +75,11 @@ void Sprite::update(float deltaTime) {
     m_childrenToRemove.clear();
   }
 
-  float w = m_size.x;
-  float h = m_size.y;
-
+  m_transform = calculateTransform();
+  
   if (m_pParent != nullptr) {
-    m_transform = calculateTransform();
     m_worldTransform = m_pParent->m_worldTransform * m_transform;
-
-    m_points[0] = m_worldTransform * glm::vec4(0.0f, 0.0f, 1.0, 1.0);
-    m_points[1] = m_worldTransform * glm::vec4(w, h, 1.0, 1.0);
-
-    if (m_centeredOnParentX || m_centeredOnParentY) {
-      float offsetX = 0;
-      float offsetY = 0;
-
-      if (m_centeredOnParentX) {
-        float parentWidth = m_pParent->getWidth();
-        float width = getWidth();
-        offsetX = (parentWidth - width) / 2;
-      }
-
-      if (m_centeredOnParentY) {
-        float parentHeight = m_pParent->getHeight();
-        float height = getHeight();
-        offsetY = (parentHeight - height) / 2;
-      }
-
-      glm::mat4 offsetMat =
-          glm::translate(glm::mat4(1.0f), glm::vec3(offsetX, offsetY, 1.0f));
-      m_worldTransform = offsetMat * m_worldTransform;
-
-      m_points[0] = m_worldTransform * glm::vec4(0.0f, 0.0f, 1.0, 1.0);
-      m_points[1] = m_worldTransform * glm::vec4(w, h, 1.0, 1.0);
-    }
   } else {
-    m_transform = calculateTransform();
-
-    m_points[0] = m_transform * glm::vec4(0.0f, 0.0f, 1.0, 1.0);
-    m_points[1] = m_transform * glm::vec4(w, h, 1.0, 1.0);
     m_worldTransform = m_transform;
   }
 
@@ -129,28 +89,27 @@ void Sprite::update(float deltaTime) {
 }
 
 glm::mat4 Sprite::calculateTransform() {
-  glm::vec2 pivot;
+  // translation * rotation * scale (also know as TRS matrix)
 
-  if (m_pivotCentered) {
-    pivot = glm::vec2(m_coords.x + m_size.x / 2, m_coords.y + m_size.y / 2);
-  } else {
-    pivot = glm::vec2(m_coords.x, m_coords.y);
-  }
-
-  glm::mat4 moveToOrigin =
-      glm::translate(glm::mat4(1.0f), glm::vec3(-pivot.x, -pivot.y, 1.0f));
-  glm::mat4 moveBackToPivot =
-      glm::translate(glm::mat4(1.0f), glm::vec3(pivot.x, pivot.y, 1.0f));
-
-  glm::mat4 transformationMatrix;
-  float x = m_centeredOnParentX ? 0 : m_coords.x;
-  float y = m_centeredOnParentY ? 0 : m_coords.y;
-
-  m_transform = glm::translate(glm::mat4(1.0f), glm::vec3(x, y, 1.0f));
-  transformationMatrix =
-      moveBackToPivot * m_rotation * m_scale * moveToOrigin * m_transform;
-
-  return transformationMatrix;
+  const glm::mat4 transformX = glm::rotate(glm::mat4(1.0f),
+                                           glm::radians(0.0f),
+                                           glm::vec3(1.0f, 0.0f, 0.0f));
+  const glm::mat4 transformY = glm::rotate(glm::mat4(1.0f),
+                                           glm::radians(0.0f),
+                                           glm::vec3(0.0f, 1.0f, 0.0f));
+  const glm::mat4 transformZ = glm::rotate(glm::mat4(1.0f),
+                                           glm::radians(m_angle),
+                                           glm::vec3(0.0f, 0.0f, 1.0f));
+    // Y * X * Z
+  glm::mat4 rotation = transformY * transformX * transformZ;
+  
+  glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(m_size.x, m_size.y, .0f));
+  glm::mat4 translate = glm::translate(glm::mat4(1.0f), glm::vec3(m_coords.x, m_coords.y, .0f));
+  
+  glm::vec3 pivot = m_pivot * m_size;
+  glm::mat4 model = translate * rotation * scale * glm::translate(glm::mat4(1.0f), -pivot);
+  
+  return model;
 }
 
 void Sprite::playSoundEffect(string const& soundName) {
@@ -166,29 +125,33 @@ void Sprite::addChild(Sprite* pChild) {
   m_children.sort(SpriteCmp());
 }
 
-void Sprite::setX(float x) { m_coords = glm::vec2(x, m_coords.y); }
+void Sprite::setX(float x) { m_coords = glm::vec3(x, m_coords.y, 0); }
 
-void Sprite::setY(float y) { m_coords = glm::vec2(m_coords.x, y); }
+void Sprite::setY(float y) { m_coords = glm::vec3(m_coords.x, y, 9); }
 
-void Sprite::setXY(float x, float y) { m_coords = glm::vec2(x, y); }
+void Sprite::setXY(float x, float y) { m_coords = glm::vec3(x, y, 0); }
 
-void Sprite::setSize(float w, float h) { m_size = glm::vec2(w, h); }
+void Sprite::setSize(float w, float h) {
+  m_size.x = w;
+  m_size.y = h;
+}
 
 void Sprite::setTextureCoordinates(float x, float y, float w, float h) {
   m_textureCoordinates = glm::vec4(x, y, w, h);
 }
 
-void Sprite::setScale(float scaleLevel) {
-  m_scale =
-      glm::scale(glm::mat4(1.0f), glm::vec3(scaleLevel, scaleLevel, 1.0f));
-}
-
 void Sprite::setRotation(float degrees) {
-  m_rotation = glm::rotate(glm::mat4(1.0f), degrees, glm::vec3(1.0f));
+  m_angle = degrees;
 }
 
-void Sprite::setPivotAtCenter(bool pivotAtCenter) {
-  m_pivotCentered = pivotAtCenter;
+void Sprite::setPivotAtCenter() {
+  m_pivot.x = 0.5f;
+  m_pivot.y = 0.5f;
+}
+
+void Sprite::setPivot(float x, float y) {
+  m_pivot.x = x;
+  m_pivot.y = y;
 }
 
 void Sprite::removeChild(Sprite* pChildToRemove) {
@@ -212,10 +175,6 @@ void Sprite::setVertices(vector<Vertex> const& vertices) {
   m_drawCall.vertices = vertices;
 }
 
-Vector2 Sprite::getScreenPosition() const {
-  return Vector2(getTransformedX(), getTransformedY());
-}
-
 Vector2 Sprite::getGamePosition() const {
   return Vector2(m_coords.x, m_coords.y);
 }
@@ -227,10 +186,6 @@ float Sprite::getY() const { return m_coords.y; }
 float Sprite::getWidth() const { return m_size.x; };
 
 float Sprite::getHeight() const { return m_size.y; };
-
-float Sprite::getTransformedX() const { return m_points[0].x; }
-
-float Sprite::getTransformedY() const { return m_points[0].y; }
 
 bool Sprite::hasTexture() const { return m_textureFilename.size() > 0; };
 
@@ -245,8 +200,5 @@ void Sprite::setTileMap(bool tileMap) { m_tileMap = tileMap; }
 void Sprite::fillParent() {
   if (m_pParent == nullptr) return;
 
-  float parentWidth = m_pParent->getWidth();
-  float parentHeight = m_pParent->getHeight();
-
-  setSize(parentWidth, parentHeight);
+  setSize(1.0f, 1.0f);
 }

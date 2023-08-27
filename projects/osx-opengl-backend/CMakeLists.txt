@@ -85,7 +85,7 @@ list(APPEND SOURCE_FILES ${GLAD_HEADERS})
 source_group(TREE "${PROJECT_SOURCE_DIR}/../" PREFIX "Source Files" FILES ${SOURCE_FILES})
 
 # Find the packages we need.
-find_package(glfw3 REQUIRED)
+find_package(GLFW3 REQUIRED)
 find_package(OpenGL REQUIRED)
 
 # adding code to the executable
@@ -101,6 +101,6 @@ set_target_properties(${PROJECT_NAME} PROPERTIES XCODE_GENERATE_SCHEME TRUE XCOD
 
 
 # include
-include_directories(${CMAKE_RUNTIME_OUTPUT_DIRECTORY} ${GLM} ${RAPID_JSON}/include/ ${ENGINE_IMPL} ${OPENGL_BACKEND_IMPL} ${OPENGL_INCLUDE_DIR} ${GLUT_INCLUDE_DIR} ${SAMPLE_GAME} ${STB} ${GLAD}/includes)
+include_directories(${CMAKE_RUNTIME_OUTPUT_DIRECTORY} ${GLM} ${RAPID_JSON}/include/ ${ENGINE_IMPL} ${OPENGL_BACKEND_IMPL} ${OPENGL_INCLUDE_DIR} ${GLUT_INCLUDE_DIR} ${SAMPLE_GAME} ${STB} ${GLAD}/includes ${GLFW3_INCLUDE_DIR})
 # link
-target_link_libraries(${PROJECT_NAME} glfw ${OPENGL_LIBRARIES})
+target_link_libraries(${PROJECT_NAME} ${OPENGL_LIBRARIES} ${GLFW3_LIBRARY} "-framework Cocoa -framework OpenGL -framework IOKit -framework CoreVideo")

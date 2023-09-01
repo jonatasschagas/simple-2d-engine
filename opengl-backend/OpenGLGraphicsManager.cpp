@@ -17,7 +17,7 @@ OpenGLGraphicsManager::OpenGLGraphicsManager(
   m_vertexShaderPath = rVertexShaderPath;
   m_fragmentShaderPath = rFragmentShaderPath;
 
-  float aspectRatio = screenWidth / (screenHeight * 1.f);
+  float aspectRatio = (float)screenWidth / (float)screenHeight;
 
   // the number of vertical units depends on the aspect ratio of the device
   m_screenHeightInGameUnits = ceil(m_screenWidthInGameUnits / aspectRatio);
@@ -49,9 +49,11 @@ void OpenGLGraphicsManager::setOffset(float x, float y) {
 
 void OpenGLGraphicsManager::renderTexture(const glm::mat4& transform, const glm::vec4& textureCoordinates, string const& texturePath)
 {
+  
+  glm::mat4 updatedMat = glm::translate(transform, glm::vec3(m_offsetX, m_offsetY, 0)) * glm::scale(glm::mat4(1.0f), glm::vec3(m_scaleFactorX, m_scaleFactorY, 0));
+  
   m_spriteRenderer.draw(ResourceManager::getInstance()->getShader("sprite"),
-                        transform,
-                        glm::vec2(m_scaleFactorX, m_scaleFactorY),
+                        updatedMat,
                         ResourceManager::getInstance()->getTexture(texturePath),
                         textureCoordinates);
 }
@@ -91,13 +93,13 @@ Texture OpenGLGraphicsManager::loadTexture(string const& path) {
     return texture;
 }
 
-int const OpenGLGraphicsManager::getWorldLocationXFromScreenCoordinates(
-    int x) const {
+int const OpenGLGraphicsManager::getWorldLocationXFromScreenCoordinates(int x) const {
+  //TODO: Implement
   return 0;
 }
 
-int const OpenGLGraphicsManager::getWorldLocationYFromScreenCoordinates(
-    int y) const {
+int const OpenGLGraphicsManager::getWorldLocationYFromScreenCoordinates(int y) const {
+  //TODO: Implement
   return 0;
 }
 

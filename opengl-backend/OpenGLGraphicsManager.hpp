@@ -11,10 +11,13 @@ using namespace std;
 
 class OpenGLGraphicsManager : public GraphicsManager {
  public:
-  OpenGLGraphicsManager(int screenWidth, int screenHeight,
+  OpenGLGraphicsManager(int screenWidth,
+                        int screenHeight,
                         int screenWidthInGameUnits,
                         ResourceProvider& rResourceProvider,
-                        string& rVertexShaderPath, string& rFragmentShaderPath);
+                        string& rVertexShaderPath,
+                        string& rFragmentShaderPath);
+  
   ~OpenGLGraphicsManager();
 
   void initialize() override;

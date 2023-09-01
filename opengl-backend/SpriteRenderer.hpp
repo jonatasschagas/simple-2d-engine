@@ -19,7 +19,6 @@ class SpriteRenderer {
 
   void draw(Shader& rShader,
             glm::mat4 const& rTransform,
-            glm::vec2 const& rScaleFactor,
             Texture2D const& rTexture,
             glm::vec4 const& rTextureCoordinates);
   

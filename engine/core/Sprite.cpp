@@ -8,12 +8,22 @@ class SpriteCmp {
   }
 };
 
-Sprite::Sprite() {
+Sprite::Sprite()
+{
   initializeMembers();
   setRotation(0);
 }
 
 Sprite::~Sprite() { initializeMembers(); }
+
+void Sprite::showPivot() {
+  m_pPivotSprite = new Sprite();
+  m_pPivotSprite->loadTexture("assets/pivot.png");
+  m_pPivotSprite->useFullTexture();
+  m_pPivotSprite->setSize(.1f, .1f);
+  m_pPivotSprite->setXY(4.5f, 4.5f);
+  addChild(m_pPivotSprite);
+}
 
 void Sprite::loadTexture(string const& textureFileName) {
   m_textureFilename = textureFileName;
@@ -89,27 +99,35 @@ void Sprite::update(float deltaTime) {
 }
 
 glm::mat4 Sprite::calculateTransform() {
-  // translation * rotation * scale (also know as TRS matrix)
+  // translation * rotation * scale (also known as TRS matrix)
 
-  const glm::mat4 transformX = glm::rotate(glm::mat4(1.0f),
-                                           glm::radians(0.0f),
-                                           glm::vec3(1.0f, 0.0f, 0.0f));
-  const glm::mat4 transformY = glm::rotate(glm::mat4(1.0f),
-                                           glm::radians(0.0f),
-                                           glm::vec3(0.0f, 1.0f, 0.0f));
-  const glm::mat4 transformZ = glm::rotate(glm::mat4(1.0f),
-                                           glm::radians(m_angle),
-                                           glm::vec3(0.0f, 0.0f, 1.0f));
+  glm::vec3 coords = m_coords;
+  glm::vec3 size = m_size;
+  
+  if (m_pParent != nullptr) {
+    coords = m_coords / (m_pParent->m_coords + m_pParent->m_size);
+    size  =  m_size / m_pParent->m_size;
+  }
+  
+  if (m_angle > 0) {
+    
+    const glm::mat4 transformX = glm::rotate(glm::mat4(1.0f),
+                                             glm::radians(0.0f),
+                                             glm::vec3(1.0f, 0.0f, 0.0f));
+    const glm::mat4 transformY = glm::rotate(glm::mat4(1.0f),
+                                             glm::radians(0.0f),
+                                             glm::vec3(0.0f, 1.0f, 0.0f));
+    const glm::mat4 transformZ = glm::rotate(glm::mat4(1.0f),
+                                             glm::radians(m_angle),
+                                             glm::vec3(0.0f, 0.0f, 1.0f));
+    
     // Y * X * Z
-  glm::mat4 rotation = transformY * transformX * transformZ;
-  
-  glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(m_size.x, m_size.y, .0f));
-  glm::mat4 translate = glm::translate(glm::mat4(1.0f), glm::vec3(m_coords.x, m_coords.y, .0f));
-  
-  glm::vec3 pivot = m_pivot * m_size;
-  glm::mat4 model = translate * rotation * scale * glm::translate(glm::mat4(1.0f), -pivot);
-  
-  return model;
+    glm::mat4 rotationMatrix = transformY * transformX * transformZ;
+    
+    return glm::translate(glm::mat4(1.0f), coords) * rotationMatrix * glm::scale(glm::mat4(1.0f), size) * glm::translate(glm::mat4(1.0f), -coords);
+  } else {
+    return glm::translate(glm::mat4(1.0f), coords) * glm::scale(glm::mat4(1.0f), size);
+  }
 }
 
 void Sprite::playSoundEffect(string const& soundName) {
@@ -125,15 +143,12 @@ void Sprite::addChild(Sprite* pChild) {
   m_children.sort(SpriteCmp());
 }
 
-void Sprite::setX(float x) { m_coords = glm::vec3(x, m_coords.y, 0); }
-
-void Sprite::setY(float y) { m_coords = glm::vec3(m_coords.x, y, 9); }
-
-void Sprite::setXY(float x, float y) { m_coords = glm::vec3(x, y, 0); }
+void Sprite::setXY(float x, float y) {
+  m_coords = glm::vec3(x, y, 0);
+}
 
 void Sprite::setSize(float w, float h) {
-  m_size.x = w;
-  m_size.y = h;
+  m_size = glm::vec3(w, h, 0);
 }
 
 void Sprite::setTextureCoordinates(float x, float y, float w, float h) {
@@ -142,16 +157,6 @@ void Sprite::setTextureCoordinates(float x, float y, float w, float h) {
 
 void Sprite::setRotation(float degrees) {
   m_angle = degrees;
-}
-
-void Sprite::setPivotAtCenter() {
-  m_pivot.x = 0.5f;
-  m_pivot.y = 0.5f;
-}
-
-void Sprite::setPivot(float x, float y) {
-  m_pivot.x = x;
-  m_pivot.y = y;
 }
 
 void Sprite::removeChild(Sprite* pChildToRemove) {
@@ -194,8 +199,6 @@ bool const Sprite::isFlipped() const { return m_flip; }
 void Sprite::setFlip(bool const flip) { m_flip = flip; }
 
 Sprite* Sprite::getParent() const { return m_pParent; }
-
-void Sprite::setTileMap(bool tileMap) { m_tileMap = tileMap; }
 
 void Sprite::fillParent() {
   if (m_pParent == nullptr) return;

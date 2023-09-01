@@ -23,14 +23,12 @@ class Sprite : enable_shared_from_this<Sprite> {
 
   void playSoundEffect(string const& soundName);
 
-  void setX(float x);
-  void setY(float y);
+  void showPivot();
+  
   void setXY(float x, float y);
   void setSize(float w, float h);
   void setTextureCoordinates(float x, float y, float w, float h);
   void setRotation(float degrees);
-  void setPivotAtCenter();
-  void setPivot(float x, float y);
   
   void useFullTexture();
     
@@ -46,7 +44,6 @@ class Sprite : enable_shared_from_this<Sprite> {
 
   void setAlpha(float const alpha);
   void setFlip(bool const flip);
-  void setTileMap(bool const tileMap);
   void setVisible(bool visible);
   bool isVisible() const;
 
@@ -74,11 +71,11 @@ class Sprite : enable_shared_from_this<Sprite> {
   float m_alpha;
 
  private:
-  glm::vec3 m_coords;
-  glm::vec3 m_size;
-  glm::vec3 m_pivot; // between 0 and 1
   
   glm::mat4 calculateTransform();
+
+  glm::vec3 m_coords;
+  glm::vec3 m_size;
 
   string m_textureFilename;
   bool m_textureLoaded;
@@ -91,7 +88,6 @@ class Sprite : enable_shared_from_this<Sprite> {
 
   glm::vec4 m_textureCoordinates;
   bool m_flip;
-  bool m_tileMap;
 
   queue<string> m_soundsToPlay;
 
@@ -102,6 +98,8 @@ class Sprite : enable_shared_from_this<Sprite> {
   
   list<Sprite*> m_children;
   list<Sprite*> m_childrenToRemove;
+  
+  Sprite* m_pPivotSprite;
 
   bool m_sortChildren;
 
@@ -117,17 +115,14 @@ class Sprite : enable_shared_from_this<Sprite> {
     m_flip = false;
     m_children.clear();
     m_visible = true;
-    m_tileMap = false;
-
+    m_pPivotSprite = nullptr;
+    
     m_coords.x = 0;
     m_coords.y = 0;
     m_coords.z = 0;
     m_size.x = 0;
     m_size.y = 0;
     m_size.z = 0;
-    m_pivot.x = 0;
-    m_pivot.y = 0;
-    m_pivot.z = 0;
     
     m_textureCoordinates.x = 0;
     m_textureCoordinates.y = 0;

@@ -5,7 +5,6 @@
 #include "AnimatedSpriteData.hpp"
 #include "DataCache.hpp"
 #include "SpritesheetData.hpp"
-#include "TileMapData.hpp"
 #include "platform/ResourceProvider.hpp"
 #include <mutex>
 #include <stdio.h>
@@ -31,10 +30,7 @@ class DataCacheManager {
 
   SpritesheetData const& getSprite(string const& config, string const& img);
   AnimatedSpriteData const& getAnimatedSprite(string const& config);
-  TileMapData const& getTileMapData(string const& config,
-                                    string const& levelsFolder,
-                                    string const& tilesFolder);
-
+  
   void updateEditor();
 
   void setResourceProvider(ResourceProvider* pResourceProvider);
@@ -53,13 +49,11 @@ class DataCacheManager {
   ResourceProvider* m_pResourceProvider;
   DataCache<SpritesheetData>* m_pSpriteCache;
   DataCache<AnimatedSpriteData>* m_pAnimatedSpriteCache;
-  DataCache<TileMapData>* m_pTileMapCache;
 
   void initializeMembers() {
     m_pResourceProvider = nullptr;
     m_pSpriteCache = nullptr;
     m_pAnimatedSpriteCache = nullptr;
-    m_pTileMapCache = nullptr;
   }
 };
 

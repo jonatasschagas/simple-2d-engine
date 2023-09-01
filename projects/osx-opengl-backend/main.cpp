@@ -8,27 +8,25 @@
 
 using namespace std;
 
-int main(int argc, char** argv) {
-  int screenWidth = 1024;
-  int screenHeight = 1024;
+#define SCREEN_WIDTH 1024
+#define SCREEN_HEIGHT 683
+#define WORLD_UNITS_X 100
 
+int main(int argc, char** argv) {
+  
   OSXResourceProvider resourceProvider;
 
   string vertexShaderPath = "assets/shaders/osx/sprite.vs";
   string fragmentShaderPath = "assets/shaders/osx/sprite.frag";
 
   // the window
-  GLFWwindow* pWindow = initializeOpenGLRenderer(argc, argv, screenWidth,
-                                                 screenHeight, "Sample Game");
-  if (pWindow == nullptr)  // error on initialization
-  {
+  GLFWwindow* pWindow = initializeOpenGLRenderer(argc, argv, SCREEN_WIDTH, SCREEN_HEIGHT, "Sample Game");
+  if (pWindow == nullptr) {
     return -1;
   }
 
   // platform manager can only be created after the OpenGL context is created
-  OpenGLGraphicsManager openGLGraphicsManager(
-      screenWidth, screenHeight, 100, resourceProvider, vertexShaderPath,
-      fragmentShaderPath);
+  OpenGLGraphicsManager openGLGraphicsManager(SCREEN_WIDTH, SCREEN_HEIGHT, WORLD_UNITS_X, resourceProvider, vertexShaderPath, fragmentShaderPath);
   openGLGraphicsManager.initialize();
 
   MuteSoundManager muteSoundManager;
@@ -36,8 +34,7 @@ int main(int argc, char** argv) {
   // the game
   SampleGame sampleGame(openGLGraphicsManager, muteSoundManager);
 
-  int code =
-      mainLoopOpenGLRenderer(pWindow, sampleGame, screenWidth, screenHeight);
+  int code = mainLoopOpenGLRenderer(pWindow, sampleGame, SCREEN_WIDTH, SCREEN_HEIGHT);
 
   return code;
 }

@@ -19,7 +19,6 @@ DataCacheManager::DataCacheManager() { initializeMembers(); }
 DataCacheManager::~DataCacheManager() {
   delete m_pSpriteCache;
   delete m_pAnimatedSpriteCache;
-  delete m_pTileMapCache;
   initializeMembers();
 }
 
@@ -46,13 +45,6 @@ AnimatedSpriteData const& DataCacheManager::getAnimatedSprite(
   return m_pAnimatedSpriteCache->getData(config);
 }
 
-TileMapData const& DataCacheManager::getTileMapData(string const& config,
-                                                    string const& levelsFolder,
-                                                    string const& tilesFolder) {
-  assert(m_pTileMapCache != nullptr);
-  return m_pTileMapCache->getData(config, levelsFolder, tilesFolder);
-}
-
 void DataCacheManager::updateEditor() {}
 
 DataCacheManagerDestroyer::DataCacheManagerDestroyer(
@@ -76,5 +68,4 @@ void DataCacheManager::setResourceProvider(
   m_pSpriteCache = new DataCache<SpritesheetData>(*m_pResourceProvider);
   m_pAnimatedSpriteCache =
       new DataCache<AnimatedSpriteData>(*m_pResourceProvider);
-  m_pTileMapCache = new DataCache<TileMapData>(*m_pResourceProvider);
 }

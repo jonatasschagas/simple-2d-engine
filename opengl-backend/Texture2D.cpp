@@ -22,10 +22,11 @@ void Texture2D::generate(unsigned int width, unsigned int height,
   glTexImage2D(GL_TEXTURE_2D, 0, m_internalFormat, width, height, 0,
                m_imageFormat, GL_UNSIGNED_BYTE, pData);
   // set Texture wrap and filter modes
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, m_wrapS);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, m_wrapT);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, m_filterMin);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, m_filterMax);
+  
   // unbind texture
   glBindTexture(GL_TEXTURE_2D, 0);
 }

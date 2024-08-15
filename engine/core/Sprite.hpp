@@ -2,9 +2,8 @@
 #ifndef Sprite_hpp
 #define Sprite_hpp
 
-#include "Vector2.h"
+#include "core/Vector2.h"
 #include "glm/glm.hpp"
-#include "platform/DrawCall.h"
 #include "platform/GraphicsManager.hpp"
 #include "platform/SoundManager.hpp"
 #include <list>
@@ -12,40 +11,42 @@
 #include <stdio.h>
 #include <string>
 
-using namespace std;
+using namespace std::string_literals;
 
-class Sprite : enable_shared_from_this<Sprite> {
+class Sprite {
  public:
-  Sprite();
-  virtual ~Sprite();
-
-  void loadTexture(string const& textureFileName);
+  Sprite() = default;
+  Sprite(float x, float y, float w, float h);
 
   void playSoundEffect(string const& soundName);
 
-  void showPivot();
-  
+  /**
+   * @brief The engine expects the x,y of sprites that have a parent to be in
+   * the range of 0-100, where 100 is 100% of the parent's size. This function
+   * takes care of converting the x,y to the correct coordinates.
+   *
+   * For sprites that don't have a parent, the x,y are in the range of 0-1000,
+   * where 1000 is the size of the screen.
+   *
+   * @param x
+   * @param y
+   */
   void setXY(float x, float y);
+
+  /**
+   * @brief The engine expects the width and height of sprites that have a
+   * parent to be in the range of 0-100, where 100 is 100% of the parent's size.
+   * This function takes care of converting the width and height to the correct
+   * size.
+   *
+   * For sprites that don't have a parent, the width and height are in the range
+   * of 0-MAX_GAME_UNITS, where MAX_GAME_UNITS is define when wiring the game.
+   */
   void setSize(float w, float h);
-  void setTextureCoordinates(float x, float y, float w, float h);
-  void setRotation(float degrees);
-  
-  void useFullTexture();
-    
-  float getX() const;
-  float getY() const;
-  float getWidth() const;
-  float getHeight() const;
-  Vector2 getGamePosition() const;
 
   void fillParent();
 
-  bool const isFlipped() const;
-
   void setAlpha(float const alpha);
-  void setFlip(bool const flip);
-  void setVisible(bool visible);
-  bool isVisible() const;
 
   virtual void update(float deltaTime);
   virtual void render(GraphicsManager& rGraphicsManager);
@@ -56,81 +57,95 @@ class Sprite : enable_shared_from_this<Sprite> {
   void removeChild(Sprite* pChild);
   void removeAllChildren();
 
-  Sprite* getParent() const;
-
-  virtual bool isVisibleInParent(GraphicsManager const& rGraphicsManager) const;
-
-  bool hasTexture() const;
-
   void setSortChildren(bool sortChildren);
 
-  void setVertices(vector<Vertex> const& vertices);
+  Vector2 getGamePosition() const { return Vector2(m_coords.x, m_coords.y); }
+
+  float getX() const { return m_coords.x; }
+
+  float getY() const { return m_coords.y; }
+
+  float getWidth() const { return m_size.x; };
+
+  float getHeight() const { return m_size.y; };
+
+  bool hasTexture() const { return m_textureFilename.size() > 0; };
+
+  bool const isFlipped() const { return m_flip; }
+
+  void setFlip(bool const flip) { m_flip = flip; }
+
+  Sprite* getParent() const { return m_pParent; }
+
+  void setTextureCoordinates(float x, float y, float w, float h) {
+    m_textureCoordinates = glm::vec4(x, y, w, h);
+  }
+
+  void setRotation(float degrees) { m_angle = degrees; }
+  float getRotation() const { return m_angle; }
+
+  void setPivotAtCenter() {
+    m_pivot.x = .5f;
+    m_pivot.y = .5f;
+  }
+
+  void setPivot(float x, float y) {
+    m_pivot.x = x;
+    m_pivot.y = y;
+  }
+
+  void setX(float x) { setXY(x, m_coords.y); }
+
+  void setY(float y) { setXY(m_coords.x, y); }
+
+  void setColor(float r, float g, float b, float a) {
+    m_color = glm::vec4(r, g, b, a);
+    m_colorSpecified = true;
+  }
+
+  void loadTexture(string const& textureFileName) {
+    m_textureFilename = textureFileName;
+  }
+
+  void setWholeTexture(bool useWholeTexture) {
+    m_useWholeTexture = useWholeTexture;
+  }
 
  protected:
-  Sprite* m_pParent;
-  float m_alpha;
+  Sprite* m_pParent = nullptr;
+  float m_alpha = 1.0f;
 
- private:
-  
-  glm::mat4 calculateTransform();
+  glm::vec3 m_coords = {0, 0, 0};
+  glm::vec3 m_size = {0, 0, 0};
+  glm::vec3 m_pivot = {0, 0, 0};  // between 0 and 1
 
-  glm::vec3 m_coords;
-  glm::vec3 m_size;
+  glm::vec4 m_color = {0, 0, 0, 0};
+  bool m_colorSpecified = false;
 
-  string m_textureFilename;
-  bool m_textureLoaded;
-  int m_textureWidth;
-  int m_textureHeight;
-  bool m_useWholeTexture;
-  
-  bool m_visible;
-  float m_angle;
+  glm::mat4 calculateParentTransform();
+  glm::mat4 calculateChildTransform();
+  void clearChildrenToRemove();
 
-  glm::vec4 m_textureCoordinates;
-  bool m_flip;
+  string m_textureFilename = "";
+  bool m_textureLoaded = false;
+  int m_textureWidth = 0;
+  int m_textureHeight = 0;
+  bool m_useWholeTexture = false;
 
-  queue<string> m_soundsToPlay;
+  bool m_visible = true;
+  float m_angle = 0;
 
-  DrawCall m_drawCall;
+  glm::vec4 m_textureCoordinates = {0, 0, 0, 0};
+  bool m_flip = false;
 
-  glm::mat4 m_worldTransform;
-  glm::mat4 m_transform;
-  
-  list<Sprite*> m_children;
-  list<Sprite*> m_childrenToRemove;
-  
-  Sprite* m_pPivotSprite;
+  std::queue<string> m_soundsToPlay;
 
-  bool m_sortChildren;
+  glm::mat4 m_worldTransform = glm::mat4(1.0f);
 
-  void initializeMembers() {
-    m_pParent = nullptr;
-    m_textureFilename = "";
-    m_textureLoaded = false;
-    m_textureWidth = 0;
-    m_textureHeight = 0;
-    m_useWholeTexture = false;
-    m_alpha = 1.f;
-    m_angle = 0;
-    m_flip = false;
-    m_children.clear();
-    m_visible = true;
-    m_pPivotSprite = nullptr;
-    
-    m_coords.x = 0;
-    m_coords.y = 0;
-    m_coords.z = 0;
-    m_size.x = 0;
-    m_size.y = 0;
-    m_size.z = 0;
-    
-    m_textureCoordinates.x = 0;
-    m_textureCoordinates.y = 0;
-    m_textureCoordinates.z = 0;
-    m_textureCoordinates.w = 0;
+  std::list<Sprite*> m_children;
+  std::list<Sprite*> m_childrenToRemove;
 
-    m_soundsToPlay.empty();
-  }
+  bool m_sortChildren = false;
 };
 
 #endif /* Sprite_hpp */

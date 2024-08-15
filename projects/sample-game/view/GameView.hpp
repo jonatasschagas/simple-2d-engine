@@ -2,14 +2,15 @@
 #ifndef GameView_hpp
 #define GameView_hpp
 
+#include "objects/Rocket.hpp"
+#include "objects/RotatingPlanet.hpp"
+#include "objects/StarField.hpp"
 #include "platform/GraphicsManager.hpp"
 #include "view/View.h"
-#include "Maze.hpp"
-#include "Head.hpp"
 #include <vector>
 
-class GameView : public View, public Maze {
-public:
+class GameView : public View {
+ public:
   GameView(GraphicsManager& rGraphicsManager);
   ~GameView();
 
@@ -18,19 +19,14 @@ public:
   virtual void readInput(int x, int y, bool pressed) override;
   virtual void updateEditor() override;
 
-  virtual bool canMoveRight(float x) const override;
-  virtual bool canMoveLeft(float x) const override;
-  virtual bool canMoveUp(float y) const override;
-  virtual bool canMoveDown(float y) const override;
-  
   void update(float delta) override;
-  
-private:
 
+ private:
   GraphicsManager& m_rGraphicsManager;
-  
-  Head m_head;
 
+  StarField m_starField;
+  Rocket m_rocket;
+  RotatingPlanet m_rotatingPlanet;
 };
 
 #endif /* GameView_hpp */

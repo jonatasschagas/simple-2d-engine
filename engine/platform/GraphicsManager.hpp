@@ -2,13 +2,16 @@
 #ifndef GraphicsManager_h
 #define GraphicsManager_h
 
-#include "DrawCall.h"
+#include "core/Vector2.h"
 #include <glm/glm.hpp>
+#include <string>
+
+using std::string;
 
 struct Texture {
-    string texturePath;
-    int width;
-    int height;
+  string texturePath;
+  int width;
+  int height;
 };
 
 /**
@@ -21,7 +24,7 @@ class GraphicsManager {
   /**
    * initialize is called by the Engine when it is first initialized.
    */
-  virtual void initialize(){};
+  virtual void initialize() {};
 
   /**
    * setOffsetY is called by the Engine when the camera is moved.
@@ -30,15 +33,18 @@ class GraphicsManager {
    */
   virtual void setOffset(float x, float y) = 0;
 
-  /**
-   * renderTexture is called by the Engine when a texture needs to be
-   * rendered to the screen.
-   * @param drawCall the DrawCall containing the texture to render
-   */
-  virtual void renderTexture(DrawCall const& drawCall) = 0;
+  virtual void renderTexture(glm::mat4 const& transform,
+                             glm::vec4 const& textureCoordinates,
+                             string const& texturePath) = 0;
 
-  virtual void renderTexture(const glm::mat4& transform, const glm::vec4& textureCoordinates, string const& texturePath) = 0;
-  
+  /**
+   * renderColoredSprite is called by the Engine when a colored sprite
+   * @param transform the transformation matrix to apply to the sprite
+   * @param color the color to apply to the sprite
+   */
+  virtual void renderColoredSprite(glm::mat4 const& transform,
+                                   glm::vec4 const& color) = 0;
+
   /**
    * loadTexture is called by the Engine when a texture needs to be
    * loaded from disk into the graphics system.
@@ -68,7 +74,7 @@ class GraphicsManager {
    * know the size of the screen in game units.
    * @return the size of the screen in game units
    */
-  virtual const Vector2 getScreenSizeInGameUnits() const = 0;
+  virtual Vector2 const getScreenSizeInGameUnits() const = 0;
 
   /**
    * getScreenWidth is called by the Engine when it needs to know the

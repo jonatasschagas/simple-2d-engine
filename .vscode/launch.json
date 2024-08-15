@@ -1,30 +1,30 @@
 {
     "configurations": [
-    {
-        "name": "(lldb) Launch SDL",
-        "type": "cppdbg",
-        "request": "launch",
-        "program": "${workspaceFolder}/build/simple-2d-engine-sdl",
-        "args": [],
-        "stopAtEntry": false,
-        "cwd": "${workspaceFolder}/build",
-        "environment": [],
-        "externalConsole": false,
-        "MIMode": "lldb",
-        "preLaunchTask": "CMake: build"
-    },
-    {
-        "name": "(lldb) Launch OpenGL",
-        "type": "cppdbg",
-        "request": "launch",
-        "program": "${workspaceFolder}/build/simple-2d-engine-opengl",
-        "args": [],
-        "stopAtEntry": false,
-        "cwd": "${workspaceFolder}/build",
-        "environment": [],
-        "externalConsole": false,
-        "MIMode": "lldb",
-        "preLaunchTask": "CMake: build"
-    }
+        {
+            "name": "(lldb) Launch SDL",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/build/osx/simple-2d-engine-sdl",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}/build/osx",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "lldb",
+            "preLaunchTask": "make"
+        },
+        {
+            "name": "(lldb) Launch OpenGL",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/build/osx/simple-2d-engine-opengl",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}/build/osx",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "lldb",
+            "preLaunchTask": "make"
+        }
     ]
 }

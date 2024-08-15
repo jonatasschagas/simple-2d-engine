@@ -14,13 +14,13 @@
             ],
             "defines": [],
             "macFrameworkPath": [
-                "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks"
+                "/Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/System/Library/Frameworks"
             ],
             "cStandard": "c17",
             "cppStandard": "c++17",
             "intelliSenseMode": "macos-clang-x64",
             "mergeConfigurations": false,
-            "configurationProvider": "ms-vscode.makefile-tools",
+            "configurationProvider": "ms-vscode.cmake-tools",
             "browse": {
                 "path": [
                     "${workspaceFolder}/**"

@@ -106,7 +106,7 @@ int const SDLGraphicsManager::getWorldLocationYFromScreenCoordinates(
   return m_screenHeightInGameUnits - y / m_scaleFactorY;
 }
 
-const Vector2 SDLGraphicsManager::getScreenSizeInGameUnits() const {
+Vector2 const SDLGraphicsManager::getScreenSizeInGameUnits() const {
   return Vector2(m_screenWidthInGameUnits, m_screenHeightInGameUnits);
 }
 

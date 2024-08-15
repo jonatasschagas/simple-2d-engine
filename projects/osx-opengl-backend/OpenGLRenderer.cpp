@@ -13,10 +13,6 @@ void render(Game& rGame) {
   rGame.render();
 }
 
-void framebufferSizeCallback(GLFWwindow* pWindow, int width, int height) {
-  glViewport(0, 0, width, height);
-}
-
 void processInput(GLFWwindow* pWindow) {
   if (glfwGetKey(pWindow, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
     glfwSetWindowShouldClose(pWindow, true);
@@ -81,19 +77,22 @@ GLFWwindow* initializeOpenGLRenderer(int argc, char** argv, int screenWidth,
     return nullptr;
   }
 
-  glViewport(0, 0, screenWidth, screenHeight);
+  // Get framebuffer size (considering Retina display)
+  int framebufferWidth, framebufferHeight;
+  glfwGetFramebufferSize(pWindow, &framebufferWidth, &framebufferHeight);
+  // Set the viewport to match the framebuffer size
+  glViewport(0, 0, framebufferWidth, framebufferHeight);
+
   glEnable(GL_CULL_FACE);
   glEnable(GL_BLEND);
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-  glfwSetFramebufferSizeCallback(pWindow, framebufferSizeCallback);
   glfwSetKeyCallback(pWindow, keyCallback);
 
   return pWindow;
 }
 
-int mainLoopOpenGLRenderer(GLFWwindow* pWindow, Game& rGame, int screenWidth,
-                           int screenHeight) {
+int mainLoopOpenGLRenderer(GLFWwindow* pWindow, Game& rGame) {
   pGame = &rGame;
   rGame.initialize();
 

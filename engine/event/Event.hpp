@@ -25,7 +25,7 @@ class Event {
     m_eventName = eventName;
     m_iData = iData;
   }
-  ~Event(){};
+  ~Event() {};
 
   string const& getName() const { return m_eventName; };
   void setName(string const& eventName) { m_eventName = eventName; };

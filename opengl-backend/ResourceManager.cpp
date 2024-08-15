@@ -45,11 +45,10 @@ Shader& ResourceManager::getShader(string const& name) {
 
 Texture2D& ResourceManager::loadTexture(string const& file, string const& name,
                                         ResourceProvider& rResourceProvider) {
-  
   if (m_texturesMap.count(name) > 0) {
     return *m_texturesMap[name];
   }
-  
+
   unique_ptr<Texture2D> pTexture = make_unique<Texture2D>();
 
   int width, height;

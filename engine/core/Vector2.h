@@ -4,8 +4,8 @@
 
 class Vector2 {
  public:
-  Vector2(){};
-  Vector2(float _x, float _y) : x(_x), y(_y){};
+  Vector2() {};
+  Vector2(float _x, float _y) : x(_x), y(_y) {};
   Vector2(Vector2 const& v);
   Vector2(Vector2 const* v);
 
@@ -51,16 +51,16 @@ class Vector2 {
   }
 
   // VECTOR2 TO VECTOR2 OPERATIONS
-  inline const Vector2 operator+(Vector2 const& v) const {
+  inline Vector2 const operator+(Vector2 const& v) const {
     return Vector2(x + v.x, y + v.y);
   }
-  inline const Vector2 operator-(Vector2 const& v) const {
+  inline Vector2 const operator-(Vector2 const& v) const {
     return Vector2(x - v.x, y - v.y);
   }
-  inline const Vector2 operator*(Vector2 const& v) const {
+  inline Vector2 const operator*(Vector2 const& v) const {
     return Vector2(x * v.x, y * v.y);
   }
-  inline const Vector2 operator/(Vector2 const& v) const {
+  inline Vector2 const operator/(Vector2 const& v) const {
     return Vector2(x / v.x, y / v.y);
   }
 
@@ -87,16 +87,16 @@ class Vector2 {
   }
 
   // SCALER TO VECTOR2 OPERATIONS
-  inline const Vector2 operator+(float v) const {
+  inline Vector2 const operator+(float v) const {
     return Vector2(x + v, y + v);
   }
-  inline const Vector2 operator-(float v) const {
+  inline Vector2 const operator-(float v) const {
     return Vector2(x - v, y - v);
   }
-  inline const Vector2 operator*(float v) const {
+  inline Vector2 const operator*(float v) const {
     return Vector2(x * v, y * v);
   }
-  inline const Vector2 operator/(float v) const {
+  inline Vector2 const operator/(float v) const {
     return Vector2(x / v, y / v);
   }
 

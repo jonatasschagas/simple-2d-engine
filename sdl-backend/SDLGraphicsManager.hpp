@@ -22,7 +22,7 @@ class SDLGraphicsManager : public GraphicsManager {
   int const getWorldLocationXFromScreenCoordinates(int x) const override;
   int const getWorldLocationYFromScreenCoordinates(int y) const override;
 
-  const Vector2 getScreenSizeInGameUnits() const override;
+  Vector2 const getScreenSizeInGameUnits() const override;
 
   int getScreenWidth() const override;
   int getScreenHeight() const override;

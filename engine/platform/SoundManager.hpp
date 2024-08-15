@@ -11,7 +11,7 @@ class SoundManager {
   /**
    * initialize is called by the Engine when it is first initialized.
    */
-  virtual void initialize(){};
+  virtual void initialize() {};
 
   /**
    * playSoundEffect is called by the Engine when a sound effect needs to be

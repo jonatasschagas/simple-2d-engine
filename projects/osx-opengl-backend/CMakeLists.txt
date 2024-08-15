@@ -55,7 +55,7 @@ file(GLOB OPENG_GL_BACKEND_FILES ${OPENGL_BACKEND_IMPL}/*.cpp)
 list(APPEND SOURCE_FILES ${OPENG_GL_BACKEND_FILES}) 
 
 # adding sample game source files
-file(GLOB SAMPLE_GAME_FILES ${SAMPLE_GAME}/*.cpp ${SAMPLE_GAME}/view/*.cpp)
+file(GLOB SAMPLE_GAME_FILES ${SAMPLE_GAME}/*.cpp ${SAMPLE_GAME}/view/*.cpp ${SAMPLE_GAME}/objects/*.cpp)
 list(APPEND SOURCE_FILES ${SAMPLE_GAME_FILES})
 
 # adding engine source files
@@ -66,10 +66,6 @@ list(APPEND SOURCE_FILES ${ENGINE_FILES})
 # glm
 file(GLOB GLM_CODE CONFIGURE_DEPENDS ${GLM}/*.h ${GLM}/*.hpp ${GLM}/*.inl)
 list(APPEND SOURCE_FILES ${GLM_CODE}) 
-
-# rapidjson
-file(GLOB RAPID_JSON_CODE CONFIGURE_DEPENDS ${RAPID_JSON}/include/*.h ${RAPID_JSON}/include/*.hpp)
-list(APPEND SOURCE_FILES ${RAPID_JSON_CODE})
 
 # stb
 list(APPEND SOURCE_FILES ${STB}/stb_image.h)

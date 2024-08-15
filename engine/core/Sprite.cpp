@@ -25,10 +25,8 @@ void Sprite::processSounds(SoundManager& rSoundManager) {
 void Sprite::render(GraphicsManager& rGraphicsManager) {
   if (!m_visible) return;
 
-  rGraphicsManager.getScaleFactor(m_scaleFactor.x, m_scaleFactor.y);
-
+  // lazy texture loading
   if (hasTexture() && !m_textureLoaded) {
-    // lazy loading...
     Texture texture = rGraphicsManager.loadTexture(m_textureFilename);
     m_textureLoaded = true;
     if (m_useWholeTexture) {
@@ -38,6 +36,15 @@ void Sprite::render(GraphicsManager& rGraphicsManager) {
     }
   }
 
+  // update world transform
+  if (m_pParent != nullptr) {
+    m_worldTransform =
+        m_pParent->m_worldTransform * calculateTransform(rGraphicsManager);
+  } else {
+    m_worldTransform = calculateTransform(rGraphicsManager);
+  }
+
+  // render
   if (hasTexture()) {
     rGraphicsManager.renderTexture(m_worldTransform, m_textureCoordinates,
                                    m_textureFilename);
@@ -45,6 +52,7 @@ void Sprite::render(GraphicsManager& rGraphicsManager) {
     rGraphicsManager.renderColoredSprite(m_worldTransform, m_color);
   }
 
+  // render children
   for (Sprite* pChild : m_children) {
     pChild->render(rGraphicsManager);
   }
@@ -71,35 +79,28 @@ void Sprite::update(float deltaTime) {
 
   clearChildrenToRemove();
 
-  if (m_pParent != nullptr) {
-    m_worldTransform = m_pParent->m_worldTransform * calculateTransform();
-  } else {
-    m_worldTransform = calculateTransform();
-  }
-
   for (Sprite* pChild : m_children) {
     pChild->update(deltaTime);
   }
 }
 
-glm::mat4 Sprite::calculateTransform() {
+glm::mat4 Sprite::calculateTransform(GraphicsManager& rGraphicsManager) const {
   // translation * rotation * scale (also known as TRS matrix)
+
+  glm::vec3 size = m_computedSize;
+
   if (m_pParent == nullptr) {
-    glm::vec3 size = m_size * m_scaleFactor;
-    return glm::translate(glm::mat4(1.0f), m_coords) *
-           glm::translate(glm::mat4(1.0f), m_pivot * size) *
-           glm::rotate(glm::mat4(1.0f), glm::radians(m_angle),
-                       glm::vec3(0.0f, 0.0f, 1.0f)) *
-           glm::translate(glm::mat4(1.0f), -m_pivot * size) *
-           glm::scale(glm::mat4(1.0f), size);
-  } else {
-    return glm::translate(glm::mat4(1.0f), m_coords) *
-           glm::translate(glm::mat4(1.0f), m_pivot * m_size) *
-           glm::rotate(glm::mat4(1.0f), glm::radians(m_angle),
-                       glm::vec3(0.0f, 0.0f, 1.0f)) *
-           glm::translate(glm::mat4(1.0f), -m_pivot * m_size) *
-           glm::scale(glm::mat4(1.0f), m_size);
+    float scaleFactorX, scaleFactorY;
+    rGraphicsManager.getScaleFactor(scaleFactorX, scaleFactorY);
+    size = m_computedSize * glm::vec3(scaleFactorX, scaleFactorY, 1.0f);
   }
+
+  return glm::translate(glm::mat4(1.0f), m_computedCoords) *
+         glm::translate(glm::mat4(1.0f), m_pivot * size) *
+         glm::rotate(glm::mat4(1.0f), glm::radians(m_angle),
+                     glm::vec3(0.0f, 0.0f, 1.0f)) *
+         glm::translate(glm::mat4(1.0f), -m_pivot * size) *
+         glm::scale(glm::mat4(1.0f), size);
 }
 
 void Sprite::playSoundEffect(string const& soundName) {
@@ -110,6 +111,10 @@ void Sprite::addChild(Sprite* pChild) {
   m_children.push_back(pChild);
   pChild->m_pParent = this;
 
+  // set child's coordinates and size relative to parent
+  pChild->setXY(pChild->getX(), pChild->getY());
+  pChild->setSize(pChild->getWidth(), pChild->getHeight());
+
   if (!m_sortChildren) return;
 
   m_children.sort(SpriteCmp());
@@ -118,11 +123,27 @@ void Sprite::addChild(Sprite* pChild) {
 void Sprite::setXY(float x, float y) {
   m_coords.x = x;
   m_coords.y = y;
+
+  if (m_pParent != nullptr) {
+    m_computedCoords.x = x / 100.f;
+    m_computedCoords.y = y / 100.f;
+  } else {
+    m_computedCoords.x = x;
+    m_computedCoords.y = y;
+  }
 }
 
 void Sprite::setSize(float w, float h) {
   m_size.x = w;
   m_size.y = h;
+
+  if (m_pParent != nullptr) {
+    m_computedSize.x = w / 100.0f;
+    m_computedSize.y = h / 100.0f;
+  } else {
+    m_computedSize.x = w;
+    m_computedSize.y = h;
+  }
 }
 
 void Sprite::removeChild(Sprite* pChildToRemove) {
@@ -141,5 +162,5 @@ void Sprite::setAlpha(float const alpha) {
 void Sprite::fillParent() {
   if (m_pParent == nullptr) return;
 
-  setSize(1.0f, 1.0f);
+  setSize(100.f, 100.f);
 }

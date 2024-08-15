@@ -17,7 +17,7 @@ void Rocket::update(float delta) {
   m_accumulatedDelta += delta;
   if (m_accumulatedDelta > m_speed) {
     float sinCal = sinf(degreesToRadians(m_angle));
-    setXY(getX(), sinCal * 0.1f + m_originalY);
+    setXY(getX(), sinCal * 5.f + m_originalY);
 
     if (sinCal > 0) {
       setRotation(simple_lerp(getRotation(), 80, delta));

@@ -25,6 +25,10 @@ class Sprite {
    * the range of 0-100, where 100 is 100% of the parent's size. This function
    * takes care of converting the x,y to the correct coordinates.
    *
+   * For example, if the parent is 100x100 and the x,y are 50,50, the sprite
+   * will be in the center of the parent. If the parent is 100x100 and the x,y
+   * are 100,100, the sprite will be in the bottom right corner of the parent.
+   *
    * For sprites that don't have a parent, the x,y are in the range of 0-1000,
    * where 1000 is the size of the screen.
    *
@@ -38,6 +42,11 @@ class Sprite {
    * parent to be in the range of 0-100, where 100 is 100% of the parent's size.
    * This function takes care of converting the width and height to the correct
    * size.
+   *
+   * For example, if the parent is 100x100 and the width and height are 50,50,
+   * the sprite will be half the size of the parent. If the parent is 100x100
+   * and the width and height are 100,100, the sprite will be the same size as
+   * the parent.
    *
    * For sprites that don't have a parent, the width and height are in the range
    * of 0-MAX_GAME_UNITS, where MAX_GAME_UNITS is define when wiring the game.
@@ -112,19 +121,20 @@ class Sprite {
   }
 
  protected:
+  glm::mat4 calculateTransform(GraphicsManager& rGraphicsManager) const;
+  void clearChildrenToRemove();
+
   Sprite* m_pParent = nullptr;
   float m_alpha = 1.0f;
 
   glm::vec3 m_coords = {0, 0, 0};
+  glm::vec3 m_computedCoords = {0, 0, 0};
   glm::vec3 m_size = {0, 0, 0};
+  glm::vec3 m_computedSize = {0, 0, 0};
   glm::vec3 m_pivot = {0, 0, 0};  // between 0 and 1
-  glm::vec3 m_scaleFactor = {1, 1, 1};
 
   glm::vec4 m_color = {0, 0, 0, 0};
   bool m_colorSpecified = false;
-
-  glm::mat4 calculateTransform();
-  void clearChildrenToRemove();
 
   string m_textureFilename = "";
   bool m_textureLoaded = false;

@@ -40,13 +40,13 @@ class OpenGLGraphicsManager : public GraphicsManager {
   int getScreenWidth() const override;
   int getScreenHeight() const override;
 
+  void getScaleFactor(float& x, float& y) const override;
+
   void initializeShader(string const& shaderName,
                         string const& vertexShaderPath,
                         string const& fragmentShaderPath);
 
  private:
-  void scaleAndOffsetTransform(glm::mat4& transform);
-
   SpriteRenderer m_spriteRenderer;
   ResourceProvider& m_rResourceProvider;
   float m_offsetX = 0;

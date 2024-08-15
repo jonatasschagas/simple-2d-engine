@@ -3,10 +3,8 @@
 GameView::GameView(GraphicsManager& rGraphicsManager)
     : View(),
       m_rGraphicsManager(rGraphicsManager),
-      m_starField(300, 0.05f),
-      m_rocket(0.01f),
-      m_rotatingPlanet(0.01f, "assets/images/planet01.png", 5.0f, 5.0f, 0.1f,
-                       0.1f, true) {}
+      m_starField(300, 0.001f),
+      m_rocket(0.01f) {}
 
 GameView::~GameView() {}
 
@@ -16,11 +14,8 @@ void GameView::initialize(ViewManager* pViewManager) {
   addChild(&m_starField);
   addChild(&m_rocket);
 
-  m_rocket.setXY(5.f, 0.5f);
-  m_rocket.setSize(0.1f, 0.18f);
-
-  m_rotatingPlanet.setWholeTexture(true);
-  addChild(&m_rotatingPlanet);
+  m_rocket.setXY(.4f, .5f);
+  m_rocket.setSize(0.1f, 0.15f);
 }
 
 void GameView::receiveEvent(Event* pEvent) {}

@@ -10,10 +10,14 @@ Rocket::Rocket(float speed) : m_speed(speed) {
 void Rocket::update(float delta) {
   Sprite::update(delta);
 
+  if (m_originalY == 0.0f) {
+    m_originalY = getY();
+  }
+
   m_accumulatedDelta += delta;
   if (m_accumulatedDelta > m_speed) {
     float sinCal = sinf(degreesToRadians(m_angle));
-    setXY(getX(), sinCal + 5.0f);
+    setXY(getX(), sinCal * 0.1f + m_originalY);
 
     if (sinCal > 0) {
       setRotation(simple_lerp(getRotation(), 80, delta));

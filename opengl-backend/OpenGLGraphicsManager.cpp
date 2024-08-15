@@ -59,29 +59,17 @@ void OpenGLGraphicsManager::setOffset(float x, float y) {
 void OpenGLGraphicsManager::renderTexture(glm::mat4 const& transform,
                                           glm::vec4 const& textureCoordinates,
                                           string const& texturePath) {
-  glm::mat4 updatedMat = transform;
-  scaleAndOffsetTransform(updatedMat);
-
   m_spriteRenderer.draw(ResourceManager::getInstance()->getShader("sprite"),
-                        updatedMat,
+                        transform,
                         ResourceManager::getInstance()->getTexture(texturePath),
                         textureCoordinates);
 }
 
 void OpenGLGraphicsManager::renderColoredSprite(glm::mat4 const& transform,
                                                 glm::vec4 const& color) {
-  glm::mat4 updatedMat = transform;
-  scaleAndOffsetTransform(updatedMat);
-
   m_spriteRenderer.draw(
-      ResourceManager::getInstance()->getShader("coloredSprite"), updatedMat,
+      ResourceManager::getInstance()->getShader("coloredSprite"), transform,
       color);
-}
-
-void OpenGLGraphicsManager::scaleAndOffsetTransform(glm::mat4& transform) {
-  transform = glm::translate(transform, glm::vec3(m_offsetX, m_offsetY, 0)) *
-              glm::scale(glm::mat4(1.0f),
-                         glm::vec3(m_scaleFactorX, m_scaleFactorY, 1.0f));
 }
 
 Texture OpenGLGraphicsManager::loadTexture(string const& path) {
@@ -113,3 +101,8 @@ Vector2 const OpenGLGraphicsManager::getScreenSizeInGameUnits() const {
 int OpenGLGraphicsManager::getScreenWidth() const { return m_screenWidth; }
 
 int OpenGLGraphicsManager::getScreenHeight() const { return m_screenHeight; }
+
+void OpenGLGraphicsManager::getScaleFactor(float& x, float& y) const {
+  x = m_scaleFactorX;
+  y = m_scaleFactorY;
+}

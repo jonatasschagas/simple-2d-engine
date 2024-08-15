@@ -2,7 +2,7 @@
 
 StarField::StarField(unsigned numStars, float speed)
     : Sprite(), m_cluster1(200, 3), m_cluster2(200, 2), m_speed(speed) {
-  setSize(10.f, 10.f);
+  setSize(1.f, 1.f);
   setXY(0, 0);
 
   addChild(&m_cluster1);

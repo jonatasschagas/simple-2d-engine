@@ -17,6 +17,7 @@ class Rocket : public Sprite {
  private:
   float m_speed = 0.05f;
   float m_accumulatedDelta = 0.0f;
+  float m_originalY = 0.0f;
   int m_angle = 0;
 };
 

@@ -118,12 +118,12 @@ class Sprite {
   glm::vec3 m_coords = {0, 0, 0};
   glm::vec3 m_size = {0, 0, 0};
   glm::vec3 m_pivot = {0, 0, 0};  // between 0 and 1
+  glm::vec3 m_scaleFactor = {1, 1, 1};
 
   glm::vec4 m_color = {0, 0, 0, 0};
   bool m_colorSpecified = false;
 
-  glm::mat4 calculateParentTransform();
-  glm::mat4 calculateChildTransform();
+  glm::mat4 calculateTransform();
   void clearChildrenToRemove();
 
   string m_textureFilename = "";

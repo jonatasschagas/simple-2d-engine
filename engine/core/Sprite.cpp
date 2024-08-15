@@ -25,6 +25,8 @@ void Sprite::processSounds(SoundManager& rSoundManager) {
 void Sprite::render(GraphicsManager& rGraphicsManager) {
   if (!m_visible) return;
 
+  rGraphicsManager.getScaleFactor(m_scaleFactor.x, m_scaleFactor.y);
+
   if (hasTexture() && !m_textureLoaded) {
     // lazy loading...
     Texture texture = rGraphicsManager.loadTexture(m_textureFilename);
@@ -70,16 +72,9 @@ void Sprite::update(float deltaTime) {
   clearChildrenToRemove();
 
   if (m_pParent != nullptr) {
-    // Compute parent's world transform
-    glm::mat4 parentTransform = m_pParent->m_worldTransform;
-
-    // Compute child's local transform
-    glm::mat4 localTransform = calculateChildTransform();
-
-    // Combine with parent's world transform
-    m_worldTransform = parentTransform * localTransform;
+    m_worldTransform = m_pParent->m_worldTransform * calculateTransform();
   } else {
-    m_worldTransform = calculateParentTransform();
+    m_worldTransform = calculateTransform();
   }
 
   for (Sprite* pChild : m_children) {
@@ -87,45 +82,24 @@ void Sprite::update(float deltaTime) {
   }
 }
 
-glm::mat4 Sprite::calculateParentTransform() {
-  glm::mat4 translate =
-      glm::translate(glm::mat4(1.0f), glm::vec3(m_coords.x, m_coords.y, 0.0f));
-
-  glm::mat4 scale =
-      glm::scale(glm::mat4(1.0f), glm::vec3(m_size.x, m_size.y, 1.0f));
-
-  glm::mat4 rotation = glm::rotate(glm::mat4(1.0f), glm::radians(m_angle),
-                                   glm::vec3(0.0f, 0.0f, 1.0f));
-
-  glm::mat4 model = translate * rotation * scale;
-
-  return model;
-}
-
-glm::mat4 Sprite::calculateChildTransform() {
-  // THIS WORKS NOW
-
-  // Translate to the child's position
-  glm::mat4 translate =
-      glm::translate(glm::mat4(1.0f), glm::vec3(m_coords.x, m_coords.y, 0.0f));
-
-  // Apply scaling to the child
-  glm::mat4 scale =
-      glm::scale(glm::mat4(1.0f), glm::vec3(m_size.x, m_size.y, 1.0f));
-
-  // Calculate the pivot in world space, considering the object's size
-  glm::vec3 pivot = glm::vec3(m_pivot.x * m_size.x, m_pivot.y * m_size.y, 0.0f);
-  glm::mat4 pivotTranslate = glm::translate(glm::mat4(1.0f), pivot);
-  glm::mat4 inversePivotTranslate = glm::translate(glm::mat4(1.0f), -pivot);
-
-  // Apply rotation around the pivot
-  glm::mat4 rotation = glm::rotate(glm::mat4(1.0f), glm::radians(m_angle),
-                                   glm::vec3(0.0f, 0.0f, 1.0f));
-
-  glm::mat4 model =
-      translate * pivotTranslate * rotation * scale * inversePivotTranslate;
-
-  return model;
+glm::mat4 Sprite::calculateTransform() {
+  // translation * rotation * scale (also known as TRS matrix)
+  if (m_pParent == nullptr) {
+    glm::vec3 size = m_size * m_scaleFactor;
+    return glm::translate(glm::mat4(1.0f), m_coords) *
+           glm::translate(glm::mat4(1.0f), m_pivot * size) *
+           glm::rotate(glm::mat4(1.0f), glm::radians(m_angle),
+                       glm::vec3(0.0f, 0.0f, 1.0f)) *
+           glm::translate(glm::mat4(1.0f), -m_pivot * size) *
+           glm::scale(glm::mat4(1.0f), size);
+  } else {
+    return glm::translate(glm::mat4(1.0f), m_coords) *
+           glm::translate(glm::mat4(1.0f), m_pivot * m_size) *
+           glm::rotate(glm::mat4(1.0f), glm::radians(m_angle),
+                       glm::vec3(0.0f, 0.0f, 1.0f)) *
+           glm::translate(glm::mat4(1.0f), -m_pivot * m_size) *
+           glm::scale(glm::mat4(1.0f), m_size);
+  }
 }
 
 void Sprite::playSoundEffect(string const& soundName) {

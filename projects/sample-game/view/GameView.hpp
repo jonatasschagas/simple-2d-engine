@@ -3,7 +3,6 @@
 #define GameView_hpp
 
 #include "objects/Rocket.hpp"
-#include "objects/RotatingPlanet.hpp"
 #include "objects/StarField.hpp"
 #include "platform/GraphicsManager.hpp"
 #include "view/View.h"
@@ -26,7 +25,6 @@ class GameView : public View {
 
   StarField m_starField;
   Rocket m_rocket;
-  RotatingPlanet m_rotatingPlanet;
 };
 
 #endif /* GameView_hpp */

@@ -90,6 +90,15 @@ class GraphicsManager {
    */
   virtual int getScreenHeight() const = 0;
 
+  /**
+   * getScaleFactor is called by the Engine when it needs to know the
+   * scale factor of the screen.
+   * @param x the x scale factor
+   * @param y the y scale factor
+   * @return the scale factor of the screen
+   */
+  virtual void getScaleFactor(float& x, float& y) const = 0;
+
   virtual ~GraphicsManager() {}
 };
 

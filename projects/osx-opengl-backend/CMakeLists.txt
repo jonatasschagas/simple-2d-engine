@@ -55,7 +55,7 @@ file(GLOB OPENG_GL_BACKEND_FILES ${OPENGL_BACKEND_IMPL}/*.cpp)
 list(APPEND SOURCE_FILES ${OPENG_GL_BACKEND_FILES}) 
 
 # adding sample game source files
-file(GLOB SAMPLE_GAME_FILES ${SAMPLE_GAME}/*.cpp ${SAMPLE_GAME}/view/*.cpp ${SAMPLE_GAME}/objects/*.cpp)
+file(GLOB SAMPLE_GAME_FILES ${SAMPLE_GAME}/*.cpp ${SAMPLE_GAME}/view/*.cpp ${SAMPLE_GAME}/objects/*.cpp ${SAMPLE_GAME}/objects/particles/*.cpp)
 list(APPEND SOURCE_FILES ${SAMPLE_GAME_FILES})
 
 # adding engine source files

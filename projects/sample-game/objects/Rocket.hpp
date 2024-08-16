@@ -4,6 +4,7 @@
 #define Rocket_hpp
 
 #include "core/Sprite.hpp"
+#include "particles/ParticlePool.hpp"
 #include <string>
 #include <vector>
 
@@ -15,10 +16,15 @@ class Rocket : public Sprite {
   void update(float delta) override;
 
  private:
+  void emitParticles();
+
   float m_speed = 0.05f;
   float m_accumulatedDelta = 0.0f;
+  float m_particlesAccumulatedDelta = 0.0f;
   float m_originalY = 0.0f;
   int m_angle = 0;
+
+  ParticlePool m_particlePool;
 };
 
 #endif /* Rocket_hpp */

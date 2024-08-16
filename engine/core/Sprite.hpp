@@ -107,6 +107,9 @@ class Sprite {
 
   void setY(float y) { setXY(m_coords.x, y); }
 
+  void setVisible(bool visible) { m_visible = visible; }
+  bool isVisible() const { return m_visible; }
+
   void setColor(float r, float g, float b, float a) {
     m_color = glm::vec4(r, g, b, a);
     m_colorSpecified = true;

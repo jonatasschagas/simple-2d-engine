@@ -1,5 +1,6 @@
 #include "OpenGLSpriteRenderer.hpp"
 #include "OpenGLResourceManager.hpp"
+#include "OpenGLUtils.h"
 #include "utils/StringUtils.h"
 
 OpenGLSpriteRenderer::OpenGLSpriteRenderer() {}
@@ -7,6 +8,7 @@ OpenGLSpriteRenderer::OpenGLSpriteRenderer() {}
 OpenGLSpriteRenderer::~OpenGLSpriteRenderer() {
   for (auto& pair : m_textureVAOs) {
     glDeleteVertexArrays(1, &pair.second);
+    checkOpenGLError("glDeleteVertexArrays");
   }
 }
 
@@ -18,10 +20,10 @@ void OpenGLSpriteRenderer::draw(Shader& rShader, glm::mat4 const& rTransform,
   rShader.setMatrix4("model", rTransform);
 
   glActiveTexture(GL_TEXTURE0);
-  CheckOpenGLError("glActiveTexture");
+  checkOpenGLError("glActiveTexture");
 
   rTexture.bind();
-  CheckOpenGLError("glActiveTexture");
+  checkOpenGLError("glActiveTexture");
 
   string textureName = stringFormat(
       "%d-(%.0f,%.0f,%.0f,%.0f)", rTexture.getId(), rTextureCoordinates.x,
@@ -34,11 +36,11 @@ void OpenGLSpriteRenderer::draw(Shader& rShader, glm::mat4 const& rTransform,
   unsigned int textureVAO = m_textureVAOs[textureName];
 
   glBindVertexArray(textureVAO);
-  CheckOpenGLError("glBindVertexArray");
+  checkOpenGLError("glBindVertexArray");
   glDrawArrays(GL_TRIANGLES, 0, 6);
-  CheckOpenGLError("glDrawArrays");
+  checkOpenGLError("glDrawArrays");
   glBindVertexArray(0);
-  CheckOpenGLError("glBindVertexArray");
+  checkOpenGLError("glBindVertexArray");
 }
 
 void OpenGLSpriteRenderer::draw(Shader& rShader, glm::mat4 const& rTransform) {
@@ -48,17 +50,17 @@ void OpenGLSpriteRenderer::draw(Shader& rShader, glm::mat4 const& rTransform) {
 
   rShader.use();
 
-  CheckOpenGLError("shader.use");
+  checkOpenGLError("shader.use");
 
   rShader.setMatrix4("model", rTransform);
-  CheckOpenGLError("shader.setMatrix4");
+  checkOpenGLError("shader.setMatrix4");
 
   glBindVertexArray(m_quadVAO);
-  CheckOpenGLError("glBindVertexArray");
+  checkOpenGLError("glBindVertexArray");
   glDrawArrays(GL_TRIANGLES, 0, 6);
-  CheckOpenGLError("glDrawArrays");
+  checkOpenGLError("glDrawArrays");
   glBindVertexArray(0);
-  CheckOpenGLError("glBindVertexArray");
+  checkOpenGLError("glBindVertexArray");
 }
 
 void OpenGLSpriteRenderer::createTextureVAO(string textureName,
@@ -83,26 +85,26 @@ void OpenGLSpriteRenderer::createTextureVAO(string textureName,
   unsigned int textureVAO;
 
   glGenVertexArrays(1, &textureVAO);
-  CheckOpenGLError("glGenVertexArrays");
+  checkOpenGLError("glGenVertexArrays");
   glGenBuffers(1, &VBO);
-  CheckOpenGLError("glGenBuffers");
+  checkOpenGLError("glGenBuffers");
 
   glBindBuffer(GL_ARRAY_BUFFER, VBO);
-  CheckOpenGLError("glBindBuffer");
+  checkOpenGLError("glBindBuffer");
   glBufferData(GL_ARRAY_BUFFER, sizeof(verticesQuad), verticesQuad,
                GL_STATIC_DRAW);
-  CheckOpenGLError("glBufferData");
+  checkOpenGLError("glBufferData");
 
   glBindVertexArray(textureVAO);
-  CheckOpenGLError("glBindVertexArray");
+  checkOpenGLError("glBindVertexArray");
   glEnableVertexAttribArray(0);
-  CheckOpenGLError("glEnableVertexAttribArray");
+  checkOpenGLError("glEnableVertexAttribArray");
   glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)0);
-  CheckOpenGLError("glVertexAttribPointer");
+  checkOpenGLError("glVertexAttribPointer");
   glBindBuffer(GL_ARRAY_BUFFER, 0);
-  CheckOpenGLError("glBindBuffer");
+  checkOpenGLError("glBindBuffer");
   glBindVertexArray(0);
-  CheckOpenGLError("glBindVertexArray");
+  checkOpenGLError("glBindVertexArray");
 
   m_textureVAOs.insert(
       std::pair<string, unsigned int>(textureName, textureVAO));
@@ -118,24 +120,24 @@ void OpenGLSpriteRenderer::createQuadVAO() {
                           0.0f, 1.0f, 0, 0, 1.0f, 1.0f, 0, 0, 1.0f, 0.0f, 0, 0};
 
   glGenVertexArrays(1, &m_quadVAO);
-  CheckOpenGLError("glGenVertexArrays");
+  checkOpenGLError("glGenVertexArrays");
   glGenBuffers(1, &VBO);
-  CheckOpenGLError("glGenBuffers");
+  checkOpenGLError("glGenBuffers");
 
   glBindBuffer(GL_ARRAY_BUFFER, VBO);
-  CheckOpenGLError("glBindBuffer");
+  checkOpenGLError("glBindBuffer");
   glBufferData(GL_ARRAY_BUFFER, sizeof(verticesQuad), verticesQuad,
                GL_STATIC_DRAW);
-  CheckOpenGLError("glBufferData");
+  checkOpenGLError("glBufferData");
 
   glBindVertexArray(m_quadVAO);
-  CheckOpenGLError("glBindVertexArray");
+  checkOpenGLError("glBindVertexArray");
   glEnableVertexAttribArray(0);
-  CheckOpenGLError("glEnableVertexAttribArray");
+  checkOpenGLError("glEnableVertexAttribArray");
   glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)0);
-  CheckOpenGLError("glVertexAttribPointer");
+  checkOpenGLError("glVertexAttribPointer");
   glBindBuffer(GL_ARRAY_BUFFER, 0);
-  CheckOpenGLError("glBindBuffer");
+  checkOpenGLError("glBindBuffer");
   glBindVertexArray(0);
-  CheckOpenGLError("glBindVertexArray");
+  checkOpenGLError("glBindVertexArray");
 }

@@ -1,5 +1,6 @@
 #include "OpenGLShader.hpp"
 #include "OpenGLHeaders.h"
+#include "OpenGLUtils.h"
 #include <iostream>
 
 using std::cout;
@@ -8,13 +9,13 @@ OpenGLShader::OpenGLShader() { initializeMembers(); }
 
 OpenGLShader::~OpenGLShader() {
   glDeleteProgram(m_id);
-  CheckOpenGLError("glDeleteProgram");
+  checkOpenGLError("glDeleteProgram");
   initializeMembers();
 }
 
 Shader& OpenGLShader::use() {
   glUseProgram(m_id);
-  CheckOpenGLError("glUseProgram");
+  checkOpenGLError("glUseProgram");
   return *this;
 }
 
@@ -24,73 +25,73 @@ void OpenGLShader::load(string const& vertexSource,
   // vertex Shader
   char const* vertexSourceCStr = vertexSource.c_str();
   sVertex = glCreateShader(GL_VERTEX_SHADER);
-  CheckOpenGLError("glCreateShader");
+  checkOpenGLError("glCreateShader");
   glShaderSource(sVertex, 1, &vertexSourceCStr, NULL);
-  CheckOpenGLError("glShaderSource");
+  checkOpenGLError("glShaderSource");
   glCompileShader(sVertex);
-  CheckOpenGLError("glCompileShader");
+  checkOpenGLError("glCompileShader");
   checkCompileErrors(sVertex, "VERTEX");
 
   // fragment Shader
   char const* fragmentSourceCStr = fragmentSource.c_str();
   sFragment = glCreateShader(GL_FRAGMENT_SHADER);
-  CheckOpenGLError("glCreateShader");
+  checkOpenGLError("glCreateShader");
   glShaderSource(sFragment, 1, &fragmentSourceCStr, NULL);
-  CheckOpenGLError("glShaderSource");
+  checkOpenGLError("glShaderSource");
   glCompileShader(sFragment);
-  CheckOpenGLError("glCompileShader");
+  checkOpenGLError("glCompileShader");
   checkCompileErrors(sFragment, "FRAGMENT");
 
   // shader program
   m_id = glCreateProgram();
-  CheckOpenGLError("glCreateProgram");
+  checkOpenGLError("glCreateProgram");
   glAttachShader(m_id, sVertex);
-  CheckOpenGLError("glAttachShader");
+  checkOpenGLError("glAttachShader");
   glAttachShader(m_id, sFragment);
-  CheckOpenGLError("glAttachShader");
+  checkOpenGLError("glAttachShader");
   glLinkProgram(m_id);
-  CheckOpenGLError("glLinkProgram");
+  checkOpenGLError("glLinkProgram");
   checkCompileErrors(m_id, "PROGRAM");
 
   // delete the shaders as they're linked into our program now and no longer
   // necessary
   glDeleteShader(sVertex);
-  CheckOpenGLError("glDeleteShader");
+  checkOpenGLError("glDeleteShader");
   glDeleteShader(sFragment);
-  CheckOpenGLError("glDeleteShader");
+  checkOpenGLError("glDeleteShader");
 }
 
 void OpenGLShader::setFloat(string const& name, float value) {
   glUniform1f(glGetUniformLocation(m_id, name.c_str()), value);
-  CheckOpenGLError("glUniform1f");
+  checkOpenGLError("glUniform1f");
 }
 
 void OpenGLShader::setInteger(string const& name, int value) {
   glUniform1i(glGetUniformLocation(m_id, name.c_str()), value);
-  CheckOpenGLError("glUniform1i");
+  checkOpenGLError("glUniform1i");
 }
 
 void OpenGLShader::setVector2f(string const& name, glm::vec2 const& value) {
   glUniform2f(glGetUniformLocation(m_id, name.c_str()), value.x, value.y);
-  CheckOpenGLError("glUniform2f");
+  checkOpenGLError("glUniform2f");
 }
 
 void OpenGLShader::setVector3f(string const& name, glm::vec3 const& value) {
   glUniform3f(glGetUniformLocation(m_id, name.c_str()), value.x, value.y,
               value.z);
-  CheckOpenGLError("glUniform3f");
+  checkOpenGLError("glUniform3f");
 }
 
 void OpenGLShader::setVector4f(string const& name, glm::vec4 const& value) {
   glUniform4f(glGetUniformLocation(m_id, name.c_str()), value.x, value.y,
               value.z, value.w);
-  CheckOpenGLError("glUniform4f");
+  checkOpenGLError("glUniform4f");
 }
 
 void OpenGLShader::setMatrix4(string const& name, glm::mat4 const& matrix) {
   glUniformMatrix4fv(glGetUniformLocation(m_id, name.c_str()), 1, false,
                      glm::value_ptr(matrix));
-  CheckOpenGLError("glUniformMatrix4fv");
+  checkOpenGLError("glUniformMatrix4fv");
 }
 
 void OpenGLShader::checkCompileErrors(unsigned int object, string const& type) {

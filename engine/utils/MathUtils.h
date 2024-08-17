@@ -3,7 +3,6 @@
 #ifndef MathUtils_h
 #define MathUtils_h
 
-#include "../core/Vector2.h"
 #include "glm/glm.hpp"
 #include <iostream>
 #include <random>
@@ -72,12 +71,6 @@ inline bool checkCollision(float x1, float y1, float width1, float height1,
   bool collidesY =
       (y1 >= y2 && y1 <= (y2 + height2)) || (y2 >= y1 && y2 <= (y1 + height1));
   return collidesX && collidesY;
-}
-
-inline bool checkCollision(Vector2 const& position1, Vector2 const& size1,
-                           Vector2 const& position2, Vector2 const& size2) {
-  return checkCollision(position1.x, position1.y, size1.x, size1.y, position2.x,
-                        position2.y, size2.x, size2.y);
 }
 
 inline float calculateDistanceBetweenNodes(float x1, float y1, float x2,

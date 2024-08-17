@@ -2,52 +2,54 @@
 #ifndef OpenGLGraphicsManager_hpp
 #define OpenGLGraphicsManager_hpp
 
-#include "SpriteRenderer.hpp"
-#include "platform/GraphicsManager.hpp"
-#include "platform/ResourceProvider.hpp"
+#include "OpenGLResourceManager.hpp"
+#include "OpenGLSpriteRenderer.hpp"
+#include "disk/ResourceProvider.hpp"
+#include "graphics/GraphicsManager.hpp"
 #include <string>
 
-using namespace std;
+using std::string;
 
 class OpenGLGraphicsManager : public GraphicsManager {
  public:
   OpenGLGraphicsManager(int screenWidth, int screenHeight,
                         int screenWidthInGameUnits,
-                        ResourceProvider& rResourceProvider,
-                        string& rVertexShaderPath, string& rFragmentShaderPath,
-                        string& rColorShaderPath,
-                        string& rColorFragmentShaderPath);
+                        ResourceProvider& rResourceProvider);
 
   ~OpenGLGraphicsManager();
 
   void initialize() override;
 
-  void setOffset(float x, float y) override;
+  void loadShader(string const& shaderName, string const& vertexPath,
+                  string const& fragmentPath,
+                  ResourceProvider& rResourceProvider) override;
+
+  Shader& getShader(string const& shaderName) override;
+
+  glm::vec2 const getScreenSizeInGameUnits() const override {
+    return glm::vec2(m_screenWidthInGameUnits, m_screenHeightInGameUnits);
+  }
 
   void renderTexture(glm::mat4 const& transform,
                      glm::vec4 const& textureCoordinates,
-                     string const& texturePath) override;
-
-  Texture loadTexture(string const& path) override;
+                     string const& texturePath, Shader& rShader) override;
 
   void renderColoredSprite(glm::mat4 const& transform,
-                           glm::vec4 const& color) override;
+                           Shader& rShader) override;
+
+  Texture loadTexture(string const& path) override;
 
   int const getWorldLocationXFromScreenCoordinates(int x) const override;
   int const getWorldLocationYFromScreenCoordinates(int y) const override;
 
-  Vector2 const getScreenSizeInGameUnits() const override;
   int getScreenWidth() const override;
   int getScreenHeight() const override;
 
   void getScaleFactor(float& x, float& y) const override;
 
-  void initializeShader(string const& shaderName,
-                        string const& vertexShaderPath,
-                        string const& fragmentShaderPath);
-
  private:
-  SpriteRenderer m_spriteRenderer;
+  OpenGLSpriteRenderer m_spriteRenderer;
+  OpenGLResourceManager m_resourceManager;
   ResourceProvider& m_rResourceProvider;
   float m_offsetX = 0;
   float m_offsetY = 0;

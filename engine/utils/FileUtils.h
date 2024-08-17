@@ -7,7 +7,13 @@
 #include <streambuf>
 #include <vector>
 
-using namespace std;
+using std::endl;
+using std::fstream;
+using std::ifstream;
+using std::ios;
+using std::istreambuf_iterator;
+using std::string;
+using std::vector;
 
 inline string loadFile(string fileName) {
   ifstream t(fileName);

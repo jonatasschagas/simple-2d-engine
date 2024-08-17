@@ -1,7 +1,7 @@
 #include "ParticlePool.hpp"
 
 ParticlePool::ParticlePool(int numParticles, glm::vec4 color)
-    : Sprite(), m_particles(numParticles), m_color(color) {
+    : StructuralSprite(), m_particles(numParticles), m_color(color) {
   for (int i = 0; i < numParticles; i++) {
     addChild(&m_particles[i]);
   }

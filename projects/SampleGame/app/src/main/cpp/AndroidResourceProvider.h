@@ -1,36 +1,29 @@
 #ifndef ANDROID_RESOURCE_PROVIDER_H
 #define ANDROID_RESOURCE_PROVIDER_H
 
-#include <memory>
-#include <android/asset_manager.h>
+#include "platform/ResourceProvider.hpp"
 #include <GLES3/gl3.h>
+#include <android/asset_manager.h>
+#include <memory>
 #include <string>
 #include <vector>
-#include "platform/ResourceProvider.hpp"
 
-using namespace std;
+using std::string;
 
 class AndroidResourceProvider : public ResourceProvider {
-public:
+ public:
+  AndroidResourceProvider(AAssetManager* pAssetManager);
 
-    AndroidResourceProvider(AAssetManager* pAssetManager);
+  void* loadTexture(string const& path, int* pWidth, int* pHeight) override;
 
-    void* loadTexture(string const& path, int* pWidth, int* pHeight) override;
+  void readContentsFromFile(string const& path, string* pOutputString) override;
 
-    void readContentsFromFile(string const& path, string* pOutputString) override;
+  ~AndroidResourceProvider();
 
-    ~AndroidResourceProvider();
+ private:
+  AAssetManager* m_pAssetManager;
 
-private:
-
-    AAssetManager* m_pAssetManager;
-
-    void initializeMembers()
-    {
-        m_pAssetManager = nullptr;
-    }
-
-
+  void initializeMembers() { m_pAssetManager = nullptr; }
 };
 
-#endif //ANDROID_RESOURCE_PROVIDER_H
+#endif  // ANDROID_RESOURCE_PROVIDER_H

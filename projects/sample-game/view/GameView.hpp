@@ -2,9 +2,9 @@
 #ifndef GameView_hpp
 #define GameView_hpp
 
+#include "graphics/GraphicsManager.hpp"
 #include "objects/Rocket.hpp"
 #include "objects/StarField.hpp"
-#include "platform/GraphicsManager.hpp"
 #include "view/View.h"
 #include <vector>
 

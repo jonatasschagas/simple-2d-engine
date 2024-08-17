@@ -9,7 +9,8 @@
 #include <string>
 #include <vector>
 
-using namespace std;
+using std::string;
+using std::stringstream;
 
 inline size_t split(std::string const& txt, std::vector<std::string>& strs,
                     char ch) {

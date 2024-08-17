@@ -7,7 +7,7 @@
 #include "view/ViewManager.hpp"
 #include <string>
 
-using namespace std;
+using std::string;
 
 class SampleGame : public Game {
  public:

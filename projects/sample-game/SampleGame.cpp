@@ -4,7 +4,8 @@
 
 SampleGame::SampleGame(GraphicsManager& rGraphicsManager,
                        SoundManager& rSoundManager)
-    : Game(rGraphicsManager, rSoundManager), m_viewManager(Vector2::ZERO) {
+    : Game(rGraphicsManager, rSoundManager),
+      m_viewManager(rGraphicsManager.getScreenSizeInGameUnits()) {
   initializeMembers();
 }
 

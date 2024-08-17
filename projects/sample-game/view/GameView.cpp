@@ -9,8 +9,6 @@ GameView::GameView(GraphicsManager& rGraphicsManager)
 GameView::~GameView() {}
 
 void GameView::initialize(ViewManager* pViewManager) {
-  setColor(0, 0, 0, 255);
-
   addChild(&m_starField);
   addChild(&m_rocket);
 
@@ -27,4 +25,4 @@ void GameView::readInput(int x, int y, bool pressed) {}
 
 void GameView::updateEditor() {}
 
-void GameView::update(float delta) { Sprite::update(delta); }
+void GameView::update(float delta) { StructuralSprite::update(delta); }

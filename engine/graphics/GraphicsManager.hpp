@@ -2,7 +2,8 @@
 #ifndef GraphicsManager_h
 #define GraphicsManager_h
 
-#include "core/Vector2.h"
+#include "Shader.hpp"
+#include "disk/ResourceProvider.hpp"
 #include <glm/glm.hpp>
 #include <string>
 
@@ -21,29 +22,53 @@ struct Texture {
  */
 class GraphicsManager {
  public:
+  virtual ~GraphicsManager() {}
+
   /**
    * initialize is called by the Engine when it is first initialized.
    */
   virtual void initialize() {};
 
   /**
-   * setOffsetY is called by the Engine when the camera is moved.
-   * @param x the new x offset of the camera
-   * @param y the new y offset of the camera
+   * loadShader is called by the Engine when it needs to load a shader from
+   * disk.
+   * @param shaderName the name of the shader
+   * @param vertexPath the path to the vertex shader
+   * @param fragmentPath the path to the fragment shader
+   * @param rResourceProvider the ResourceProvider to use to load the shaders
    */
-  virtual void setOffset(float x, float y) = 0;
+  virtual void loadShader(string const& shaderName, string const& vertexPath,
+                          string const& fragmentPath,
+                          ResourceProvider& rResourceProvider) = 0;
 
+  /**
+   * getShader is called by the Engine when it needs to get a shader.
+   * @param shaderName the name of the shader
+   * @return a reference to the Shader
+   */
+  virtual Shader& getShader(string const& shaderName) = 0;
+
+  /**
+   * renderTexture is called by the Engine when a texture needs to be
+   * rendered to the screen.
+   *
+   * @param transform the transformation matrix to apply to the texture
+   * @param textureCoordinates the texture coordinates to apply to the
+   * texture
+   * @param texturePath the path to the texture to render
+   * @param rShader the shader to use to render the texture
+   */
   virtual void renderTexture(glm::mat4 const& transform,
                              glm::vec4 const& textureCoordinates,
-                             string const& texturePath) = 0;
+                             string const& texturePath, Shader& rShader) = 0;
 
   /**
    * renderColoredSprite is called by the Engine when a colored sprite
    * @param transform the transformation matrix to apply to the sprite
-   * @param color the color to apply to the sprite
+   * @param rShader the shader to use to render the sprite
    */
   virtual void renderColoredSprite(glm::mat4 const& transform,
-                                   glm::vec4 const& color) = 0;
+                                   Shader& rShader) = 0;
 
   /**
    * loadTexture is called by the Engine when a texture needs to be
@@ -74,7 +99,7 @@ class GraphicsManager {
    * know the size of the screen in game units.
    * @return the size of the screen in game units
    */
-  virtual Vector2 const getScreenSizeInGameUnits() const = 0;
+  virtual glm::vec2 const getScreenSizeInGameUnits() const = 0;
 
   /**
    * getScreenWidth is called by the Engine when it needs to know the
@@ -98,8 +123,6 @@ class GraphicsManager {
    * @return the scale factor of the screen
    */
   virtual void getScaleFactor(float& x, float& y) const = 0;
-
-  virtual ~GraphicsManager() {}
 };
 
 #endif /* GraphicsManager_h */

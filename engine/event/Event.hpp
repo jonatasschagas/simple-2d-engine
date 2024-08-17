@@ -2,11 +2,11 @@
 #ifndef Event_hpp
 #define Event_hpp
 
-#include "core/Vector2.h"
+#include "glm/glm.hpp"
 #include <stdio.h>
 #include <string>
 
-using namespace std;
+using std::string;
 
 class Event {
  public:
@@ -39,8 +39,8 @@ class Event {
   float const getFloatData() const { return m_fData; };
   void setFloatData(float fData) { m_fData = fData; };
 
-  Vector2 const& getInputCoordinates() const { return m_inputCoordinates; };
-  void setInputCoordinates(Vector2 const& inputCoordinates) {
+  glm::vec2 const& getInputCoordinates() const { return m_inputCoordinates; };
+  void setInputCoordinates(glm::vec2 const& inputCoordinates) {
     m_inputCoordinates = inputCoordinates;
   };
 
@@ -61,14 +61,14 @@ class Event {
   void* m_pParam;
   int m_iData;
   float m_fData;
-  Vector2 m_inputCoordinates;
+  glm::vec2 m_inputCoordinates;
 
   void initializeMembers() {
     m_pParam = nullptr;
     m_iData = -1;
     m_fData = -1;
     m_target = "";
-    m_inputCoordinates = Vector2(0, 0);
+    m_inputCoordinates = glm::vec2(0, 0);
     m_eventName = "";
   }
 };

@@ -1,27 +1,28 @@
 #pragma once
-#ifndef SPRITE_RENDERER_H
-#define SPRITE_RENDERER_H
+#ifndef OpenGLSpriteRenderer_hpp
+#define OpenGLSpriteRenderer_hpp
 
 #include "OpenGLHeaders.h"
-#include "Shader.hpp"
-#include "Texture2D.hpp"
+#include "OpenGLTexture2d.hpp"
+#include "graphics/Shader.hpp"
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <map>
 #include <string>
 
-using namespace std;
+using std::map;
+using std::string;
 
-class SpriteRenderer {
+class OpenGLSpriteRenderer {
  public:
-  SpriteRenderer();
-  ~SpriteRenderer();
+  OpenGLSpriteRenderer();
+  ~OpenGLSpriteRenderer();
 
   void draw(Shader& rShader, glm::mat4 const& rTransform,
-            Texture2D const& rTexture, glm::vec4 const& rTextureCoordinates);
+            OpenGLTexture2d const& rTexture,
+            glm::vec4 const& rTextureCoordinates);
 
-  void draw(Shader& rShader, glm::mat4 const& rTransform,
-            glm::vec4 const& color);
+  void draw(Shader& rShader, glm::mat4 const& rTransform);
 
  private:
   void createTextureVAO(string textureName, glm::vec2 textureSize,
@@ -35,4 +36,4 @@ class SpriteRenderer {
   void initializeMembers() { m_textureVAOs.clear(); }
 };
 
-#endif
+#endif /* OpenGLSpriteRenderer_hpp */

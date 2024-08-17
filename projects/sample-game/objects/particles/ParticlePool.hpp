@@ -4,11 +4,11 @@
 #define ParticlePool_hpp
 
 #include "Particle.hpp"
-#include "core/Sprite.hpp"
+#include "core/StructuralSprite.hpp"
 #include <string>
 #include <vector>
 
-class ParticlePool : public Sprite {
+class ParticlePool : public StructuralSprite {
  public:
   ParticlePool(int numParticles, glm::vec4 color);
   ~ParticlePool() {}

@@ -1,18 +1,19 @@
-#include "Texture2D.hpp"
+#include "OpenGLTexture2d.hpp"
 #include "OpenGLHeaders.h"
 #include <iostream>
 
-Texture2D::Texture2D() {
+OpenGLTexture2d::OpenGLTexture2d() {
   initializeMembers();
   glGenTextures(1, &m_id);
 }
 
-Texture2D::~Texture2D() {
+OpenGLTexture2d::~OpenGLTexture2d() {
   glDeleteTextures(1, &m_id);
   initializeMembers();
 }
 
-void Texture2D::generate(unsigned int width, unsigned int height, void* pData) {
+void OpenGLTexture2d::generate(unsigned int width, unsigned int height,
+                               void* pData) {
   m_width = width;
   m_height = height;
 
@@ -30,4 +31,4 @@ void Texture2D::generate(unsigned int width, unsigned int height, void* pData) {
   glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-void Texture2D::bind() const { glBindTexture(GL_TEXTURE_2D, m_id); }
+void OpenGLTexture2d::bind() const { glBindTexture(GL_TEXTURE_2D, m_id); }

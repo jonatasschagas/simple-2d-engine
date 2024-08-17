@@ -3,11 +3,11 @@
 #ifndef Particle_hpp
 #define Particle_hpp
 
-#include "core/Sprite.hpp"
+#include "core/ColoredSprite.hpp"
 #include <string>
 #include <vector>
 
-class Particle : public Sprite {
+class Particle : public ColoredSprite {
   friend class ParticlePool;
 
  public:
@@ -26,7 +26,6 @@ class Particle : public Sprite {
   int m_lifetime = 0;
   float m_speed = 0.0f;
   float m_angle = 0.0f;
-  glm::vec4 m_color;
 };
 
 #endif /* Particle_hpp */

@@ -4,11 +4,12 @@
 #define StarCluster_hpp
 
 #include "RotatingPlanet.hpp"
-#include "core/Sprite.hpp"
+#include "core/ColoredSprite.hpp"
+#include "core/StructuralSprite.hpp"
 #include <string>
 #include <vector>
 
-class StarCluster : public Sprite {
+class StarCluster : public StructuralSprite {
  public:
   StarCluster(unsigned numStars, unsigned numPlanets);
   ~StarCluster() {}
@@ -16,11 +17,10 @@ class StarCluster : public Sprite {
   void update(float delta) override;
 
  private:
-  void initializeCluster(unsigned numStars, std::vector<Sprite>& starsCluster);
-  void initializePlanets(unsigned numPlanets,
-                         std::vector<RotatingPlanet>& planets);
+  void initializeCluster(unsigned numStars);
+  void initializePlanets(unsigned numPlanets);
 
-  std::vector<Sprite> m_starsCluster = {};
+  std::vector<ColoredSprite> m_starsCluster = {};
   std::vector<RotatingPlanet> m_planets = {};
 };
 

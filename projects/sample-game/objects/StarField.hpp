@@ -4,11 +4,11 @@
 #define StarField_hpp
 
 #include "StarCluster.hpp"
-#include "core/Sprite.hpp"
+#include "core/ColoredSprite.hpp"
 #include <string>
 #include <vector>
 
-class StarField : public Sprite {
+class StarField : public ColoredSprite {
  public:
   StarField(unsigned numStars, float speed);
   ~StarField() {}

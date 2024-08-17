@@ -3,12 +3,12 @@
 #ifndef Rocket_hpp
 #define Rocket_hpp
 
-#include "core/Sprite.hpp"
+#include "core/TexturedSprite.hpp"
 #include "particles/ParticlePool.hpp"
 #include <string>
 #include <vector>
 
-class Rocket : public Sprite {
+class Rocket : public TexturedSprite {
  public:
   Rocket(float speed);
   ~Rocket() {}

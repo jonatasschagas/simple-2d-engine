@@ -2,7 +2,7 @@
 #ifndef MuteSoundManager_hpp
 #define MuteSoundManager_hpp
 
-#include "platform/SoundManager.hpp"
+#include "sound/SoundManager.hpp"
 
 class MuteSoundManager : public SoundManager {
  public:

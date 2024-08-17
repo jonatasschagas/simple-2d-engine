@@ -3,10 +3,10 @@
 #include "OpenGLGraphicsManager.hpp"
 #include "OpenGLRenderer.h"
 #include "SampleGame.hpp"
-#include "platform/impl/MuteSoundManager.hpp"
+#include "sound/impl/MuteSoundManager.hpp"
 #include <string>
 
-using namespace std;
+using std::string;
 
 #define SCREEN_WIDTH 1024
 #define SCREEN_HEIGHT 1024
@@ -30,11 +30,14 @@ int main(int argc, char** argv) {
 
   // platform manager can only be created after the OpenGL context is
   // created
-  OpenGLGraphicsManager openGLGraphicsManager(
-      SCREEN_WIDTH, SCREEN_HEIGHT, WORLD_UNITS_X, resourceProvider,
-      vertexShaderPath, fragmentShaderPath, colorVertexShaderPath,
-      colorFragmentShaderPath);
+  OpenGLGraphicsManager openGLGraphicsManager(SCREEN_WIDTH, SCREEN_HEIGHT,
+                                              WORLD_UNITS_X, resourceProvider);
   openGLGraphicsManager.initialize();
+
+  openGLGraphicsManager.loadShader("textured", vertexShaderPath,
+                                   fragmentShaderPath, resourceProvider);
+  openGLGraphicsManager.loadShader("colored", colorVertexShaderPath,
+                                   colorFragmentShaderPath, resourceProvider);
 
   MuteSoundManager muteSoundManager;
 

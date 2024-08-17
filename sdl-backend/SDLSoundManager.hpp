@@ -9,7 +9,9 @@
 #include <string>
 #include <vector>
 
-using namespace std;
+using std::map;
+using std::string;
+using std::vector;
 
 class SDLSoundManager : public SoundManager {
  public:

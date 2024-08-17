@@ -1,7 +1,7 @@
 #include "Particle.hpp"
 #include "utils/MathUtils.h"
 
-Particle::Particle() : Sprite() {
+Particle::Particle() : ColoredSprite() {
   setColor(0, 0, 0, 0);
   setSize(5.f, 5.f);
 }
@@ -11,7 +11,7 @@ void Particle::update(float delta) {
     return;
   }
 
-  Sprite::update(delta);
+  ColoredSprite::update(delta);
 
   float dx = cubicEaseOut(m_framesLeft, 0,
                           m_speed * cos(degreesToRadians(m_angle)), m_lifetime);

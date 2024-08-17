@@ -1,12 +1,12 @@
 #ifndef View_h
 #define View_h
 
-#include "../core/Sprite.hpp"
-#include "../event/EventListener.hpp"
+#include "core/StructuralSprite.hpp"
+#include "event/EventListener.hpp"
 
 class ViewManager;
 
-class View : public EventListener, public Sprite {
+class View : public EventListener, public StructuralSprite {
  public:
   View() {};
   virtual ~View() {};

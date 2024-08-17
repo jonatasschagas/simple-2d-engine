@@ -2,11 +2,11 @@
 #define Game_hpp
 
 #include "event/EventListener.hpp"
-#include "platform/GraphicsManager.hpp"
-#include "platform/SoundManager.hpp"
+#include "graphics/GraphicsManager.hpp"
+#include "sound/SoundManager.hpp"
 #include <string>
 
-using namespace std;
+using std::string;
 
 class Game : public EventListener {
  public:

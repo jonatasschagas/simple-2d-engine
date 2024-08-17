@@ -3,7 +3,9 @@
 RotatingPlanet::RotatingPlanet(float rotatingSpeed,
                                std::string const& textureFileName, float x,
                                float y, float w, float h, bool pivotCenter)
-    : Sprite(x, y, w, h), m_rotatingSpeed(rotatingSpeed) {
+    : m_rotatingSpeed(rotatingSpeed) {
+  setXY(x, y);
+  setSize(w, h);
   loadTexture(textureFileName);
   setWholeTexture(true);
   if (pivotCenter) {

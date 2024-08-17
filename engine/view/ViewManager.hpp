@@ -4,18 +4,19 @@
 
 #include "View.h"
 #include "event/EventListener.hpp"
-#include "platform/GraphicsManager.hpp"
-#include "platform/SoundManager.hpp"
+#include "graphics/GraphicsManager.hpp"
+#include "sound/SoundManager.hpp"
 #include <map>
 #include <stdio.h>
 #include <string>
 #include <vector>
 
-using namespace std;
+using std::map;
+using std::string;
 
 class ViewManager : public EventListener {
  public:
-  ViewManager(Vector2 const& screenSizeInGameUnits);
+  ViewManager(glm::vec2 screenSizeInGameUnits);
   ~ViewManager();
 
   void receiveEvent(Event* pEvent) override;
@@ -29,12 +30,12 @@ class ViewManager : public EventListener {
   void addView(string const& viewName, View* pView);
   void switchView(string const& viewName);
 
-  Vector2 const& getScreenSizeInGameUnits() const {
+  glm::vec2 const& getScreenSizeInGameUnits() const {
     return m_screenSizeInGameUnits;
   }
 
  private:
-  Vector2 m_screenSizeInGameUnits;
+  glm::vec2 m_screenSizeInGameUnits;
   View* m_pCurrentView;
   View* m_pPreviousView;
 

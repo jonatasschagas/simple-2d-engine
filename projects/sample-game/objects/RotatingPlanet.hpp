@@ -3,10 +3,10 @@
 #ifndef RotatingPlanet_hpp
 #define RotatingPlanet_hpp
 
-#include "core/Sprite.hpp"
+#include "core/TexturedSprite.hpp"
 #include <string>
 
-class RotatingPlanet : public Sprite {
+class RotatingPlanet : public TexturedSprite {
  public:
   RotatingPlanet(float rotatingSpeed, std::string const& textureFileName,
                  float x, float y, float w, float h, bool pivotCenter);

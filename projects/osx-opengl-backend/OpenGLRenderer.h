@@ -2,8 +2,8 @@
 #ifndef OPENGLRENDERER_H
 #define OPENGLRENDERER_H
 
-#include "platform/GraphicsManager.hpp"
-#include "platform/SoundManager.hpp"
+#include "graphics/GraphicsManager.hpp"
+#include "sound/SoundManager.hpp"
 #include "view/Game.hpp"
 
 class Game;

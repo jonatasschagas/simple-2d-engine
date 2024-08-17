@@ -4,8 +4,6 @@
 #include "SDLSoundManager.hpp"
 #include "SampleGame.hpp"
 
-using namespace std;
-
 int main(int argc, char** argv) {
   SDLGameConfigs sdlGameConfigs;
   sdlGameConfigs.windowTitle = "SDL Game";

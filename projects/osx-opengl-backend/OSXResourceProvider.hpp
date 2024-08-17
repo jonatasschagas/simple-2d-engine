@@ -2,7 +2,7 @@
 #ifndef OSXResourceProvider_hpp
 #define OSXResourceProvider_hpp
 
-#include "platform/ResourceProvider.hpp"
+#include "disk/ResourceProvider.hpp"
 
 class OSXResourceProvider : public ResourceProvider {
  public:

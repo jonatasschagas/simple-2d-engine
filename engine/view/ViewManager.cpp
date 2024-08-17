@@ -1,6 +1,6 @@
 #include "ViewManager.hpp"
 
-ViewManager::ViewManager(Vector2 const& screenSizeInGameUnits)
+ViewManager::ViewManager(glm::vec2 screenSizeInGameUnits)
     : m_screenSizeInGameUnits(screenSizeInGameUnits) {
   initializeMembers();
 }

@@ -1,14 +1,14 @@
 #pragma once
-#ifndef Texture2d_hpp
-#define Texture2d_hpp
+#ifndef OpenGLTexture2d_hpp
+#define OpenGLTexture2d_hpp
 
 #include "OpenGLHeaders.h"
 
-class Texture2D {
+class OpenGLTexture2d {
  public:
   // constructor (sets default texture modes)
-  Texture2D();
-  ~Texture2D();
+  OpenGLTexture2d();
+  ~OpenGLTexture2d();
 
   // generates texture from image data
   void generate(unsigned int width, unsigned int height, void* pData);
@@ -58,4 +58,4 @@ class Texture2D {
   }
 };
 
-#endif /* Texture2d_hpp */
+#endif /* OpenGLTexture2d_hpp */

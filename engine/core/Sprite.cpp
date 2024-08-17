@@ -25,17 +25,6 @@ void Sprite::processSounds(SoundManager& rSoundManager) {
 void Sprite::render(GraphicsManager& rGraphicsManager) {
   if (!m_visible) return;
 
-  // lazy texture loading
-  if (hasTexture() && !m_textureLoaded) {
-    Texture texture = rGraphicsManager.loadTexture(m_textureFilename);
-    m_textureLoaded = true;
-    if (m_useWholeTexture) {
-      m_textureWidth = texture.width;
-      m_textureHeight = texture.height;
-      setTextureCoordinates(0, 0, m_textureWidth, m_textureHeight);
-    }
-  }
-
   // update world transform
   if (m_pParent != nullptr) {
     m_worldTransform =
@@ -44,13 +33,7 @@ void Sprite::render(GraphicsManager& rGraphicsManager) {
     m_worldTransform = calculateTransform(rGraphicsManager);
   }
 
-  // render
-  if (hasTexture()) {
-    rGraphicsManager.renderTexture(m_worldTransform, m_textureCoordinates,
-                                   m_textureFilename);
-  } else if (m_colorSpecified) {
-    rGraphicsManager.renderColoredSprite(m_worldTransform, m_color);
-  }
+  renderSprite(rGraphicsManager);
 
   // render children
   for (Sprite* pChild : m_children) {
@@ -151,13 +134,6 @@ void Sprite::removeChild(Sprite* pChildToRemove) {
 }
 
 void Sprite::removeAllChildren() { m_children.clear(); }
-
-void Sprite::setAlpha(float const alpha) {
-  m_alpha = alpha;
-  for (Sprite* pChild : m_children) {
-    pChild->setAlpha(alpha);
-  }
-}
 
 void Sprite::fillParent() {
   if (m_pParent == nullptr) return;

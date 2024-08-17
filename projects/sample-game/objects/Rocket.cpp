@@ -2,7 +2,7 @@
 #include "utils/MathUtils.h"
 
 Rocket::Rocket(float speed)
-    : Sprite(),
+    : TexturedSprite(),
       m_speed(speed),
       m_particlePool(500, glm::vec4(255, 69, 0, 255)) {
   loadTexture("assets/images/rocket.png");
@@ -15,7 +15,7 @@ Rocket::Rocket(float speed)
   m_particlePool.setSize(100.f, 100.f);
 }
 void Rocket::update(float delta) {
-  Sprite::update(delta);
+  TexturedSprite::update(delta);
 
   if (m_originalY == 0.0f) {
     m_originalY = getY();

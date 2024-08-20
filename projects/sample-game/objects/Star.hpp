@@ -15,6 +15,7 @@ class Star : public ColoredSprite {
   void update(float delta) override;
 
  private:
+  double m_time = 0;
   void renderSprite(GraphicsManager& rGraphicsManager) override;
 };
 

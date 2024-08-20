@@ -1,7 +1,7 @@
 #include "StarField.hpp"
 
 StarField::StarField(unsigned numStars, float speed)
-    : ColoredSprite(), m_cluster1(200, 3), m_cluster2(200, 2), m_speed(speed) {
+    : ColoredSprite(), m_cluster1(200, 1), m_cluster2(200, 2), m_speed(speed) {
   setColor(0, 0, 0, 255);
   addChild(&m_cluster1);
   addChild(&m_cluster2);

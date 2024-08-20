@@ -4,7 +4,7 @@
 Rocket::Rocket(float speed)
     : TexturedSprite(),
       m_speed(speed),
-      m_particlePool(500, glm::vec4(255, 69, 0, 255)) {
+      m_particlePool(1000, glm::vec4(255, 69, 0, 255)) {
   loadTexture("assets/images/rocket.png");
   setWholeTexture(true);
   setRotation(90);
@@ -48,12 +48,12 @@ void Rocket::update(float delta) {
 }
 
 void Rocket::emitParticles() {
-  for (int i = 0; i < (10 + rand() % 300); i++) {
+  for (int i = 0; i < (10 + rand() % 500); i++) {
     float x = 30;
     float y = 100;
-    float speed = -1.f;
+    float speed = -1.5f;
     float angle = 200 + rand() % 150;
-    int lifetime = rand() % 100;
+    int lifetime = rand() % 300;
     m_particlePool.create(x, y, speed, angle, lifetime);
   }
 }

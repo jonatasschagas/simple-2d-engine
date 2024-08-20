@@ -12,7 +12,7 @@ void StarCluster::initializeCluster(unsigned numStars) {
     glm::vec4 randomColor =
         glm::vec4(rand() % 255, rand() % 255, rand() % 255, 255);
     Star star(randomColor);
-    float size = (rand() % 30) / 50.0f;
+    float size = (rand() % 100) / 50.0f;
     star.setSize(size, size);
     star.setXY(rand() % 100, rand() % 100);
     m_starsCluster.push_back(star);
@@ -28,7 +28,7 @@ void StarCluster::initializePlanets(unsigned numPlanets) {
     float const y = rand() % 100;
     float const x = rand() % 100;
     float const size = rand() % 20;
-    float const speed = rand() % 5 / 100.0f;
+    float const speed = 1.0f / size;
 
     m_planets.emplace_back(speed,
                            "assets/images/planet0" + std::to_string(i) + ".png",

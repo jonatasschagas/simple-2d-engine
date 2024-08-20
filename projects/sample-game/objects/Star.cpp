@@ -1,8 +1,14 @@
 #include "Star.hpp"
 
-Star::Star(glm::vec4 color) : ColoredSprite() { m_color = color; }
+Star::Star(glm::vec4 color) : ColoredSprite() {
+  m_color = color;
+  m_time = rand() % 1000;
+}
 
-void Star::update(float delta) { ColoredSprite::update(delta); }
+void Star::update(float delta) {
+  ColoredSprite::update(delta);
+  m_time += delta;
+}
 
 void Star::renderSprite(GraphicsManager& rGraphicsManager) {
   if (m_pShader == nullptr) {
@@ -29,6 +35,8 @@ void Star::renderSprite(GraphicsManager& rGraphicsManager) {
                                    rGraphicsManager.getScreenHeight()) *
                          dpi;
   m_pShader->setVector2f("screenSize", screenSize);
+
+  m_pShader->setFloat("time", m_time);
 
   rGraphicsManager.renderColoredSprite(m_worldTransform, *m_pShader);
 }

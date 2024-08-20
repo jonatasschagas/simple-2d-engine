@@ -51,7 +51,8 @@ void keyCallback(GLFWwindow* window, int key, int scancode, int action,
 }
 
 GLFWwindow* initializeOpenGLRenderer(int argc, char** argv, int screenWidth,
-                                     int screenHeight, string const& gameName) {
+                                     int screenHeight, string const& gameName,
+                                     float& dpiX, float& dpiY) {
   glfwInit();
   glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
   glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
@@ -82,6 +83,8 @@ GLFWwindow* initializeOpenGLRenderer(int argc, char** argv, int screenWidth,
   glfwGetFramebufferSize(pWindow, &framebufferWidth, &framebufferHeight);
   // Set the viewport to match the framebuffer size
   glViewport(0, 0, framebufferWidth, framebufferHeight);
+  dpiX = framebufferWidth / screenWidth;
+  dpiY = framebufferHeight / screenHeight;
 
   glEnable(GL_CULL_FACE);
   glEnable(GL_BLEND);

@@ -9,9 +9,10 @@ StarCluster::StarCluster(unsigned numStars, unsigned numPlanets)
 
 void StarCluster::initializeCluster(unsigned numStars) {
   for (unsigned i = 0; i < numStars; i++) {
-    ColoredSprite star;
-    star.setColor(255, 255, 255, 255);
-    float size = (rand() % 30) / 100.0f;
+    glm::vec4 randomColor =
+        glm::vec4(rand() % 255, rand() % 255, rand() % 255, 255);
+    Star star(randomColor);
+    float size = (rand() % 30) / 50.0f;
     star.setSize(size, size);
     star.setXY(rand() % 100, rand() % 100);
     m_starsCluster.push_back(star);

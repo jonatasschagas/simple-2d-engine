@@ -13,7 +13,7 @@ using std::string;
 class OpenGLGraphicsManager : public GraphicsManager {
  public:
   OpenGLGraphicsManager(int screenWidth, int screenHeight,
-                        int screenWidthInGameUnits,
+                        int screenWidthInGameUnits, float dpiX, float dpiY,
                         ResourceProvider& rResourceProvider);
 
   ~OpenGLGraphicsManager();
@@ -47,12 +47,17 @@ class OpenGLGraphicsManager : public GraphicsManager {
 
   void getScaleFactor(float& x, float& y) const override;
 
+  void getDpi(float& x, float& y) const override {
+    x = m_dpiX;
+    y = m_dpiY;
+  };
+
  private:
   OpenGLSpriteRenderer m_spriteRenderer;
   OpenGLResourceManager m_resourceManager;
   ResourceProvider& m_rResourceProvider;
-  float m_offsetX = 0;
-  float m_offsetY = 0;
+  float m_dpiX = 1;
+  float m_dpiY = 1;
   int m_screenWidth = 0;
   int m_screenHeight = 0;
   int m_screenWidthInGameUnits = 0;

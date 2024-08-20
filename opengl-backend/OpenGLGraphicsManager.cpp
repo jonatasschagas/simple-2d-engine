@@ -3,9 +3,14 @@
 #include "OpenGLTexture2d.hpp"
 
 OpenGLGraphicsManager::OpenGLGraphicsManager(
-    int screenWidth, int screenHeight, int screenWidthInGameUnits,
-    ResourceProvider& rResourceProvider)
-    : GraphicsManager(), m_rResourceProvider(rResourceProvider) {
+    int screenWidth, int screenHeight, int screenWidthInGameUnits, float dpiX,
+    float dpiY, ResourceProvider& rResourceProvider)
+    : GraphicsManager(),
+      m_rResourceProvider(rResourceProvider),
+      m_spriteRenderer(),
+      m_resourceManager(),
+      m_dpiX(dpiX),
+      m_dpiY(dpiY) {
   m_screenWidth = screenWidth;
   m_screenHeight = screenHeight;
   m_screenWidthInGameUnits = screenWidthInGameUnits;

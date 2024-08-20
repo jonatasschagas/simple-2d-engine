@@ -123,6 +123,14 @@ class GraphicsManager {
    * @return the scale factor of the screen
    */
   virtual void getScaleFactor(float& x, float& y) const = 0;
+
+  /**
+   * getDpi is called by the Engine when it needs to know the DPI of the
+   * screen.
+   * @param x the x DPI
+   * @param y the y DPI
+   */
+  virtual void getDpi(float& x, float& y) const = 0;
 };
 
 #endif /* GraphicsManager_h */

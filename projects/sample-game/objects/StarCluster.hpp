@@ -4,7 +4,7 @@
 #define StarCluster_hpp
 
 #include "RotatingPlanet.hpp"
-#include "core/ColoredSprite.hpp"
+#include "Star.hpp"
 #include "core/StructuralSprite.hpp"
 #include <string>
 #include <vector>
@@ -20,7 +20,7 @@ class StarCluster : public StructuralSprite {
   void initializeCluster(unsigned numStars);
   void initializePlanets(unsigned numPlanets);
 
-  std::vector<ColoredSprite> m_starsCluster = {};
+  std::vector<Star> m_starsCluster = {};
   std::vector<RotatingPlanet> m_planets = {};
 };
 

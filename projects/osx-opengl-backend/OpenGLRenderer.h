@@ -10,7 +10,8 @@ class Game;
 class GLFWwindow;
 
 GLFWwindow* initializeOpenGLRenderer(int argc, char** argv, int screenWidth,
-                                     int screenHeight, string const& gameName);
+                                     int screenHeight, string const& gameName,
+                                     float& dpiX, float& dpiY);
 int mainLoopOpenGLRenderer(GLFWwindow* pWindow, Game& rGame);
 
 #endif /* OPENGLRENDERER_H */

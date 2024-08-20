@@ -198,6 +198,21 @@ class Sprite {
    */
   bool isVisible() const { return m_visible; }
 
+  /**
+   * @brief returns the size of the sprite in pixels
+   * @param graphicsManager the graphics manager
+   * @return the world transform of the sprite
+   */
+  glm::vec2 getTrueSizeInPixels(GraphicsManager const& graphicsManager) const;
+
+  /**
+   * @brief returns the world transform of the sprite
+   * @param graphicsManager the graphics manager
+   * @return the world transform of the sprite
+   */
+  glm::vec2 getTruePositionInPixels(
+      GraphicsManager const& graphicsManager) const;
+
  protected:
   /**
    * @brief renders the sprite and should be implemented by the derived class

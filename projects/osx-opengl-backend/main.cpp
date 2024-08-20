@@ -15,29 +15,29 @@ using std::string;
 int main(int argc, char** argv) {
   OSXResourceProvider resourceProvider;
 
-  string vertexShaderPath = "assets/shaders/osx/sprite.vs";
-  string fragmentShaderPath = "assets/shaders/osx/sprite.frag";
-
-  string colorVertexShaderPath = "assets/shaders/osx/color.vs";
-  string colorFragmentShaderPath = "assets/shaders/osx/color.frag";
-
   // the window
-  GLFWwindow* pWindow = initializeOpenGLRenderer(argc, argv, SCREEN_WIDTH,
-                                                 SCREEN_HEIGHT, "Sample Game");
+  float dpiX, dpiY;
+  GLFWwindow* pWindow = initializeOpenGLRenderer(
+      argc, argv, SCREEN_WIDTH, SCREEN_HEIGHT, "Sample Game", dpiX, dpiY);
   if (pWindow == nullptr) {
     return -1;
   }
 
   // platform manager can only be created after the OpenGL context is
   // created
-  OpenGLGraphicsManager openGLGraphicsManager(SCREEN_WIDTH, SCREEN_HEIGHT,
-                                              WORLD_UNITS_X, resourceProvider);
+  OpenGLGraphicsManager openGLGraphicsManager(
+      SCREEN_WIDTH, SCREEN_HEIGHT, WORLD_UNITS_X, dpiX, dpiY, resourceProvider);
   openGLGraphicsManager.initialize();
 
-  openGLGraphicsManager.loadShader("textured", vertexShaderPath,
-                                   fragmentShaderPath, resourceProvider);
-  openGLGraphicsManager.loadShader("colored", colorVertexShaderPath,
-                                   colorFragmentShaderPath, resourceProvider);
+  openGLGraphicsManager.loadShader("textured", "assets/shaders/osx/sprite.vs",
+                                   "assets/shaders/osx/sprite.frag",
+                                   resourceProvider);
+  openGLGraphicsManager.loadShader("colored", "assets/shaders/osx/color.vs",
+                                   "assets/shaders/osx/color.frag",
+                                   resourceProvider);
+  openGLGraphicsManager.loadShader("circle", "assets/shaders/osx/circle.vs",
+                                   "assets/shaders/osx/circle.frag",
+                                   resourceProvider);
 
   MuteSoundManager muteSoundManager;
 

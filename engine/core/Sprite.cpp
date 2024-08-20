@@ -140,3 +140,43 @@ void Sprite::fillParent() {
 
   setSize(100.f, 100.f);
 }
+
+glm::vec2 Sprite::getTrueSizeInPixels(
+    GraphicsManager const& graphicsManager) const {
+  glm::vec2 size = m_size;
+
+  if (m_pParent == nullptr) {
+    float scaleFactorX, scaleFactorY;
+    graphicsManager.getScaleFactor(scaleFactorX, scaleFactorY);
+    size.x = m_size.x * scaleFactorX;
+    size.y = m_size.y * scaleFactorY;
+  } else {
+    size.x =
+        m_size.x * m_pParent->getTrueSizeInPixels(graphicsManager).x / 100.f;
+    size.y =
+        m_size.y * m_pParent->getTrueSizeInPixels(graphicsManager).y / 100.f;
+  }
+
+  return size;
+}
+
+glm::vec2 Sprite::getTruePositionInPixels(
+    GraphicsManager const& graphicsManager) const {
+  glm::vec2 pos = m_coords;
+
+  if (m_pParent == nullptr) {
+    float scaleFactorX, scaleFactorY;
+    graphicsManager.getScaleFactor(scaleFactorX, scaleFactorY);
+    pos.x = m_coords.x * scaleFactorX;
+    pos.y = m_coords.y * scaleFactorY;
+  } else {
+    glm::vec2 parentPos = m_pParent->getTruePositionInPixels(graphicsManager);
+    pos.x =
+        parentPos.x +
+        m_coords.x * m_pParent->getTrueSizeInPixels(graphicsManager).x / 100.f;
+    pos.y =
+        parentPos.y +
+        m_coords.y * m_pParent->getTrueSizeInPixels(graphicsManager).y / 100.f;
+  }
+  return pos;
+}

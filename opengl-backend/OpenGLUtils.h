@@ -1,4 +1,5 @@
 #include "OpenGLHeaders.h"
+#include <cassert>
 #include <iostream>
 #include <string>
 
@@ -40,5 +41,6 @@ inline void checkOpenGLError(std::string const& errorMsg) {
     }
 
     std::cerr << "OpenGL Error: " << error << " - " << errorMsg << std::endl;
+    assert(false);  // This will stop the program and print the error message.
   }
 }

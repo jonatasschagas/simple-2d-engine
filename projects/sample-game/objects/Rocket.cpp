@@ -57,3 +57,11 @@ void Rocket::emitParticles() {
     m_particlePool.create(x, y, speed, angle, lifetime);
   }
 }
+
+void Rocket::moveUp() { setXY(getX(), getY() + 1); }
+
+void Rocket::moveDown() { setXY(getX(), getY() - 1); }
+
+void Rocket::moveLeft() { setXY(getX() - 1, getY()); }
+
+void Rocket::moveRight() { setXY(getX() + 1, getY()); }

@@ -1,4 +1,5 @@
 
+#include "GLFWInputManager.hpp"
 #include "OSXResourceProvider.hpp"
 #include "OpenGLGraphicsManager.hpp"
 #include "OpenGLRenderer.h"
@@ -39,12 +40,27 @@ int main(int argc, char** argv) {
                                    "assets/shaders/osx/circle.frag",
                                    resourceProvider);
 
+  GLFWInputManager inputManager(*pWindow);
+
+  // maps GLFW key codes to InputKey values
+  inputManager.setKeyTranslatorFunction([](int key) -> InputKey {
+    switch (key) {
+      case GLFW_KEY_UP:
+        return InputKey::KEY_UP;
+      case GLFW_KEY_DOWN:
+        return InputKey::KEY_DOWN;
+      case GLFW_KEY_LEFT:
+        return InputKey::KEY_LEFT;
+      case GLFW_KEY_RIGHT:
+        return InputKey::KEY_RIGHT;
+    }
+  });
+
   MuteSoundManager muteSoundManager;
 
   // the game
-  SampleGame sampleGame(openGLGraphicsManager, muteSoundManager);
-
-  int code = mainLoopOpenGLRenderer(pWindow, sampleGame);
+  SampleGame sampleGame(openGLGraphicsManager, muteSoundManager, inputManager);
+  int code = mainLoopOpenGLRenderer(pWindow, sampleGame, inputManager);
 
   return code;
 }

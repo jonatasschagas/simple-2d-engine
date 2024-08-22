@@ -3,8 +3,8 @@
 #define ViewManager_hpp
 
 #include "View.h"
-#include "event/EventListener.hpp"
 #include "graphics/GraphicsManager.hpp"
+#include "input/InputManager.hpp"
 #include "sound/SoundManager.hpp"
 #include <map>
 #include <stdio.h>
@@ -14,20 +14,19 @@
 using std::map;
 using std::string;
 
-class ViewManager : public EventListener {
+class ViewManager {
  public:
-  ViewManager(glm::vec2 screenSizeInGameUnits);
+  ViewManager(glm::vec2 screenSizeInGameUnits, InputManager& rInputManager);
   ~ViewManager();
 
-  void receiveEvent(Event* pEvent) override;
   void render(GraphicsManager& rGraphicsManager);
+
   void processSounds(SoundManager& rSoundManager);
-  void readInput(int x, int y, bool pressed);
+
   void update(float delta);
 
-  void updateEditor();
-
   void addView(string const& viewName, View* pView);
+
   void switchView(string const& viewName);
 
   glm::vec2 const& getScreenSizeInGameUnits() const {
@@ -40,6 +39,7 @@ class ViewManager : public EventListener {
   View* m_pPreviousView;
 
   map<string, View*> m_views;
+  InputManager& m_rInputManager;
 
   void initializeMembers() {
     m_pCurrentView = nullptr;

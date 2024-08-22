@@ -1,10 +1,12 @@
 #include "OpenGLRenderer.h"
 #include "OpenGLHeaders.h"
+#include "input/InputManager.hpp"
 #include "view/Game.hpp"
 #include <GLFW/glfw3.h>
 #include <iostream>
 
 Game* pGame = nullptr;
+InputManager* pInputManager = nullptr;
 
 void render(Game& rGame) {
   glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
@@ -17,37 +19,8 @@ void processInput(GLFWwindow* pWindow) {
   if (glfwGetKey(pWindow, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
     glfwSetWindowShouldClose(pWindow, true);
   }
-}
 
-void keyCallback(GLFWwindow* window, int key, int scancode, int action,
-                 int mods) {
-  if (pGame == nullptr) return;
-  if (key == GLFW_KEY_RIGHT && action == GLFW_PRESS) {
-    Event v("right-start");
-    pGame->receiveEvent(&v);
-  } else if (key == GLFW_KEY_LEFT && action == GLFW_PRESS) {
-    Event v("left-start");
-    pGame->receiveEvent(&v);
-  } else if (key == GLFW_KEY_UP && action == GLFW_PRESS) {
-    Event v("up-start");
-    pGame->receiveEvent(&v);
-  } else if (key == GLFW_KEY_DOWN && action == GLFW_PRESS) {
-    Event v("down-start");
-    pGame->receiveEvent(&v);
-  }
-  if (key == GLFW_KEY_RIGHT && action == GLFW_RELEASE) {
-    Event v("right-end");
-    pGame->receiveEvent(&v);
-  } else if (key == GLFW_KEY_LEFT && action == GLFW_RELEASE) {
-    Event v("left-end");
-    pGame->receiveEvent(&v);
-  } else if (key == GLFW_KEY_UP && action == GLFW_RELEASE) {
-    Event v("up-end");
-    pGame->receiveEvent(&v);
-  } else if (key == GLFW_KEY_DOWN && action == GLFW_RELEASE) {
-    Event v("down-end");
-    pGame->receiveEvent(&v);
-  }
+  pInputManager->pollEvents();
 }
 
 GLFWwindow* initializeOpenGLRenderer(int argc, char** argv, int screenWidth,
@@ -90,13 +63,13 @@ GLFWwindow* initializeOpenGLRenderer(int argc, char** argv, int screenWidth,
   glEnable(GL_BLEND);
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-  glfwSetKeyCallback(pWindow, keyCallback);
-
   return pWindow;
 }
 
-int mainLoopOpenGLRenderer(GLFWwindow* pWindow, Game& rGame) {
+int mainLoopOpenGLRenderer(GLFWwindow* pWindow, Game& rGame,
+                           InputManager& rInputManager) {
   pGame = &rGame;
+  pInputManager = &rInputManager;
   rGame.initialize();
 
   // DeltaTime variables

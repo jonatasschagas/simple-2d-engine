@@ -23,7 +23,8 @@ set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ./)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/CMAKE")
 set(SOURCE_FILES    main.cpp)
-set(OPENGL_BACKEND_IMPL ${PROJECT_SOURCE_DIR}/opengl-backend)
+set(OPENGL_BACKEND_IMPL ${PROJECT_SOURCE_DIR}/service-implementation/graphics/opengl)
+set(INPUT_BACKEND_IMPL ${PROJECT_SOURCE_DIR}/service-implementation/input/glfw)
 set(ENGINE_IMPL ${PROJECT_SOURCE_DIR}/engine)
 set(ASSETS ${PROJECT_SOURCE_DIR}/projects/assets)
 set(SAMPLE_GAME ${PROJECT_SOURCE_DIR}/projects/sample-game)
@@ -36,6 +37,7 @@ set(GLAD ${PROJECT_SOURCE_DIR}/third-party/glad)
 message("")
 message( STATUS "ENGINE_IMPL : " ${ENGINE_IMPL} )
 message( STATUS "OPENGL_BACKEND_IMPL : " ${OPENGL_BACKEND_IMPL} )
+message( STATUS "INPUT_BACKEND_IMPL : " ${INPUT_BACKEND_IMPL} )
 message("")
 
 # Suppress warnings of the deprecation of glut functions on macOS.
@@ -51,7 +53,7 @@ set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -O0")
 file(GLOB SOURCE_FILES *.cpp)
 
 # adding opengl backend source files
-file(GLOB OPENG_GL_BACKEND_FILES ${OPENGL_BACKEND_IMPL}/*.cpp)
+file(GLOB OPENG_GL_BACKEND_FILES ${OPENGL_BACKEND_IMPL}/*.cpp ${INPUT_BACKEND_IMPL}/*.cpp)
 list(APPEND SOURCE_FILES ${OPENG_GL_BACKEND_FILES}) 
 
 # adding sample game source files
@@ -97,6 +99,6 @@ set_target_properties(${PROJECT_NAME} PROPERTIES XCODE_GENERATE_SCHEME TRUE XCOD
 
 
 # include
-include_directories(${CMAKE_RUNTIME_OUTPUT_DIRECTORY} ${GLM} ${RAPID_JSON}/include/ ${ENGINE_IMPL} ${OPENGL_BACKEND_IMPL} ${OPENGL_INCLUDE_DIR} ${GLUT_INCLUDE_DIR} ${SAMPLE_GAME} ${STB} ${GLAD}/includes ${GLFW3_INCLUDE_DIR})
+include_directories(${CMAKE_RUNTIME_OUTPUT_DIRECTORY} ${GLM} ${RAPID_JSON}/include/ ${ENGINE_IMPL} ${OPENGL_BACKEND_IMPL} ${OPENGL_INCLUDE_DIR} ${INPUT_BACKEND_IMPL} ${GLUT_INCLUDE_DIR} ${SAMPLE_GAME} ${STB} ${GLAD}/includes ${GLFW3_INCLUDE_DIR})
 # link
 target_link_libraries(${PROJECT_NAME} ${OPENGL_LIBRARIES} ${GLFW3_LIBRARY} "-framework Cocoa -framework OpenGL -framework IOKit -framework CoreVideo")

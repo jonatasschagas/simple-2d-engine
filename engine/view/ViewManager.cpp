@@ -1,7 +1,9 @@
 #include "ViewManager.hpp"
 
-ViewManager::ViewManager(glm::vec2 screenSizeInGameUnits)
-    : m_screenSizeInGameUnits(screenSizeInGameUnits) {
+ViewManager::ViewManager(glm::vec2 screenSizeInGameUnits,
+                         InputManager& rInputManager)
+    : m_screenSizeInGameUnits(screenSizeInGameUnits),
+      m_rInputManager(rInputManager) {
   initializeMembers();
 }
 
@@ -12,10 +14,6 @@ ViewManager::~ViewManager() {
   }
 
   initializeMembers();
-}
-
-void ViewManager::receiveEvent(Event* pEvent) {
-  m_pCurrentView->receiveEvent(pEvent);
 }
 
 void ViewManager::render(GraphicsManager& rGraphicsManager) {
@@ -30,10 +28,6 @@ void ViewManager::processSounds(SoundManager& rSoundManager) {
   }
 }
 
-void ViewManager::readInput(int x, int y, bool pressed) {
-  m_pCurrentView->readInput(x, y, pressed);
-}
-
 void ViewManager::update(float delta) {
   if (m_pCurrentView != nullptr) {
     m_pCurrentView->update(delta);
@@ -45,8 +39,6 @@ void ViewManager::update(float delta) {
     m_pPreviousView = nullptr;
   }
 }
-
-void ViewManager::updateEditor() { m_pCurrentView->updateEditor(); }
 
 void ViewManager::switchView(string const& viewName) {
   if (m_views.find(viewName) != m_views.end()) {
@@ -62,4 +54,5 @@ void ViewManager::addView(string const& viewName, View* pView) {
   pView->setXY(0, 0);
   pView->setSize(m_screenSizeInGameUnits.x, m_screenSizeInGameUnits.y);
   pView->initialize(this);
+  m_rInputManager.setListener(pView);
 }

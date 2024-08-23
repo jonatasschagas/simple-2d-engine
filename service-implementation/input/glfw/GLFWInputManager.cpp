@@ -4,10 +4,6 @@ GLFWInputManager::GLFWInputManager(GLFWwindow& rWindow) : m_rWindow(rWindow) {}
 
 GLFWInputManager::~GLFWInputManager() {}
 
-void GLFWInputManager::setListener(InputListener* pInputListener) {
-  m_pInputListener = pInputListener;
-}
-
 void GLFWInputManager::pollEvents() {
   // poll for events
   glfwPollEvents();

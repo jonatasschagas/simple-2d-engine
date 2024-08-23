@@ -8,7 +8,8 @@ AndroidInputManager::AndroidInputManager(android_app* pApp) : m_pApp(pApp) {}
 AndroidInputManager::~AndroidInputManager() {}
 
 void AndroidInputManager::pollEvents() {
-    assert(m_pInputListener != nullptr);
+  if (m_pInputListener == nullptr)
+    return;
 
   // handle all queued inputs
   for (auto i = 0; i < m_pApp->motionEventsCount; i++) {
@@ -18,10 +19,9 @@ void AndroidInputManager::pollEvents() {
     // cache the current action
     auto action = motionEvent.action;
 
-    // Find the pointer index, mask and bitshift to turn it into a readable
-    // value
+    // Find the pointer index, mask and bitshift to turn it into a readable value
     auto pointerIndex = (action & AMOTION_EVENT_ACTION_POINTER_INDEX_MASK) >>
-                        AMOTION_EVENT_ACTION_POINTER_INDEX_SHIFT;
+                                                                           AMOTION_EVENT_ACTION_POINTER_INDEX_SHIFT;
     aout << "Pointer " << pointerIndex << ":";
 
     // get the x and y position of this event
@@ -30,32 +30,36 @@ void AndroidInputManager::pollEvents() {
     auto y = GameActivityPointerAxes_getY(&pointer);
     aout << "(" << x << ", " << y << ") ";
 
-    // Only consider touchscreen events, like touches
-    auto actionMasked = action & AINPUT_SOURCE_TOUCHSCREEN;
+    // Mask the action to get the actual event type
+    auto actionMasked = action & AMOTION_EVENT_ACTION_MASK;
 
     // determine the kind of event it is
     switch (actionMasked) {
       case AMOTION_EVENT_ACTION_DOWN:
       case AMOTION_EVENT_ACTION_POINTER_DOWN:
         aout << "Pointer Down";
-        m_pInputListener->onMousePressed(x, y);
-        break;
+            m_pInputListener->onMousePressed(x, y);
+            break;
 
       case AMOTION_EVENT_ACTION_UP:
       case AMOTION_EVENT_ACTION_POINTER_UP:
         aout << "Pointer Up";
-        m_pInputListener->onMouseReleased(x, y);
-        break;
+            m_pInputListener->onMouseReleased(x, y);
+            break;
+
+      case AMOTION_EVENT_ACTION_MOVE:
+        aout << "Pointer Move";
+            m_pInputListener->onMouseMoved(x, y);
+            break;
 
       default:
-        aout << "Pointer Move";
-        m_pInputListener->onMouseMoved(x, y);
+        aout << "Unknown Action";
     }
 
     aout << std::endl;
   }
 
-  // clear inputs, be careful as this will clear it for anyone listening to
-  // these events
+  // clear inputs, be careful as this will clear it for anyone listening to these events
   android_app_clear_motion_events(m_pApp);
 }
+

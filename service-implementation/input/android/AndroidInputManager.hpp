@@ -15,7 +15,6 @@ class AndroidInputManager : public InputManager {
 
  private:
   android_app* m_pApp = nullptr;
-  InputListener* m_pInputListener = nullptr;
 };
 
 #endif /* AndroidInputManager_hpp */

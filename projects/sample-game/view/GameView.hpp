@@ -18,9 +18,18 @@ class GameView : public View {
 
   void onKeyPressed(InputKey key) override;
 
+  void onMousePressed(int x, int y) override;
+
+  void onMouseReleased(int x, int y) override;
+
+  void renderSprite(GraphicsManager& rGraphicsManager) override;
+
  private:
   StarField m_starField;
   Rocket m_rocket;
+  ViewManager* m_pViewManager = nullptr;
+  glm::vec2 m_screenSize = {0,0};
+  float m_speedToMove = 0;
 };
 
 #endif /* GameView_hpp */

@@ -44,6 +44,7 @@ void ViewManager::switchView(string const& viewName) {
   if (m_views.find(viewName) != m_views.end()) {
     m_pCurrentView = m_views[viewName];
     m_pCurrentView->onEnter(nullptr);
+    m_rInputManager.setListener(m_pCurrentView);
   } else {
     printf("ViewManager::switchView: View %s not found)", viewName.c_str());
   }

@@ -23,12 +23,6 @@ inline void checkOpenGLError(std::string const& errorMsg) {
       case GL_INVALID_OPERATION:
         error = "GL_INVALID_OPERATION";
         break;
-      case GL_STACK_OVERFLOW:
-        error = "GL_STACK_OVERFLOW";
-        break;
-      case GL_STACK_UNDERFLOW:
-        error = "GL_STACK_UNDERFLOW";
-        break;
       case GL_OUT_OF_MEMORY:
         error = "GL_OUT_OF_MEMORY";
         break;

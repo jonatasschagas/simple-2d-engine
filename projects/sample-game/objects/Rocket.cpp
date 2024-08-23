@@ -14,6 +14,7 @@ Rocket::Rocket(float speed)
   m_particlePool.setXY(20, -19);
   m_particlePool.setSize(100.f, 100.f);
 }
+
 void Rocket::update(float delta) {
   TexturedSprite::update(delta);
 

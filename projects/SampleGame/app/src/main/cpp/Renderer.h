@@ -7,6 +7,7 @@ struct android_app;
 class MuteSoundManager;
 class OpenGLGraphicsManager;
 class ResourceProvider;
+class InputManager;
 class SampleGame;
 
 class Renderer {
@@ -65,6 +66,7 @@ private:
     OpenGLGraphicsManager* m_pGraphicsManager;
     MuteSoundManager* m_pMuteSoundManager;
     ResourceProvider* m_pResourceProvider;
+    InputManager* m_pInputManager;
     double m_previousFrameMs;
 
     void initializeMembers()
@@ -72,6 +74,7 @@ private:
         m_pSampleGame = nullptr;
         m_pGraphicsManager = nullptr;
         m_pMuteSoundManager = nullptr;
+        m_pInputManager = nullptr;
         m_pResourceProvider = nullptr;
         m_previousFrameMs = 0;
     }

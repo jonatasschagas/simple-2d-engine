@@ -9,7 +9,8 @@
 
 #include "SampleGame.hpp"
 #include "OpenGLGraphicsManager.hpp"
-#include "platform/impl/MuteSoundManager.hpp"
+#include "sound/impl/MuteSoundManager.hpp"
+#include "AndroidInputManager.hpp"
 #include "AndroidOut.h"
 #include "Utility.h"
 #include "AndroidResourceProvider.h"
@@ -55,6 +56,7 @@ Renderer::~Renderer() {
     delete m_pGraphicsManager;
     delete m_pResourceProvider;
     delete m_pMuteSoundManager;
+    delete m_pInputManager;
 
     initializeMembers();
 }
@@ -73,7 +75,7 @@ void Renderer::render() {
     double delta = (now - m_previousFrameMs)/1000.f;
 
     m_pSampleGame->update(delta);
-    m_pSampleGame->render(*m_pGraphicsManager);
+    m_pSampleGame->render();
 
     m_previousFrameMs = now;
 
@@ -173,17 +175,22 @@ void Renderer::updateRenderArea() {
         m_height = height;
         glViewport(0, 0, width, height);
 
-        m_pSampleGame = new SampleGame();
         AAssetManager* pAssetManager = m_pApp->activity->assetManager;
         m_pResourceProvider = new AndroidResourceProvider(pAssetManager);
 
-        string vertexShaderPath = "assets/shaders/android/sprite.vs";
-        string fragShaderPath = "assets/shaders/android/sprite.frag";
-        m_pGraphicsManager = new OpenGLGraphicsManager(m_width, m_height, 100, *m_pResourceProvider, vertexShaderPath, fragShaderPath);
-        m_pMuteSoundManager = new MuteSoundManager();
-
+        m_pGraphicsManager = new OpenGLGraphicsManager(m_width, m_height, 100, 1, 1, *m_pResourceProvider);
+        m_pGraphicsManager->loadShader("textured", "assets/shaders/android/sprite.vs", "assets/shaders/android/sprite.frag", *m_pResourceProvider);
+        m_pGraphicsManager->loadShader("colored", "assets/shaders/android/color.vs", "assets/shaders/android/color.frag", *m_pResourceProvider);
+        m_pGraphicsManager->loadShader("circle", "assets/shaders/android/circle.vs", "assets/shaders/android/circle.frag", *m_pResourceProvider);
         m_pGraphicsManager->initialize();
-        m_pSampleGame->initialize(m_pGraphicsManager->getScreenSizeInGameUnits());
+
+        m_pMuteSoundManager = new MuteSoundManager();
+        m_pInputManager = new AndroidInputManager(m_pApp);
+
+        m_pSampleGame = new SampleGame(*m_pGraphicsManager,
+                                       *m_pMuteSoundManager,
+                                       *m_pInputManager);
+        m_pSampleGame->initialize();
     }
 }
 

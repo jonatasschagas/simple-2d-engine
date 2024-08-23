@@ -17,12 +17,17 @@ class InputManager {
    * setListener is called by the Engine to set the InputListener to use
    * @param pInputListener the InputListener to use for input events
    */
-  virtual void setListener(InputListener* pInputListener) = 0;
+  void setListener(InputListener* pInputListener) {
+    m_pInputListener = pInputListener;
+  }
 
   /**
    * pollEvents is called by the Engine when it needs to poll for input events.
    */
   virtual void pollEvents() = 0;
+
+ protected:
+  InputListener* m_pInputListener = nullptr;
 };
 
 #endif /* InputManager_h */

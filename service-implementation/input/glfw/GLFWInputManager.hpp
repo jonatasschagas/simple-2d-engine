@@ -12,8 +12,6 @@ class GLFWInputManager : public InputManager {
 
   ~GLFWInputManager();
 
-  virtual void setListener(InputListener* pInputListener) override;
-
   virtual void pollEvents() override;
 
   /** Set the function to translate GLFW key codes to InputKey values */
@@ -25,7 +23,6 @@ class GLFWInputManager : public InputManager {
  private:
   GLFWwindow& m_rWindow;
 
-  InputListener* m_pInputListener = nullptr;
   std::function<InputKey(int)> m_keyTranslatorFunction;
 };
 

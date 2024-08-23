@@ -15,26 +15,35 @@ project("samplegame")
 # Gradle automatically packages shared libraries with your APK.
 
 set(PROJECT_SOURCE_DIR ../../../../../..)
-set(OPENGL_BACKEND_IMPL ${PROJECT_SOURCE_DIR}/opengl-backend)
+set(OPENGL_BACKEND_IMPL ${PROJECT_SOURCE_DIR}/service-implementation/graphics/opengl)
+set(INPUT_BACKEND_IMPL ${PROJECT_SOURCE_DIR}/service-implementation/input/android)
+set(RESOURCE_PROVIDER_IMPL ${PROJECT_SOURCE_DIR}/service-implementation/disk/android)
 set(ENGINE_IMPL ${PROJECT_SOURCE_DIR}/engine)
+set(UTILS_IMPL ${PROJECT_SOURCE_DIR}/service-implementation/utils/android)
 set(ASSETS ${PROJECT_SOURCE_DIR}/projects/assets)
 set(SAMPLE_GAME ${PROJECT_SOURCE_DIR}/projects/sample-game)
+
 # third party libs
 set(GLM ${PROJECT_SOURCE_DIR}/third-party/glm)
-set(RAPID_JSON ${PROJECT_SOURCE_DIR}/third-party/rapidjson)
 set(STB ${PROJECT_SOURCE_DIR}/third-party/stb)
 
 # adding source files
 set(SOURCE_FILES    main.cpp)
 file(GLOB_RECURSE SOURCE_FILES *.cpp)
-file(GLOB_RECURSE OTHER_MODULES_SOURCE_FILES ${OPENGL_BACKEND_IMPL}/*.cpp ${ENGINE_IMPL}/*.cpp ${SAMPLE_GAME}/*.cpp)
+file(GLOB_RECURSE
+        OTHER_MODULES_SOURCE_FILES
+        ${UTILS_IMPL}/*.cpp
+        ${OPENGL_BACKEND_IMPL}/*.cpp
+        ${RESOURCE_PROVIDER_IMPL}/*.cpp
+        ${INPUT_BACKEND_IMPL}/*.cpp
+        ${ENGINE_IMPL}/*.cpp
+        ${SAMPLE_GAME}/*.cpp
+        )
 list(APPEND SOURCE_FILES ${OTHER_MODULES_SOURCE_FILES})
 
 # adding third-party deps source code
 file(GLOB_RECURSE GLM_CODE ${GLM}/*.h ${GLM}/*.hpp ${GLM}/*.inl)
-file(GLOB_RECURSE R APID_JSON_CODE ${RAPID_JSON}/include/*.h ${RAPID_JSON}/include/*.hpp)
 list(APPEND SOURCE_FILES ${GLM_CODE})
-list(APPEND SOURCE_FILES ${RAPID_JSON_CODE})
 list(APPEND SOURCE_FILES ${STB}/stb_image.h)
 
 add_library( # Sets the name of the library.
@@ -65,7 +74,16 @@ find_library( # Sets the name of the path variable.
 find_package(game-activity REQUIRED CONFIG)
 
 # include
-include_directories(${CMAKE_RUNTIME_OUTPUT_DIRECTORY} ${GLM} ${RAPID_JSON}/include/ ${ENGINE_IMPL} ${OPENGL_BACKEND_IMPL} ${SAMPLE_GAME} ${STB})
+include_directories(${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
+        ${GLM}
+        ${RESOURCE_PROVIDER_IMPL}
+        ${ENGINE_IMPL}
+        ${UTILS_IMPL}
+        ${INPUT_BACKEND_IMPL}
+        ${OPENGL_BACKEND_IMPL}
+        ${SAMPLE_GAME}
+        ${STB})
+
 
 # Specifies libraries CMake should link to your target library. You
 # can link multiple libraries, such as libraries you define in this

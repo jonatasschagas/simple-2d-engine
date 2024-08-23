@@ -25,6 +25,7 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/CMAKE")
 set(SOURCE_FILES    main.cpp)
 set(OPENGL_BACKEND_IMPL ${PROJECT_SOURCE_DIR}/service-implementation/graphics/opengl)
 set(INPUT_BACKEND_IMPL ${PROJECT_SOURCE_DIR}/service-implementation/input/glfw)
+set(RESOURCE_PROVIDER_BACKEND_IMPL ${PROJECT_SOURCE_DIR}/service-implementation/disk/osx)
 set(ENGINE_IMPL ${PROJECT_SOURCE_DIR}/engine)
 set(ASSETS ${PROJECT_SOURCE_DIR}/projects/assets)
 set(SAMPLE_GAME ${PROJECT_SOURCE_DIR}/projects/sample-game)
@@ -53,8 +54,8 @@ set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -O0")
 file(GLOB SOURCE_FILES *.cpp)
 
 # adding opengl backend source files
-file(GLOB OPENG_GL_BACKEND_FILES ${OPENGL_BACKEND_IMPL}/*.cpp ${INPUT_BACKEND_IMPL}/*.cpp)
-list(APPEND SOURCE_FILES ${OPENG_GL_BACKEND_FILES}) 
+file(GLOB BACKEND_FILES ${OPENGL_BACKEND_IMPL}/*.cpp ${INPUT_BACKEND_IMPL}/*.cpp ${RESOURCE_PROVIDER_BACKEND_IMPL}/*.cpp)
+list(APPEND SOURCE_FILES ${BACKEND_FILES}) 
 
 # adding sample game source files
 file(GLOB SAMPLE_GAME_FILES ${SAMPLE_GAME}/*.cpp ${SAMPLE_GAME}/view/*.cpp ${SAMPLE_GAME}/objects/*.cpp ${SAMPLE_GAME}/objects/particles/*.cpp)
@@ -99,6 +100,6 @@ set_target_properties(${PROJECT_NAME} PROPERTIES XCODE_GENERATE_SCHEME TRUE XCOD
 
 
 # include
-include_directories(${CMAKE_RUNTIME_OUTPUT_DIRECTORY} ${GLM} ${RAPID_JSON}/include/ ${ENGINE_IMPL} ${OPENGL_BACKEND_IMPL} ${OPENGL_INCLUDE_DIR} ${INPUT_BACKEND_IMPL} ${GLUT_INCLUDE_DIR} ${SAMPLE_GAME} ${STB} ${GLAD}/includes ${GLFW3_INCLUDE_DIR})
+include_directories(${CMAKE_RUNTIME_OUTPUT_DIRECTORY} ${GLM} ${RAPID_JSON}/include/ ${ENGINE_IMPL} ${OPENGL_BACKEND_IMPL} ${RESOURCE_PROVIDER_BACKEND_IMPL}  ${OPENGL_INCLUDE_DIR} ${INPUT_BACKEND_IMPL} ${GLUT_INCLUDE_DIR} ${SAMPLE_GAME} ${STB} ${GLAD}/includes ${GLFW3_INCLUDE_DIR})
 # link
 target_link_libraries(${PROJECT_NAME} ${OPENGL_LIBRARIES} ${GLFW3_LIBRARY} "-framework Cocoa -framework OpenGL -framework IOKit -framework CoreVideo")

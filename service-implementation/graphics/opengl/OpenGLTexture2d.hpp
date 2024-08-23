@@ -51,8 +51,8 @@ class OpenGLTexture2d {
     m_height = 0;
     m_internalFormat = GL_RGBA;
     m_imageFormat = GL_RGBA;
-    m_wrapS = GL_REPEAT;
-    m_wrapT = GL_REPEAT;
+    m_wrapS = GL_CLAMP_TO_EDGE;  // Or GL_REPEAT if you prefer
+    m_wrapT = GL_CLAMP_TO_EDGE;  // Or GL_REPEAT if you prefer
     m_filterMin = GL_LINEAR;
     m_filterMax = GL_LINEAR;
   }

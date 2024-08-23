@@ -11,7 +11,7 @@ Rocket::Rocket(float speed)
 
   addChild(&m_particlePool);
 
-  m_particlePool.setXY(0, 0);
+  m_particlePool.setXY(20, -19);
   m_particlePool.setSize(100.f, 100.f);
 }
 void Rocket::update(float delta) {
@@ -51,17 +51,13 @@ void Rocket::emitParticles() {
   for (int i = 0; i < (10 + rand() % 500); i++) {
     float x = 30;
     float y = 100;
-    float speed = -1.5f;
+    float speed = -1.5f + (rand() % 10) / 10.0f;
     float angle = 200 + rand() % 150;
     int lifetime = rand() % 300;
     m_particlePool.create(x, y, speed, angle, lifetime);
   }
 }
 
-void Rocket::moveUp() { setXY(getX(), getY() + 1); }
+void Rocket::moveLeft() { setXY(getX() - m_speed * 10, getY()); }
 
-void Rocket::moveDown() { setXY(getX(), getY() - 1); }
-
-void Rocket::moveLeft() { setXY(getX() - 1, getY()); }
-
-void Rocket::moveRight() { setXY(getX() + 1, getY()); }
+void Rocket::moveRight() { setXY(getX() + m_speed * 10, getY()); }

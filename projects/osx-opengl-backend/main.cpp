@@ -45,10 +45,6 @@ int main(int argc, char** argv) {
   // maps GLFW key codes to InputKey values
   inputManager.setKeyTranslatorFunction([](int key) -> InputKey {
     switch (key) {
-      case GLFW_KEY_UP:
-        return InputKey::KEY_UP;
-      case GLFW_KEY_DOWN:
-        return InputKey::KEY_DOWN;
       case GLFW_KEY_LEFT:
         return InputKey::KEY_LEFT;
       case GLFW_KEY_RIGHT:

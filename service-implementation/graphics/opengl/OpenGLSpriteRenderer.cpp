@@ -37,8 +37,10 @@ void OpenGLSpriteRenderer::draw(Shader& rShader, glm::mat4 const& rTransform,
 
   glBindVertexArray(textureVAO);
   checkOpenGLError("glBindVertexArray");
+
   glDrawArrays(GL_TRIANGLES, 0, 6);
   checkOpenGLError("glDrawArrays");
+
   glBindVertexArray(0);
   checkOpenGLError("glBindVertexArray");
 }
@@ -57,8 +59,10 @@ void OpenGLSpriteRenderer::draw(Shader& rShader, glm::mat4 const& rTransform) {
 
   glBindVertexArray(m_quadVAO);
   checkOpenGLError("glBindVertexArray");
+
   glDrawArrays(GL_TRIANGLES, 0, 6);
   checkOpenGLError("glDrawArrays");
+
   glBindVertexArray(0);
   checkOpenGLError("glBindVertexArray");
 }
@@ -68,41 +72,52 @@ void OpenGLSpriteRenderer::createTextureVAO(string textureName,
                                             glm::vec4 textureCoordinates) {
   float xs = textureCoordinates.x / textureSize.x;  // x start
   float xe =
-      (textureCoordinates.x + textureCoordinates.w) / textureSize.x;  // x end
+      (textureCoordinates.x + textureCoordinates.z) / textureSize.x;  // x end
   float ys = textureCoordinates.y / textureSize.y;                    // y start
   float ye =
-      (textureCoordinates.y + textureCoordinates.z) / textureSize.y;  // y end
+      (textureCoordinates.y + textureCoordinates.w) / textureSize.y;  // y end
 
-  // configure VAO/VBO
+  // Configure VAO/VBO
   unsigned int VBO;
 
   float verticesQuad[] = {
-      // pos      // tex
-      0.0f, 1.0f, xs, ye, 1.0f, 0.0f, xe, ys, 0.0f, 0.0f, xs, ys,
+      // Positions    // Texture Coords
+      0.0f, 1.0f, xs, ye,  // Top-left
+      1.0f, 0.0f, xe, ys,  // Bottom-right
+      0.0f, 0.0f, xs, ys,  // Bottom-left
 
-      0.0f, 1.0f, xs, ye, 1.0f, 1.0f, xe, ye, 1.0f, 0.0f, xe, ys};
+      0.0f, 1.0f, xs, ye,  // Top-left
+      1.0f, 1.0f, xe, ye,  // Top-right
+      1.0f, 0.0f, xe, ys   // Bottom-right
+  };
 
   unsigned int textureVAO;
 
   glGenVertexArrays(1, &textureVAO);
   checkOpenGLError("glGenVertexArrays");
+
   glGenBuffers(1, &VBO);
   checkOpenGLError("glGenBuffers");
 
   glBindBuffer(GL_ARRAY_BUFFER, VBO);
   checkOpenGLError("glBindBuffer");
+
   glBufferData(GL_ARRAY_BUFFER, sizeof(verticesQuad), verticesQuad,
                GL_STATIC_DRAW);
   checkOpenGLError("glBufferData");
 
   glBindVertexArray(textureVAO);
   checkOpenGLError("glBindVertexArray");
+
   glEnableVertexAttribArray(0);
   checkOpenGLError("glEnableVertexAttribArray");
+
   glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)0);
   checkOpenGLError("glVertexAttribPointer");
+
   glBindBuffer(GL_ARRAY_BUFFER, 0);
   checkOpenGLError("glBindBuffer");
+
   glBindVertexArray(0);
   checkOpenGLError("glBindVertexArray");
 
@@ -121,23 +136,29 @@ void OpenGLSpriteRenderer::createQuadVAO() {
 
   glGenVertexArrays(1, &m_quadVAO);
   checkOpenGLError("glGenVertexArrays");
+
   glGenBuffers(1, &VBO);
   checkOpenGLError("glGenBuffers");
 
   glBindBuffer(GL_ARRAY_BUFFER, VBO);
   checkOpenGLError("glBindBuffer");
+
   glBufferData(GL_ARRAY_BUFFER, sizeof(verticesQuad), verticesQuad,
                GL_STATIC_DRAW);
   checkOpenGLError("glBufferData");
 
   glBindVertexArray(m_quadVAO);
   checkOpenGLError("glBindVertexArray");
+
   glEnableVertexAttribArray(0);
   checkOpenGLError("glEnableVertexAttribArray");
+
   glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)0);
   checkOpenGLError("glVertexAttribPointer");
+
   glBindBuffer(GL_ARRAY_BUFFER, 0);
   checkOpenGLError("glBindBuffer");
+
   glBindVertexArray(0);
   checkOpenGLError("glBindVertexArray");
 }

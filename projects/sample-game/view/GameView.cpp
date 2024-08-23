@@ -20,12 +20,6 @@ void GameView::update(float delta) { StructuralSprite::update(delta); }
 
 void GameView::onKeyPressed(InputKey key) {
   switch (key) {
-    case InputKey::KEY_UP:
-      m_rocket.moveUp();
-      break;
-    case InputKey::KEY_DOWN:
-      m_rocket.moveDown();
-      break;
     case InputKey::KEY_LEFT:
       m_rocket.moveLeft();
       break;

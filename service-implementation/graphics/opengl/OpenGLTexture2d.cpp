@@ -23,16 +23,22 @@ void OpenGLTexture2d::generate(unsigned int width, unsigned int height,
   // create Texture
   glBindTexture(GL_TEXTURE_2D, m_id);
   checkOpenGLError("glBindTexture");
+
+  // Specify texture format and data
   glTexImage2D(GL_TEXTURE_2D, 0, m_internalFormat, width, height, 0,
                m_imageFormat, GL_UNSIGNED_BYTE, pData);
   checkOpenGLError("glTexImage2D");
-  // set Texture wrap and filter modes
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+
+  // Set Texture wrap and filter modes using member variables
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, m_wrapS);
   checkOpenGLError("glTexParameteri");
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, m_wrapT);
   checkOpenGLError("glTexParameteri");
+
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, m_filterMin);
   checkOpenGLError("glTexParameteri");
+
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, m_filterMax);
   checkOpenGLError("glTexParameteri");
 

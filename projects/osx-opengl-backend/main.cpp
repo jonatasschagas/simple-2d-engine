@@ -9,8 +9,8 @@
 
 using std::string;
 
-#define SCREEN_WIDTH 1024
-#define SCREEN_HEIGHT 1024
+#define SCREEN_WIDTH 2160
+#define SCREEN_HEIGHT 1080
 #define WORLD_UNITS_X 100
 
 int main(int argc, char** argv) {

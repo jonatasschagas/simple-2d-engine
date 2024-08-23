@@ -25,14 +25,15 @@ void StarCluster::initializeCluster(unsigned numStars) {
 
 void StarCluster::initializePlanets(unsigned numPlanets) {
   for (unsigned i = 0; i < numPlanets; i++) {
-    float const y = rand() % 100;
     float const x = rand() % 100;
-    float const size = rand() % 20;
-    float const speed = 1.0f / size;
+    float const y = rand() % 100;
+    float const width = rand() % 20;
+    float const height = width;
+    float const speed = 1.0f / width;
 
     m_planets.emplace_back(speed,
                            "assets/images/planet0" + std::to_string(i) + ".png",
-                           x, y, size, size, true);
+                           x, y, width, height, true);
   }
 
   for (RotatingPlanet& rotatingPlanet : m_planets) {

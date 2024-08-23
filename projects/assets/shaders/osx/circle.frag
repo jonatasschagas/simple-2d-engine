@@ -9,7 +9,7 @@ uniform float time;
 
 void main()
 {
-    vec2 redefinedCoord = vec2(gl_FragCoord.x, (screenSize - gl_FragCoord.y)); // bottom-left origin to top-left origin
+    vec2 redefinedCoord = vec2(gl_FragCoord.x, (screenSize.y - gl_FragCoord.y)); // bottom-left origin to top-left origin
     vec2 normalizedCoord = (redefinedCoord - shapePosition) / shapeSize;
 
     vec2 center = vec2(0.5, 0.5); // center of the star in NDC

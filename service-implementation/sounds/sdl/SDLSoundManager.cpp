@@ -1,17 +1,30 @@
 #include "SDLSoundManager.hpp"
+#include <iostream>
 
-SDLSoundManager::SDLSoundManager() { initializeMembers(); }
+SDLSoundManager::SDLSoundManager() {
+  initializeMembers();
+  if (Mix_Init(MIX_INIT_OGG) & MIX_INIT_OGG) {
+    std::cout << "Ogg support is available!" << std::endl;
+  } else {
+    std::cout << "Ogg support is NOT available!" << std::endl;
+  }
+
+  if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0) {
+    std::cerr << "SDL_mixer could not initialize! SDL_mixer Error: "
+              << Mix_GetError() << std::endl;
+  }
+}
 
 SDLSoundManager::~SDLSoundManager() {
   for (auto it = m_songs.begin(); it != m_songs.end(); ++it) {
-    string path = it->first;
+    std::string path = it->first;
     auto pMUS = it->second;
     Mix_FreeMusic(pMUS);
     pMUS = nullptr;
   }
 
   for (auto it = m_soundEffects.begin(); it != m_soundEffects.end(); ++it) {
-    string path = it->first;
+    std::string path = it->first;
     auto pSEffc = it->second;
     Mix_FreeChunk(pSEffc);
     pSEffc = nullptr;
@@ -19,12 +32,12 @@ SDLSoundManager::~SDLSoundManager() {
   initializeMembers();
 }
 
-void SDLSoundManager::playSoundEffect(string const& name) {
+void SDLSoundManager::playSoundEffect(std::string const& name) {
   if (!m_sounds) {
     return;
   }
 
-  map<string, Mix_Chunk*>::iterator it = m_soundEffects.find(name);
+  std::map<std::string, Mix_Chunk*>::iterator it = m_soundEffects.find(name);
   if (it == m_soundEffects.end()) {
     // not found
     return;
@@ -34,12 +47,12 @@ void SDLSoundManager::playSoundEffect(string const& name) {
   Mix_PlayChannel(-1, pSoundEffect, 0);
 }
 
-void SDLSoundManager::playMusic(string const& path) {
+void SDLSoundManager::playMusic(std::string const& path) {
   if (!m_sounds) {
     return;
   }
 
-  map<string, Mix_Music*>::iterator it = m_songs.find(path);
+  std::map<std::string, Mix_Music*>::iterator it = m_songs.find(path);
   if (it == m_songs.end()) {
     // element not found;
     return;
@@ -56,7 +69,7 @@ void SDLSoundManager::stopSounds() {
 }
 
 bool SDLSoundManager::loadMusic(string const& path) {
-  map<string, Mix_Music*>::iterator it = m_songs.find(path);
+  std::map<std::string, Mix_Music*>::iterator it = m_songs.find(path);
   if (it != m_songs.end()) {
     // already loaded;
     return true;
@@ -65,7 +78,8 @@ bool SDLSoundManager::loadMusic(string const& path) {
   bool success = true;
   Mix_Music* pMusic = Mix_LoadMUS(path.c_str());
   if (pMusic == NULL) {
-    printf("Failed to load music! SDL_mixer Error: %s\n", Mix_GetError());
+    std::cout << "Failed to load music! SDL_mixer Error: " << Mix_GetError()
+              << std::endl;
     success = false;
   } else {
     m_songs[path] = pMusic;
@@ -75,7 +89,7 @@ bool SDLSoundManager::loadMusic(string const& path) {
 }
 
 bool SDLSoundManager::loadSoundEffect(string const& name, string const& path) {
-  map<string, Mix_Chunk*>::iterator it = m_soundEffects.find(name);
+  std::map<std::string, Mix_Chunk*>::iterator it = m_soundEffects.find(name);
   if (it != m_soundEffects.end()) {
     // already loaded;
     return true;
@@ -84,8 +98,8 @@ bool SDLSoundManager::loadSoundEffect(string const& name, string const& path) {
   bool success = true;
   Mix_Chunk* pSound = Mix_LoadWAV(path.c_str());
   if (pSound == NULL) {
-    printf("Failed to load sound effect! SDL_mixer Error: %s\n",
-           Mix_GetError());
+    std::cout << "Failed to load sound effect! SDL_mixer Error: "
+              << Mix_GetError() << std::endl;
     success = false;
   } else {
     m_soundEffects[name] = pSound;

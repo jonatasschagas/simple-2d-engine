@@ -3,34 +3,31 @@
 #define SDLSoundManager_hpp
 
 #include "SDL_mixer.h"
-#include "platform/SoundManager.hpp"
+#include "sound/SoundManager.hpp"
 #include <map>
 #include <stdio.h>
 #include <string>
 #include <vector>
-
-using std::map;
-using std::string;
-using std::vector;
 
 class SDLSoundManager : public SoundManager {
  public:
   SDLSoundManager();
   ~SDLSoundManager();
 
-  void playSoundEffect(string const& name) override;
+  void playSoundEffect(std::string const& name) override;
 
-  void playMusic(string const& path) override;
+  void playMusic(std::string const& path) override;
 
   void stopSounds() override;
 
-  bool loadMusic(string const& path) override;
+  bool loadMusic(std::string const& path) override;
 
-  bool loadSoundEffect(string const& name, string const& path) override;
+  bool loadSoundEffect(std::string const& name,
+                       std::string const& path) override;
 
  private:
-  map<string, Mix_Chunk*> m_soundEffects;
-  map<string, Mix_Music*> m_songs;
+  std::map<std::string, Mix_Chunk*> m_soundEffects;
+  std::map<std::string, Mix_Music*> m_songs;
   bool m_sounds;
 
   void initializeMembers() {

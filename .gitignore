@@ -56,3 +56,4 @@ _deps
 
 build
 build/*
+.DS_Store

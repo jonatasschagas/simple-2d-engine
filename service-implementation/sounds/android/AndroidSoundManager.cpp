@@ -2,7 +2,7 @@
 // Created by Jonatas Chagas on 1.11.2023.
 //
 
-#include "AndroidSoundManager.h"
+#include "AndroidSoundManager.hpp"
 #include "AudioFile.h"
 #include "utils/Logging.h"
 #include "utils/MathUtils.h"
@@ -64,27 +64,26 @@ void AndroidSoundManager::openStream(int samplingRate) {
   logMessage(LogLevel::Info, "AndroidSoundManager", infoMessage.c_str());
 }
 
-void AndroidSoundManager::playSoundEffect(string const& name, float volume) {
-  if (!m_audioMap.contains(name)) {
+void AndroidSoundManager::playSoundEffect(string const& name) {
+  if (m_audioMap.find(name) == m_audioMap.end()) {
     logMessage(LogLevel::Error, "AndroidSoundManager",
                ("Error reading the sound effect " + name).c_str());
     std::abort();
   }
 
   AudioFile<int16_t>* pAudio = m_audioMap[name];
-  appendSound(pAudio, false, volume);
+  appendSound(pAudio, false, VOLUME);
   m_pStream->requestStart();
 }
 
-void AndroidSoundManager::playMusic(string const& name, bool loop,
-                                    float volume) {
-  if (!m_audioMap.contains(name)) {
+void AndroidSoundManager::playMusic(string const& name) {
+  if (m_audioMap.find(name) == m_audioMap.end()) {
     logMessage(LogLevel::Error, "AndroidSoundManager",
                ("Error reading the song " + name).c_str());
     std::abort();
   }
   AudioFile<int16_t>* pAudio = m_audioMap[name];
-  appendSound(pAudio, loop, volume);
+  appendSound(pAudio, true, VOLUME);
   m_pStream->requestStart();
 }
 
@@ -92,7 +91,7 @@ void AndroidSoundManager::stopSounds() { m_pStream->requestStop(); }
 
 bool AndroidSoundManager::loadAudioFile(string const& name,
                                         string const& path) {
-  if (m_audioMap.contains(name)) {
+  if (m_audioMap.find(name) != m_audioMap.end()) {
     logMessage(LogLevel::Warning, "AndroidSoundManager",
                "Audio File " + name + " has already been loaded.");
     return true;
@@ -121,17 +120,17 @@ bool AndroidSoundManager::loadAudioFile(string const& name,
     logMessage(LogLevel::Info, "AndroidSoundManager",
                "Read audio file: " + path);
     logMessage(LogLevel::Info, "AndroidSoundManager",
-               "Num Channels: " + to_string(pAudioFile->getNumChannels()));
+               "Num Channels: " + std::to_string(pAudioFile->getNumChannels()));
     logMessage(LogLevel::Info, "AndroidSoundManager",
                "Num Samples Per Channel: " +
-                   to_string(pAudioFile->getNumSamplesPerChannel()));
+                       std::to_string(pAudioFile->getNumSamplesPerChannel()));
     logMessage(LogLevel::Info, "AndroidSoundManager",
-               "Sample Rate: " + to_string(pAudioFile->getSampleRate()));
+               "Sample Rate: " + std::to_string(pAudioFile->getSampleRate()));
     logMessage(LogLevel::Info, "AndroidSoundManager",
-               "Bit Depth: " + to_string(pAudioFile->getBitDepth()));
+               "Bit Depth: " + std::to_string(pAudioFile->getBitDepth()));
     logMessage(
         LogLevel::Info, "AndroidSoundManager",
-        "Length in Seconds: " + to_string(pAudioFile->getLengthInSeconds()));
+        "Length in Seconds: " + std::to_string(pAudioFile->getLengthInSeconds()));
     logMessage(
         LogLevel::Info, "AndroidSoundManager",
         "-------------------------------------------------------------------");
@@ -147,8 +146,8 @@ bool AndroidSoundManager::loadAudioFile(string const& name,
   return false;
 }
 
-bool AndroidSoundManager::loadMusic(string const& name, string const& path) {
-  return loadAudioFile(name, path);
+bool AndroidSoundManager::loadMusic(string const& path) {
+  return loadAudioFile(path, path);
 }
 
 bool AndroidSoundManager::loadSoundEffect(string const& name,

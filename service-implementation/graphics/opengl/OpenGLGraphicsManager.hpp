@@ -24,6 +24,8 @@ class OpenGLGraphicsManager : public GraphicsManager {
                   string const& fragmentPath,
                   ResourceProvider& rResourceProvider) override;
 
+  void updateScreenSize(int width, int height);
+
   Shader& getShader(string const& shaderName) override;
 
   glm::vec2 const getScreenSizeInGameUnits() const override {

@@ -18,6 +18,10 @@ class AndroidResourceProvider : public ResourceProvider {
 
   void readContentsFromFile(string const& path, string* pOutputString) override;
 
+  char* readBytesFromFile(string const& path, std::size_t& fileSize) override;
+
+  void writeContentsToFile(string const& path, string const& contents) override;
+
   ~AndroidResourceProvider();
 
  private:

@@ -30,6 +30,7 @@ class OpenGLResourceManager {
 
   OpenGLTexture2d& getTexture(string const& name);
 
+
  private:
   map<string, OpenGLShader*> m_shadersMap;
   map<string, OpenGLTexture2d*> m_texturesMap;

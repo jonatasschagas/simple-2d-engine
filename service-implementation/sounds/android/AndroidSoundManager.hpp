@@ -2,16 +2,17 @@
 // Created by Jonatas Chagas on 1.11.2023.
 //
 #pragma once
-#ifndef GOODOLDSNAKEGAME_ANDROIDSOUNDMANAGER_H
-#define GOODOLDSNAKEGAME_ANDROIDSOUNDMANAGER_H
+#ifndef ANDROIDSOUNDMANAGER_H
+#define ANDROIDSOUNDMANAGER_H
 
 #include "AudioFile.h"
-#include "platform/ResourceProvider.hpp"
-#include "platform/SoundManager.hpp"
+#include "disk/ResourceProvider.hpp"
+#include "sound/SoundManager.hpp"
 #include <oboe/Oboe.h>
 #include <map>
 #include <string>
 
+static const float VOLUME = 1.0f;
 using std::map;
 using std::string;
 
@@ -34,14 +35,13 @@ class AndroidSoundManager : public SoundManager,
 
   virtual void initialize() override;
 
-  virtual void playSoundEffect(string const& name, float volume = .8f) override;
+  virtual void playSoundEffect(string const& name) override;
 
-  virtual void playMusic(string const& name, bool loop = false,
-                         float volume = .5f) override;
+  virtual void playMusic(string const& name) override;
 
   virtual void stopSounds() override;
 
-  virtual bool loadMusic(string const& name, string const& path) override;
+  virtual bool loadMusic(string const& path) override;
 
   virtual bool loadSoundEffect(string const& name, string const& path) override;
 
@@ -73,4 +73,4 @@ class AndroidSoundManager : public SoundManager,
   }
 };
 
-#endif  // GOODOLDSNAKEGAME_ANDROIDSOUNDMANAGER_H
+#endif  // ANDROIDSOUNDMANAGER_H

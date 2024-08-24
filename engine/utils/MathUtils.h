@@ -97,4 +97,14 @@ inline double degreesToRadians(double degrees) {
   return degrees * M_PI / 180.0;
 }
 
+inline int16_t clipToRangeInteger16(int32_t value) {
+  if (value > 32767) {
+    return 32767;  // Clip to the maximum value
+  } else if (value < -32768) {
+    return -32768;  // Clip to the minimum value
+  } else {
+    return static_cast<int16_t>(value);  // Value is within the valid range
+  }
+}
+
 #endif /* MathUtils_h */

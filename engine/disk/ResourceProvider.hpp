@@ -12,6 +12,12 @@ class ResourceProvider {
 
   virtual void readContentsFromFile(string const& path,
                                     string* pOutputString) = 0;
+
+  virtual char* readBytesFromFile(string const& path,
+                                  std::size_t& fileSize) = 0;
+
+  virtual void writeContentsToFile(string const& path,
+                                   string const& contents) = 0;
 };
 
 #endif /* ResourceProvider_hpp */

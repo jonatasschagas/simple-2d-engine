@@ -6,7 +6,9 @@ Game::Game(GraphicsManager& rGraphicsManager, SoundManager& rSoundManager,
       m_rSoundManager(rSoundManager),
       m_rInputManager(rInputManager),
       m_viewManager(rGraphicsManager.getScreenSizeInGameUnits(),
-                    rInputManager) {}
+                    rInputManager) {
+  m_rSoundManager.initialize();
+}
 
 void Game::update(float const deltaTime) { m_viewManager.update(deltaTime); }
 

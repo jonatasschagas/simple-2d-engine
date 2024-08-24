@@ -1,8 +1,8 @@
 #include "AndroidResourceProvider.h"
 #include "AndroidOut.h"
 #include <android/imagedecoder.h>
-#include <string>
 #include <cassert>
+#include <string>
 
 AndroidResourceProvider::AndroidResourceProvider(AAssetManager* pAssetManager) {
   initializeMembers();
@@ -55,6 +55,28 @@ void AndroidResourceProvider::readContentsFromFile(string const& path,
   AAsset_read(pFile, const_cast<char*>(buffer.c_str()), size);
   *pOutputString = buffer;
   AAsset_close(pFile);
+}
+
+char* AndroidResourceProvider::readBytesFromFile(string const& path,
+                                                 std::size_t& fileSize) {
+  AAsset* asset =
+      AAssetManager_open(m_pAssetManager, path.c_str(), AASSET_MODE_BUFFER);
+
+  assert(asset && "Asset not found.");
+
+  fileSize = AAsset_getLength(asset);
+
+  char* buffer = new char[fileSize];
+  AAsset_read(asset, buffer, fileSize);
+
+  AAsset_close(asset);
+
+  return buffer;
+}
+
+void AndroidResourceProvider::writeContentsToFile(string const& path,
+                                                  string const& contents) {
+  // TODO: Implement this
 }
 
 AndroidResourceProvider::~AndroidResourceProvider() { initializeMembers(); }

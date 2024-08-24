@@ -28,6 +28,11 @@ OpenGLGraphicsManager::~OpenGLGraphicsManager() {}
 
 void OpenGLGraphicsManager::initialize() {}
 
+void OpenGLGraphicsManager::updateScreenSize(int width, int height) {
+  m_screenWidth = width;
+  m_screenHeight = height;
+}
+
 void OpenGLGraphicsManager::renderTexture(glm::mat4 const& transform,
                                           glm::vec4 const& textureCoordinates,
                                           string const& texturePath,

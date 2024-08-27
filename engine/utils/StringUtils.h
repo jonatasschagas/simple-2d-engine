@@ -63,4 +63,12 @@ inline std::string stringFormat(std::string const& format, Args... args) {
                      buf.get() + size - 1);  // We don't want the '\0' inside
 }
 
+inline std::string bytesToHexString(char const* bytes, size_t length) {
+  std::stringstream stream;
+  for (size_t i = 0; i < length; ++i) {
+    stream << std::hex << static_cast<int>(bytes[i]);
+  }
+  return stream.str();
+}
+
 #endif /* StringUtils_h */

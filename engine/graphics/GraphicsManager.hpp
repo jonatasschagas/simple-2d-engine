@@ -70,6 +70,26 @@ class GraphicsManager {
   virtual void renderColoredSprite(glm::mat4 const& transform,
                                    Shader& rShader) = 0;
 
+  /** renderCharacter is called by the Engine when a character needs to be
+   * rendered to the screen.
+   * @param character the character to render
+   * @param transform the transformation matrix to apply to the character
+   * @param scale the scale to apply to the character
+   * @param color the color to apply to the character
+   * @param rShader the shader to use to render the character
+   * @return the amount to advance the cursor after rendering the character
+   */
+  virtual float renderCharacter(char const character,
+                                glm::mat4 const& transform, float scale,
+                                glm::vec3 color, Shader& rShader) = 0;
+
+  /**
+   * loadFont is called by the Engine when a font needs to be loaded from
+   * disk into the graphics system.
+   * @param fontPath the path to the font to load
+   */
+  virtual void loadFont(string const& fontPath) = 0;
+
   /**
    * loadTexture is called by the Engine when a texture needs to be
    * loaded from disk into the graphics system.

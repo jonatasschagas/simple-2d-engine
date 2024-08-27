@@ -10,3 +10,6 @@
 [submodule "third-party/AudioFile"]
 	path = third-party/AudioFile
 	url = git@github.com:adamstark/AudioFile.git
+[submodule "third-party/freetype"]
+	path = third-party/freetype
+	url = git@github.com:freetype/freetype.git

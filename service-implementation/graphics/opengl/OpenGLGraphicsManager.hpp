@@ -4,6 +4,7 @@
 
 #include "OpenGLResourceManager.hpp"
 #include "OpenGLSpriteRenderer.hpp"
+#include "OpenGLTextManager.hpp"
 #include "disk/ResourceProvider.hpp"
 #include "graphics/GraphicsManager.hpp"
 #include <string>
@@ -39,6 +40,11 @@ class OpenGLGraphicsManager : public GraphicsManager {
   void renderColoredSprite(glm::mat4 const& transform,
                            Shader& rShader) override;
 
+  float renderCharacter(char const character, glm::mat4 const& transform,
+                        float scale, glm::vec3 color, Shader& rShader) override;
+
+  void loadFont(string const& fontPath) override;
+
   Texture loadTexture(string const& path) override;
 
   int const getWorldLocationXFromScreenCoordinates(int x) const override;
@@ -58,6 +64,7 @@ class OpenGLGraphicsManager : public GraphicsManager {
   OpenGLSpriteRenderer m_spriteRenderer;
   OpenGLResourceManager m_resourceManager;
   ResourceProvider& m_rResourceProvider;
+  OpenGLTextManager m_textManager;
   float m_dpiX = 1;
   float m_dpiY = 1;
   int m_screenWidth = 0;

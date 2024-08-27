@@ -33,7 +33,7 @@ class Game {
   /** return the name of the game
    * @return the name of the game
    */
-  virtual string const& getGameName() = 0;
+  virtual string getGameName() const = 0;
 
  protected:
   /** Used by derived classes to add views to the game

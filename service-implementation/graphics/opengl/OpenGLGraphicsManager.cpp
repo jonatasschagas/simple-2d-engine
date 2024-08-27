@@ -10,7 +10,8 @@ OpenGLGraphicsManager::OpenGLGraphicsManager(
       m_spriteRenderer(),
       m_resourceManager(),
       m_dpiX(dpiX),
-      m_dpiY(dpiY) {
+      m_dpiY(dpiY),
+      m_textManager(rResourceProvider) {
   m_screenWidth = screenWidth;
   m_screenHeight = screenHeight;
   m_screenWidthInGameUnits = screenWidthInGameUnits;
@@ -55,6 +56,18 @@ Texture OpenGLGraphicsManager::loadTexture(string const& path) {
   texture.width = texture2D.getWidth();
   texture.height = texture2D.getHeight();
   return texture;
+}
+
+float OpenGLGraphicsManager::renderCharacter(char const character,
+                                             glm::mat4 const& transform,
+                                             float scale, glm::vec3 color,
+                                             Shader& rShader) {
+  return m_textManager.renderCharacter(character, scale, color, transform,
+                                       rShader);
+}
+
+void OpenGLGraphicsManager::loadFont(string const& fontPath) {
+  m_textManager.loadFont(fontPath);
 }
 
 int const OpenGLGraphicsManager::getWorldLocationXFromScreenCoordinates(

@@ -129,6 +129,7 @@ Other noteworthy characteristics of a Sprite:
     - **TexturedSprite**: used to display quads with a texture. **Note: Requires a shader called "textured" to be added to the GraphicsManager**
     - **ColoredSprite**: used to display quads with a solid color. **Note: Requires a shader called "colored" to be added to the GraphicsManager**
     - **StructuralSprite**: sprites that don't render but are used as a scaffold to aggregate children sprites.
+    - **TextSprite**: used to render strings on the screen. **Note: Requires a shader called "text" to be added to the GraphicsManager and a font to be loaded**
 
 You should extend one of these **Sprite** classes to create your own game objects. Here's an example:
 

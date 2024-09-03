@@ -1,9 +1,11 @@
 #include "ViewManager.hpp"
 
 ViewManager::ViewManager(glm::vec2 screenSizeInGameUnits,
-                         InputManager& rInputManager)
+                         InputManager& rInputManager,
+                         ResourceProvider& rResourceProvider)
     : m_screenSizeInGameUnits(screenSizeInGameUnits),
-      m_rInputManager(rInputManager) {
+      m_rInputManager(rInputManager),
+      m_rResourceProvider(rResourceProvider) {
   initializeMembers();
 }
 

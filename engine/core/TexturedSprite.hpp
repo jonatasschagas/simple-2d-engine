@@ -55,9 +55,10 @@ class TexturedSprite : public Sprite {
     m_textureFilename = textureFileName;
   }
 
- private:
+ protected:
   void renderSprite(GraphicsManager& rGraphicsManager) override;
 
+ private:
   glm::vec4 m_textureCoordinates = {0, 0, 0, 0};
   bool m_flip = false;
   string m_textureFilename = "";

@@ -1,12 +1,13 @@
 #include "Game.hpp"
 
 Game::Game(GraphicsManager& rGraphicsManager, SoundManager& rSoundManager,
-           InputManager& rInputManager)
+           InputManager& rInputManager, ResourceProvider& rResourceProvider)
     : m_rGraphicsManager(rGraphicsManager),
       m_rSoundManager(rSoundManager),
       m_rInputManager(rInputManager),
-      m_viewManager(rGraphicsManager.getScreenSizeInGameUnits(),
-                    rInputManager) {
+      m_rResourceProvider(rResourceProvider),
+      m_viewManager(rGraphicsManager.getScreenSizeInGameUnits(), rInputManager,
+                    rResourceProvider) {
   m_rSoundManager.initialize();
 }
 

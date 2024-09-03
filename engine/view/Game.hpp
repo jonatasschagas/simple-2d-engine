@@ -1,6 +1,7 @@
 #ifndef Game_hpp
 #define Game_hpp
 
+#include "disk/ResourceProvider.hpp"
 #include "event/EventListener.hpp"
 #include "graphics/GraphicsManager.hpp"
 #include "input/InputManager.hpp"
@@ -13,7 +14,7 @@ using std::string;
 class Game {
  public:
   Game(GraphicsManager& rGraphicsManager, SoundManager& rSoundManager,
-       InputManager& rInputManager);
+       InputManager& rInputManager, ResourceProvider& rResourceProvider);
   virtual ~Game() {}
 
   /** Initialize the game, switch initial view */
@@ -51,6 +52,7 @@ class Game {
   GraphicsManager& m_rGraphicsManager;
   SoundManager& m_rSoundManager;
   InputManager& m_rInputManager;
+  ResourceProvider& m_rResourceProvider;
   ViewManager m_viewManager;
 
   bool m_initialized = false;

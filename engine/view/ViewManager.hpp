@@ -3,6 +3,7 @@
 #define ViewManager_hpp
 
 #include "View.h"
+#include "disk/ResourceProvider.hpp"
 #include "graphics/GraphicsManager.hpp"
 #include "input/InputManager.hpp"
 #include "sound/SoundManager.hpp"
@@ -16,7 +17,8 @@ using std::string;
 
 class ViewManager {
  public:
-  ViewManager(glm::vec2 screenSizeInGameUnits, InputManager& rInputManager);
+  ViewManager(glm::vec2 screenSizeInGameUnits, InputManager& rInputManager,
+              ResourceProvider& rResourceProvider);
   ~ViewManager();
 
   void render(GraphicsManager& rGraphicsManager);
@@ -33,6 +35,8 @@ class ViewManager {
     return m_screenSizeInGameUnits;
   }
 
+  ResourceProvider& getResourceProvider() { return m_rResourceProvider; }
+
  private:
   glm::vec2 m_screenSizeInGameUnits;
   View* m_pCurrentView;
@@ -40,6 +44,7 @@ class ViewManager {
 
   map<string, View*> m_views;
   InputManager& m_rInputManager;
+  ResourceProvider& m_rResourceProvider;
 
   void initializeMembers() {
     m_pCurrentView = nullptr;

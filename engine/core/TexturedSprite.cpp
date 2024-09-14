@@ -14,7 +14,12 @@ void TexturedSprite::renderSprite(GraphicsManager& rGraphicsManager) {
     if (m_useWholeTexture) {
       m_textureWidth = texture.width;
       m_textureHeight = texture.height;
-      setTextureCoordinates(0, 0, m_textureWidth, m_textureHeight);
+      if (m_flip) {
+        setTextureCoordinates(m_textureWidth, 0, -m_textureWidth,
+                              m_textureHeight);
+      } else {
+        setTextureCoordinates(0, 0, m_textureWidth, m_textureHeight);
+      }
     }
   }
 

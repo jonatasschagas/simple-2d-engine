@@ -8,14 +8,23 @@ void GLFWInputManager::pollEvents() {
   // poll for events
   glfwPollEvents();
 
+  static std::vector<int> lastKeyState(GLFW_KEY_LAST,
+                                       GLFW_RELEASE);  // track last key state
+
   if (m_keyTranslatorFunction) {
     // check for key events
     for (int i = 0; i < GLFW_KEY_LAST; i++) {
-      if (glfwGetKey(&m_rWindow, i) == GLFW_PRESS) {
+      int currentState = glfwGetKey(&m_rWindow, i);
+
+      if (currentState == GLFW_PRESS && lastKeyState[i] == GLFW_RELEASE) {
         m_pInputListener->onKeyPressed(m_keyTranslatorFunction(i));
-      } else if (glfwGetKey(&m_rWindow, i) == GLFW_RELEASE) {
-        // m_pInputListener->onKeyReleased(m_keyTranslatorFunction(i));
+      } else if (currentState == GLFW_RELEASE &&
+                 lastKeyState[i] == GLFW_PRESS) {
+        m_pInputListener->onKeyReleased(m_keyTranslatorFunction(i));
       }
+
+      // Update the last known state
+      lastKeyState[i] = currentState;
     }
   }
 

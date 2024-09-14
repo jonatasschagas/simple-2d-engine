@@ -9,6 +9,8 @@
 #include "graphics/GraphicsManager.hpp"
 #include <string>
 
+#define GL_SILENCE_DEPRECATION
+
 using std::string;
 
 class OpenGLGraphicsManager : public GraphicsManager {

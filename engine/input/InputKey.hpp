@@ -104,7 +104,8 @@ enum class InputKey {
   KEY_KP_SUBTRACT = 333,
   KEY_KP_ADD = 334,
   KEY_KP_ENTER = 335,
-  KEY_KP_EQUAL = 336
+  KEY_KP_EQUAL = 336,
+  KEY_UNMAPPED = 337
 };
 
 #endif /* InputKey_h */

@@ -14,6 +14,15 @@ Sprite::Sprite(float x, float y, float w, float h) {
   setSize(w, h);
 }
 
+Sprite::~Sprite() {
+  for (Sprite* pChild : m_children) {
+    if (pChild->m_onRemoveFromParent) {
+      pChild->m_onRemoveFromParent(
+          pChild);  // TODO: fix this by using smart pointers
+    }
+  }
+}
+
 void Sprite::processSounds(SoundManager& rSoundManager) {
   while (!m_soundsToPlay.empty()) {
     string sound = m_soundsToPlay.front();
@@ -44,11 +53,15 @@ void Sprite::render(GraphicsManager& rGraphicsManager) {
 void Sprite::clearChildrenToRemove() {
   // cleaning up
   if (m_childrenToRemove.size() > 0) {
-    for (Sprite const* pChildToRemove : m_childrenToRemove) {
+    for (Sprite* pChildToRemove : m_childrenToRemove) {
       auto i = m_children.begin();
       while (i != m_children.end()) {
         if ((*i) == pChildToRemove) {
           i = m_children.erase(i);
+          if (pChildToRemove->m_onRemoveFromParent) {
+            pChildToRemove->m_onRemoveFromParent(
+                pChildToRemove);  // TODO: fix this by using smart pointers
+          }
         }
         ++i;
       }
@@ -58,9 +71,9 @@ void Sprite::clearChildrenToRemove() {
 }
 
 void Sprite::update(float deltaTime) {
-  if (!m_visible) return;
-
   clearChildrenToRemove();
+
+  if (!m_visible) return;
 
   for (Sprite* pChild : m_children) {
     pChild->update(deltaTime);

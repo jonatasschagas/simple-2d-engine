@@ -5,6 +5,7 @@
 #include "glm/glm.hpp"
 #include "graphics/GraphicsManager.hpp"
 #include "sound/SoundManager.hpp"
+#include <functional>
 #include <list>
 #include <queue>
 #include <stdio.h>
@@ -22,6 +23,8 @@ class Sprite {
  public:
   Sprite() = default;
   Sprite(float x, float y, float w, float h);
+
+  virtual ~Sprite();
 
   /**
    * @brief Plays a sound effect
@@ -213,6 +216,14 @@ class Sprite {
   glm::vec2 getTruePositionInPixels(
       GraphicsManager const& graphicsManager) const;
 
+  /**
+   * @brief callback for when the sprite is removed from its parent
+   * @param onRemoveFromParent the callback to set
+   */
+  void setOnRemoveFromParent(std::function<void(Sprite*)> onRemoveFromParent) {
+    m_onRemoveFromParent = onRemoveFromParent;
+  }
+
  protected:
   /**
    * @brief renders the sprite and should be implemented by the derived class
@@ -244,6 +255,8 @@ class Sprite {
   std::list<Sprite*> m_children;
   std::list<Sprite*> m_childrenToRemove;
   bool m_sortChildren = false;
+
+  std::function<void(Sprite*)> m_onRemoveFromParent = nullptr;
 };
 
 #endif /* Sprite_hpp */

@@ -68,7 +68,7 @@ void AndroidSoundManager::playSoundEffect(string const& name) {
   if (m_audioMap.find(name) == m_audioMap.end()) {
     logMessage(LogLevel::Error, "AndroidSoundManager",
                ("Error reading the sound effect " + name).c_str());
-    std::abort();
+    return;
   }
 
   AudioFile<int16_t>* pAudio = m_audioMap[name];
@@ -80,7 +80,7 @@ void AndroidSoundManager::playMusic(string const& name) {
   if (m_audioMap.find(name) == m_audioMap.end()) {
     logMessage(LogLevel::Error, "AndroidSoundManager",
                ("Error reading the song " + name).c_str());
-    std::abort();
+    return;
   }
   AudioFile<int16_t>* pAudio = m_audioMap[name];
   appendSound(pAudio, true, VOLUME);

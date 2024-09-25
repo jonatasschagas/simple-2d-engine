@@ -34,12 +34,17 @@ void Sprite::processSounds(SoundManager& rSoundManager) {
 void Sprite::render(GraphicsManager& rGraphicsManager) {
   if (!m_visible) return;
 
+  if (m_dirty) {
+    m_localTransform = calculateTransform(rGraphicsManager);
+    m_dirty = false;
+  }
+
   // update world transform
   if (m_pParent != nullptr) {
     m_worldTransform =
-        m_pParent->m_worldTransform * calculateTransform(rGraphicsManager);
+            m_pParent->m_worldTransform * m_localTransform;
   } else {
-    m_worldTransform = calculateTransform(rGraphicsManager);
+    m_worldTransform = m_localTransform;
   }
 
   renderSprite(rGraphicsManager);
@@ -127,6 +132,8 @@ void Sprite::setXY(float x, float y) {
     m_computedCoords.x = x;
     m_computedCoords.y = y;
   }
+
+  m_dirty = true;
 }
 
 void Sprite::setSize(float w, float h) {
@@ -140,6 +147,8 @@ void Sprite::setSize(float w, float h) {
     m_computedSize.x = w;
     m_computedSize.y = h;
   }
+
+  m_dirty = true;
 }
 
 void Sprite::removeChild(Sprite* pChildToRemove) {

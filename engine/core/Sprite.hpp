@@ -151,7 +151,7 @@ class Sprite {
    * @brief sets the rotation of the sprite
    * @param degrees the rotation in degrees
    */
-  void setRotation(float degrees) { m_angle = degrees; }
+  void setRotation(float degrees) { m_angle = degrees; m_dirty = true; }
 
   /**
    * @brief returns the rotation of the sprite
@@ -165,6 +165,7 @@ class Sprite {
   void setPivotAtCenter() {
     m_pivot.x = .5f;
     m_pivot.y = .5f;
+    m_dirty = true;
   }
 
   /**
@@ -175,6 +176,7 @@ class Sprite {
   void setPivot(float x, float y) {
     m_pivot.x = x;
     m_pivot.y = y;
+    m_dirty = true;
   }
 
   /**
@@ -243,11 +245,13 @@ class Sprite {
   glm::vec3 m_pivot = {0, 0, 0};  // between 0 and 1
 
   bool m_visible = true;
+  bool m_dirty = true;
   float m_angle = 0;
 
   std::queue<string> m_soundsToPlay;
 
   glm::mat4 m_worldTransform = glm::mat4(1.0f);
+  glm::mat4 m_localTransform = glm::mat4(1.0f);
 
   Shader* m_pShader = nullptr;
 
